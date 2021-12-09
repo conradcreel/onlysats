@@ -28,6 +28,6 @@ Projects we use
 ----------------------------
 - [NBitcoin](https://github.com/MetacoSA/NBitcoin)
 - [BTCPay Server](https://github.com/btcpayserver/btcpayserver)
-- [Signal](https://github.com/signalapp)
+- [Matrix](https://github.com/matrix-org)
 - [Dapr](https://github.com/dapr)
 - [.NET](https://github.com/dotnet)
