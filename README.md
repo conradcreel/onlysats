@@ -31,3 +31,8 @@ Projects we use
 - [Matrix](https://github.com/matrix-org)
 - [Dapr](https://github.com/dapr)
 - [.NET](https://github.com/dotnet)
+
+Timeline
+----------------------------
+- Proof of concept with core capabilities by EOY 2021
+- OnlyFans feature parity by Q2 2022
