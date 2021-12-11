@@ -4,6 +4,10 @@
     <ProjectReference Include="..\onlysats.domain\onlysats.domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <PackageReference Include="BTCPayServer.Client" Version="1.5.0" />
+  </ItemGroup>
+
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net6.0</TargetFramework>

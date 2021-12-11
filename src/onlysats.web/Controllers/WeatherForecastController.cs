@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using onlysats.domain.Services;
 
 namespace onlysats.web.Controllers;
 
@@ -12,10 +13,12 @@ public class WeatherForecastController : ControllerBase
     };
 
     private readonly ILogger<WeatherForecastController> _logger;
+    private readonly BtcPayServerProxy _BtcPayProxy;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger)
+    public WeatherForecastController(ILogger<WeatherForecastController> logger, BtcPayServerProxy btcPayProxy)
     {
         _logger = logger;
+        _BtcPayProxy = btcPayProxy;
     }
 
     [HttpGet]
@@ -28,5 +31,11 @@ public class WeatherForecastController : ControllerBase
             Summary = Summaries[Random.Shared.Next(Summaries.Length)]
         })
         .ToArray();
+    }
+    [HttpGet("stores")]
+    public async Task<IActionResult> GetStores()
+    {
+        var stores = await _BtcPayProxy.Client.GetStores();
+        return Ok(stores);
     }
 }

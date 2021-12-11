@@ -1,8 +1,16 @@
+using onlysats.domain.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddControllersWithViews();
+var services = builder.Services;
+var configuration = builder.Configuration;
+
+// Register all Domain services
+ContainerRegistration.Register(services, configuration);
+
+services.AddControllersWithViews();
 
 var app = builder.Build();
 
@@ -22,6 +30,6 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
 
-app.MapFallbackToFile("index.html");;
+app.MapFallbackToFile("index.html");
 
 app.Run();
