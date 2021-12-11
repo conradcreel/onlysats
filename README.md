@@ -1,6 +1,6 @@
 <p align="center">
   <p align="center">
-    <img src="https://bitcoin.org/img/home/bitcoin-img.svg?1637078881" height="200" alt="Bitcoin" />
+    <img src="https://raw.githubusercontent.com/conradcreel/onlysats/master/btc.png" height="200" alt="Bitcoin" />
   </p>
   <h3 align="center">
     About OnlySats
