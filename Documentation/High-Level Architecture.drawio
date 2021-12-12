@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-12-12T01:30:59.696Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36" etag="E1cEEKS1kzYs_DklJh1d" version="15.9.4" type="github" pages="2">
+<mxfile host="app.diagrams.net" modified="2021-12-12T03:00:31.205Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.93 Safari/537.36" etag="hWIOX1uVuBfhJ1615klC" version="15.9.4" type="github" pages="3">
   <diagram id="UM9CCpyptlKB11P23nob" name="High Level Architecture">
     <mxGraphModel dx="1399" dy="1297" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -237,6 +237,86 @@
             <mxPoint x="340" y="723" as="sourcePoint" />
             <mxPoint x="390" y="673" as="targetPoint" />
           </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="Nlr17vkd6MQoDeBBsOZl" name="Domain Services">
+    <mxGraphModel dx="1399" dy="1297" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="EgK74VeT9ALjDZcewfO4-0" />
+        <mxCell id="EgK74VeT9ALjDZcewfO4-1" parent="EgK74VeT9ALjDZcewfO4-0" />
+        <mxCell id="EgK74VeT9ALjDZcewfO4-2" value="Accounting" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;verticalAlign=top;fontStyle=1" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="240" y="395" width="140" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="EgK74VeT9ALjDZcewfO4-3" value="Chat" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;verticalAlign=top;fontStyle=1" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="440" y="160" width="130" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="EgK74VeT9ALjDZcewfO4-4" value="Content Management" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;verticalAlign=top;fontStyle=1" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="240" y="160" width="140" height="210" as="geometry" />
+        </mxCell>
+        <mxCell id="EgK74VeT9ALjDZcewfO4-5" value="Feed" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;verticalAlign=top;fontStyle=1" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="235" y="530" width="150" height="110" as="geometry" />
+        </mxCell>
+        <mxCell id="EgK74VeT9ALjDZcewfO4-8" value="Onboarding" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;verticalAlign=top;fontStyle=1" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="40" y="160" width="130" height="480" as="geometry" />
+        </mxCell>
+        <mxCell id="EgK74VeT9ALjDZcewfO4-9" value="Reporting" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;verticalAlign=top;fontStyle=1" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="640" y="160" width="130" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="PhWYVJE0Ht6umOSQmvB5-16" value="Creator" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="55" y="255" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="PhWYVJE0Ht6umOSQmvB5-17" value="Account Settings" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="55" y="555" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="PhWYVJE0Ht6umOSQmvB5-18" value="Chat Settings" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="55" y="405" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="PhWYVJE0Ht6umOSQmvB5-19" value="Notification Settings" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="55" y="455" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="PhWYVJE0Ht6umOSQmvB5-20" value="Profile Settings" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="55" y="505" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="PhWYVJE0Ht6umOSQmvB5-21" value="Security Settings" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="55" y="355" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="PhWYVJE0Ht6umOSQmvB5-22" value="Patron" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="55" y="305" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="PhWYVJE0Ht6umOSQmvB5-23" value="User Account" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="55" y="205" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="J80iAyCfR7-3p7xQ4P_3-0" value="Asset" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="260" y="305" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="J80iAyCfR7-3p7xQ4P_3-1" value="Asset Package" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="260" y="255" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="J80iAyCfR7-3p7xQ4P_3-2" value="Vault" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="260" y="205" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="SKW2F82pPHSIpkwnXHdr-0" value="Payment" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="260" y="440" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="p1AJR_5pMAaVWJftzWlV-0" value="Feed Posts" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="260" y="575" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="p1AJR_5pMAaVWJftzWlV-1" value="TBD" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="455" y="205" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="p1AJR_5pMAaVWJftzWlV-2" value="Finder" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;verticalAlign=top;fontStyle=1" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="440" y="325" width="130" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="p1AJR_5pMAaVWJftzWlV-3" value="TBD" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="455" y="370" width="100" height="40" as="geometry" />
+        </mxCell>
+        <mxCell id="p1AJR_5pMAaVWJftzWlV-4" value="Notification" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;verticalAlign=top;fontStyle=1" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="440" y="490" width="130" height="150" as="geometry" />
+        </mxCell>
+        <mxCell id="p1AJR_5pMAaVWJftzWlV-5" value="TBD" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" vertex="1" parent="EgK74VeT9ALjDZcewfO4-1">
+          <mxGeometry x="455" y="535" width="100" height="40" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
