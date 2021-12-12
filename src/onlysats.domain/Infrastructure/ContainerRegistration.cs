@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using onlysats.domain.Models;
 using onlysats.domain.Services;
+using onlysats.domain.Services.Repositories;
 
 namespace onlysats.domain.Infrastructure;
 
@@ -19,6 +20,13 @@ public static class ContainerRegistration
         services.AddSingleton(onlySatsConfig);
 
         services.AddHttpClient<BtcPayServerProxy>(); // TODO: Add Polly Policies
+
+        services.AddTransient<IAssetRepository, AssetRepository>();
+        services.AddTransient<ICreatorRepository, CreatorRepository>();
+        services.AddTransient<IFeedRepository, FeedRepository>();
+        services.AddTransient<IPatronRepository, PatronRepository>();
+        services.AddTransient<IUserAccountRepository, UserAccountRepository>();
+        services.AddTransient<IVaultRepository, VaultRepository>();
 
         services.AddTransient<IAccountingService, AccountingService>();
         services.AddTransient<IChatService, ChatService>();
