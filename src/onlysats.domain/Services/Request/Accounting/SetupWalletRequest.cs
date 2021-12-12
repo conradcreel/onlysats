@@ -9,6 +9,8 @@ public class SetupWalletRequest : RequestBase
     public override bool IsValid()
     {
         // TODO: Additional validation?
-        return UserAccountId > 0 && !string.IsNullOrWhiteSpace(Username) && !string.IsNullOrWhiteSpace(XPubKey);
+        return UserAccountId > 0 && 
+                !string.IsNullOrWhiteSpace(Username) && 
+                !string.IsNullOrWhiteSpace(XPubKey);
     }
 }

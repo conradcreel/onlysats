@@ -3,7 +3,7 @@ using onlysats.domain.Models;
 namespace onlysats.domain.Services.Repositories;
 
 /// <summary>
-///
+/// Encapsulates persistence of Vaults
 /// </summary>
 public interface IVaultRepository
 {
@@ -14,11 +14,11 @@ public interface IVaultRepository
 
 public class VaultRepository : IVaultRepository 
 {
-    private readonly SqlRepository _Repository;
+    private readonly ISqlRepository _Repository;
 
-    public VaultRepository(OnlySatsConfiguration config)
+    public VaultRepository(ISqlRepository sqlRepository)
     {
-        _Repository = new SqlRepository(config.SqlConnectionString);
+        _Repository = sqlRepository;
     }
 }
 

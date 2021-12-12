@@ -3,7 +3,7 @@ using onlysats.domain.Models;
 namespace onlysats.domain.Services.Repositories;
 
 /// <summary>
-///
+/// Encapsulates persistence of User Accounts
 /// </summary>
 public interface IUserAccountRepository
 {
@@ -14,11 +14,11 @@ public interface IUserAccountRepository
 
 public class UserAccountRepository : IUserAccountRepository 
 {
-    private readonly SqlRepository _Repository;
+    private readonly ISqlRepository _Repository;
 
-    public UserAccountRepository(OnlySatsConfiguration config)
+    public UserAccountRepository(ISqlRepository sqlRepository)
     {
-        _Repository = new SqlRepository(config.SqlConnectionString);
+        _Repository = sqlRepository;
     }
 }
 

@@ -3,7 +3,7 @@ using onlysats.domain.Models;
 namespace onlysats.domain.Services.Repositories;
 
 /// <summary>
-///
+/// Encapsulates persistence of Assets and Asset Packages
 /// </summary>
 public interface IAssetRepository
 {
@@ -14,11 +14,11 @@ public interface IAssetRepository
 
 public class AssetRepository : IAssetRepository
 {
-    private readonly SqlRepository _Repository;
+    private readonly ISqlRepository _Repository;
 
-    public AssetRepository(OnlySatsConfiguration config)
+    public AssetRepository(ISqlRepository sqlRepository)
     {
-        _Repository = new SqlRepository(config.SqlConnectionString);
+        _Repository = sqlRepository;
     }
 }
 

@@ -3,7 +3,7 @@ using onlysats.domain.Models;
 namespace onlysats.domain.Services.Repositories;
 
 /// <summary>
-///
+/// Encapsulates persistence of Patrons and their Settings
 /// </summary>
 public interface IPatronRepository
 {
@@ -14,11 +14,11 @@ public interface IPatronRepository
 
 public class PatronRepository : IPatronRepository 
 {
-    private readonly SqlRepository _Repository;
+    private readonly ISqlRepository _Repository;
 
-    public PatronRepository(OnlySatsConfiguration config)
+    public PatronRepository(ISqlRepository sqlRepository)
     {
-        _Repository = new SqlRepository(config.SqlConnectionString);
+        _Repository = sqlRepository;
     }
 }
 

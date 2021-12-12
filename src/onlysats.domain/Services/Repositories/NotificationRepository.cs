@@ -3,20 +3,20 @@ using onlysats.domain.Models;
 namespace onlysats.domain.Services.Repositories;
 
 /// <summary>
-/// Encapsulates persistence of Creators and their Settings
+/// Encapsulates persistence of Notifications within OnlySats
 /// </summary>
-public interface ICreatorRepository
+public interface INotificationRepository
 {
 
 }
 
 #region Implementation
 
-public class CreatorRepository : ICreatorRepository 
+public class NotificationRepository : INotificationRepository 
 {
     private readonly ISqlRepository _Repository;
 
-    public CreatorRepository(ISqlRepository sqlRepository)
+    public NotificationRepository(ISqlRepository sqlRepository)
     {
         _Repository = sqlRepository;
     }

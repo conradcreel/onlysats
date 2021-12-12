@@ -3,7 +3,7 @@ using onlysats.domain.Models;
 namespace onlysats.domain.Services.Repositories;
 
 /// <summary>
-///
+/// Encapsulates persistence of Feed Posts
 /// </summary>
 public interface IFeedRepository
 {
@@ -14,11 +14,11 @@ public interface IFeedRepository
 
 public class FeedRepository : IFeedRepository 
 {
-    private readonly SqlRepository _Repository;
+    private readonly ISqlRepository _Repository;
 
-    public FeedRepository(OnlySatsConfiguration config)
+    public FeedRepository(ISqlRepository sqlRepository)
     {
-        _Repository = new SqlRepository(config.SqlConnectionString);
+        _Repository = sqlRepository;
     }
 }
 

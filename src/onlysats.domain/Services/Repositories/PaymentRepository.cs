@@ -3,7 +3,7 @@ using onlysats.domain.Models;
 namespace onlysats.domain.Services.Repositories;
 
 /// <summary>
-///
+/// Encapsulates persistence of Payments and Payment methods (wallets)
 /// </summary>
 public interface IPaymentRepository
 {
@@ -14,11 +14,11 @@ public interface IPaymentRepository
 
 public class PaymentRepository : IPaymentRepository 
 {
-    private readonly SqlRepository _Repository;
+    private readonly ISqlRepository _Repository;
 
-    public PaymentRepository(OnlySatsConfiguration config)
+    public PaymentRepository(ISqlRepository sqlRepository)
     {
-        _Repository = new SqlRepository(config.SqlConnectionString);
+        _Repository = sqlRepository;
     }
 }
 

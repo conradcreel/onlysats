@@ -1,10 +1,15 @@
+using onlysats.domain.Services.Repositories;
 using onlysats.domain.Services.Request.Onboarding;
 using onlysats.domain.Services.Response.Onboarding;
 
 namespace onlysats.domain.Services;
 
 /// <summary>
-/// Handles all account and settings setup (except wallet import)
+/// Handles all account and settings setup (except wallet import).
+/// While wallet/BTCPay Server setup could be considered part of 
+/// onboarding, it's purposely encapsulated within the Accounting 
+/// service for extensibility without tightly coupling user
+/// setup with payment setup.
 /// </summary>
 public interface IOnboardingService
 {
@@ -33,11 +38,18 @@ public interface IOnboardingService
 
 public class OnboardingService : IOnboardingService
 {
-    private readonly BtcPayServerProxy _BtcPayProxy;
+    private readonly IUserAccountRepository _UserAccountRepository;
+    private readonly ICreatorRepository _CreatorRepository;
+    private readonly IPatronRepository _PatronRepository;
 
-    public OnboardingService(BtcPayServerProxy btcPayProxy)
+    public OnboardingService(IUserAccountRepository userAccountRepository,
+                            ICreatorRepository creatorRepository,
+                            IPatronRepository patronRepository
+                            )
     {
-        _BtcPayProxy = btcPayProxy;
+        _UserAccountRepository = userAccountRepository;
+        _CreatorRepository = creatorRepository;
+        _PatronRepository = patronRepository;
     }
 
     public Task<SetupCreatorResponse> SetupCreator(SetupCreatorRequest request)
