@@ -24,6 +24,10 @@ Introduction
 - Censorship-resistant content sharing is needed now more than ever. If the content is legal but still undesired by the powers that be, they can censor you by restricting payments. Bitcoin fixes this.
 - Content creators shouldn't need to pass off 25% or more of their money to a glorified web hosting provider.
 
+High-Level Architecture
+----------------------------
+See the Documentation folder for a set of WIP architecture diagrams
+
 Projects we use
 ----------------------------
 - [NBitcoin](https://github.com/MetacoSA/NBitcoin)
