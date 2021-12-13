@@ -1,3 +1,4 @@
+using Dapr.Client;
 using onlysats.domain.Services.Repositories;
 
 namespace onlysats.domain.Services;
@@ -16,9 +17,12 @@ public class FeedService : IFeedService
 {
     private readonly IFeedRepository _FeedRepository;
 
-    public FeedService(IFeedRepository feedRepository)
+    private readonly DaprClient _DaprClient;
+    public FeedService(IFeedRepository feedRepository,
+                      DaprClient daprClient)
     {
         _FeedRepository = feedRepository;
+        _DaprClient = daprClient;
     }
 }
 

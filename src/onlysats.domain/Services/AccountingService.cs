@@ -1,3 +1,4 @@
+using Dapr.Client;
 using onlysats.domain.Constants;
 using onlysats.domain.Services.Repositories;
 using onlysats.domain.Services.Request.Accounting;
@@ -24,11 +25,15 @@ public class AccountingService : IAccountingService
 {
     private readonly BtcPayServerProxy _BtcPayProxy;
     private readonly IPaymentRepository _PaymentRepository;
+    private readonly DaprClient _DaprClient;
 
-    public AccountingService(IPaymentRepository paymentRepository, BtcPayServerProxy btcPayProxy)
+    public AccountingService(IPaymentRepository paymentRepository, 
+                            BtcPayServerProxy btcPayProxy, 
+                            DaprClient daprClient)
     {
         _PaymentRepository = paymentRepository;
         _BtcPayProxy = btcPayProxy;
+        _DaprClient = daprClient;
     }
 
     public async Task<SetupWalletResponse> SetupWallet(SetupWalletRequest request)

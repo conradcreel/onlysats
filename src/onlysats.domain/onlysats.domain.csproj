@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="BTCPayServer.Client" Version="1.5.0" />
+    <PackageReference Include="Dapr.Client" Version="1.5.0" />
     <PackageReference Include="Microsoft.AspnetCore" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />

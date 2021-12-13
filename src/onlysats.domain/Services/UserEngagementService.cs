@@ -1,3 +1,4 @@
+using Dapr.Client;
 using onlysats.domain.Services.Repositories;
 
 namespace onlysats.domain.Services;
@@ -18,9 +19,13 @@ public class UserEngagementService : IUserEngagementService
 {
     private readonly INotificationRepository _NotificationRepository;
 
-    public UserEngagementService(INotificationRepository notificationRepository)
+    private readonly DaprClient _DaprClient;
+
+    public UserEngagementService(INotificationRepository notificationRepository,
+                                DaprClient daprClient)
     {
         _NotificationRepository = notificationRepository;
+        _DaprClient = daprClient;
     }
 
 }
