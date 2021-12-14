@@ -4,13 +4,8 @@ namespace onlysats.domain.Entity;
 /// Stores reference data from BTCPayServer after importing their 
 /// xPubKey. We don't store the xPubkey to limit privacy implications
 /// </summary>
-public class Wallet
+public class Wallet : BaseEntity
 {
-    /// <summary>
-    /// The global unique identifier for this Wallet reference
-    /// </summary>
-    public int Id { get; set; }
-
     /// <summary>
     /// Reference to the UserAccount that owns this Wallet
     /// </summary>

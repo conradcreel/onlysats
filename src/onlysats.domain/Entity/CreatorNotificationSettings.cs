@@ -3,13 +3,8 @@ namespace onlysats.domain.Entity;
 /// <summary>
 /// Various notification settings for the Creator
 /// </summary>
-public class CreatorNotificationSettings
+public class CreatorNotificationSettings : BaseEntity
 {
-    /// <summary>
-    /// The global unique identifier for the Creator's notification settings
-    /// </summary>
-    public int Id { get; set; }
-
     /// <summary>
     /// A reference to the Creator
     /// </summary>

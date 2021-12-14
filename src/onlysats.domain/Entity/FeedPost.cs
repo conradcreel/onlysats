@@ -5,13 +5,8 @@ namespace onlysats.domain.Entity;
 /// <summary>
 /// A post in a Creator's feed
 /// </summary>
-public class FeedPost
+public class FeedPost : BaseEntity
 {
-    /// <summary>
-    /// The global unique identifier of this Post
-    /// </summary>
-    public int Id { get; set; }
-
     /// <summary>
     /// The Creator who created this post
     /// </summary>

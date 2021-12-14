@@ -5,13 +5,8 @@ namespace onlysats.domain.Entity;
 /// <summary>
 /// All Creator Assets are stored in a Vault. A Creator can have multiple vaults
 /// </summary>
-public class Vault
+public class Vault : BaseEntity
 {
-    /// <summary>
-    /// The global unique identifier of this vault
-    /// </summary>
-    public int Id { get; set; }
-
     /// <summary>
     /// The owner of this vault
     /// </summary>

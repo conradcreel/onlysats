@@ -1,8 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Dapr.Client;
 using Moq;
 using onlysats.domain.Models;
+using onlysats.domain.Services;
 
 namespace onlysats.tests.Infrastructure;
 
@@ -16,12 +16,12 @@ public static class SetupInternalDependencies
         };
     }
 
-    public static Mock<DaprClient> SetupDaprClient()
+    public static Mock<MessagePublisherProxy> SetupMessagePublisher()
     {
-        var mockDaprClient = new Mock<DaprClient>();
+        var mockDaprClient = new Mock<MessagePublisherProxy>();
         
         mockDaprClient.Setup(s =>
-            s.PublishEventAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<It.IsAnyType>(), It.IsAny<CancellationToken>()))
+            s.PublishEvent(It.IsAny<string>(), It.IsAny<It.IsAnyType>(), It.IsAny<CancellationToken>()))
         .Returns(Task.CompletedTask);
 
         return mockDaprClient;

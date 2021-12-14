@@ -6,13 +6,8 @@ namespace onlysats.domain.Entity;
 /// A grouping of Assets which can be purchased like an e-commerce product or 
 /// via a private negotiation on a per-Patron basis. Useful for deals/promos
 /// </summary>
-public class AssetPackage
+public class AssetPackage : BaseEntity
 {
-    /// <summary>
-    /// The global unique identifier of this Asset Package
-    /// </summary>
-    public int Id { get; set; }
-
     /// <summary>
     /// A reference to the Vault where this AssetPackage is stored
     /// Note an AssetPackage can only contain Assets from the same 

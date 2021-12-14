@@ -16,13 +16,15 @@ public static class ContainerRegistration
             SqlConnectionString = configuration["Sql:ConnectionString"],
             BtcPayUri = configuration["BtcPayServer:Uri"],
             BtcPayAdminUser = configuration["BtcPayServer:AdminUser"],
-            BtcPayAdminPass = configuration["BtcPayServer:AdminPass"]
+            BtcPayAdminPass = configuration["BtcPayServer:AdminPass"],
+            PubSubName = configuration["PubSub:Name"]
         };
 
         services.AddSingleton(onlySatsConfig);
 
         services.AddHttpClient<BtcPayServerProxy>(); // TODO: Add Polly Policies
 
+        services.AddScoped<MessagePublisherProxy>();
         services.AddScoped<ISqlRepository, SqlRepository>();
         services.AddScoped<IBlobRepository, BlobRepository>();
 

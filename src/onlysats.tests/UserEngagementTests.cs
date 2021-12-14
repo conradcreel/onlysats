@@ -11,27 +11,27 @@ namespace onlysats.tests;
 public class UserEngagementTests
 {
     private Mock<INotificationRepository> _MockNotificationRepository;
-    private Mock<DaprClient> _MockDaprClient;
+    private Mock<MessagePublisherProxy> _MockMessagePublisher;
 
     private IUserEngagementService _UserEngagementService;
 
     public UserEngagementTests()
     {
-        _MockDaprClient = SetupInternalDependencies.SetupDaprClient();
+        _MockMessagePublisher = SetupInternalDependencies.SetupMessagePublisher();
         _MockNotificationRepository = new Mock<INotificationRepository>();
 
         Setup();
 
         _UserEngagementService = new UserEngagementService(
             notificationRepository: _MockNotificationRepository.Object,
-            daprClient: _MockDaprClient.Object
+            messagePublisher: _MockMessagePublisher.Object
         );
     }
 
     private void Setup()
     {
         Assert.NotNull(_MockNotificationRepository);
-        Assert.NotNull(_MockDaprClient);
+        Assert.NotNull(_MockMessagePublisher);
 
         // TODO: Setup Notification Repository
     }

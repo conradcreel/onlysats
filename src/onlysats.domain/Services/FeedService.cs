@@ -16,13 +16,13 @@ public interface IFeedService
 public class FeedService : IFeedService
 {
     private readonly IFeedRepository _FeedRepository;
+    private readonly MessagePublisherProxy _MessagePublisher;
 
-    private readonly DaprClient _DaprClient;
     public FeedService(IFeedRepository feedRepository,
-                      DaprClient daprClient)
+                      MessagePublisherProxy messagePublisher)
     {
         _FeedRepository = feedRepository;
-        _DaprClient = daprClient;
+        _MessagePublisher = messagePublisher;
     }
 }
 

@@ -25,15 +25,15 @@ public class AccountingService : IAccountingService
 {
     private readonly BtcPayServerProxy _BtcPayProxy;
     private readonly IPaymentRepository _PaymentRepository;
-    private readonly DaprClient _DaprClient;
+    private readonly MessagePublisherProxy _MessagePublisher;
 
     public AccountingService(IPaymentRepository paymentRepository, 
                             BtcPayServerProxy btcPayProxy, 
-                            DaprClient daprClient)
+                            MessagePublisherProxy messagePublisher)
     {
         _PaymentRepository = paymentRepository;
         _BtcPayProxy = btcPayProxy;
-        _DaprClient = daprClient;
+        _MessagePublisher = messagePublisher;
     }
 
     public async Task<SetupWalletResponse> SetupWallet(SetupWalletRequest request)

@@ -3,13 +3,8 @@ namespace onlysats.domain.Entity;
 /// <summary>
 /// Subscribers/Fans of Creator(s)
 /// </summary>
-public class Patron
+public class Patron : BaseEntity
 {
-    /// <summary>
-    /// The global unique identifier of this Patron
-    /// </summary>
-    public int Id { get; set; }
-
     /// <summary>
     /// A reference to the UserAccount for this Patron
     /// </summary>

@@ -13,21 +13,21 @@ public class AccountingTests
 {
     private Mock<IPaymentRepository> _MockPaymentRepository;
     private Mock<BtcPayServerProxy> _MockBtcPayServerProxy;
-    private Mock<DaprClient> _MockDaprClient;
+    private Mock<MessagePublisherProxy> _MockMessagePublisher;
     private IAccountingService _AccountingService;
 
     public AccountingTests()
     {
         _MockPaymentRepository = new Mock<IPaymentRepository>();
         _MockBtcPayServerProxy = new Mock<BtcPayServerProxy>();
-        _MockDaprClient = SetupInternalDependencies.SetupDaprClient();
+        _MockMessagePublisher = SetupInternalDependencies.SetupMessagePublisher();
 
         Setup();
 
         _AccountingService = new AccountingService(
             paymentRepository: _MockPaymentRepository.Object,
             btcPayProxy: _MockBtcPayServerProxy.Object,
-            daprClient: _MockDaprClient.Object
+            messagePublisher: _MockMessagePublisher.Object
         );
     }
 
@@ -35,7 +35,7 @@ public class AccountingTests
     {
         Assert.NotNull(_MockPaymentRepository);
         Assert.NotNull(_MockBtcPayServerProxy);
-        Assert.NotNull(_MockDaprClient);
+        Assert.NotNull(_MockMessagePublisher);
 
         // TODO: Setup Payment Repository
 

@@ -1,5 +1,7 @@
 using Dapr.Client;
 using onlysats.domain.Constants;
+using onlysats.domain.Entity;
+using onlysats.domain.Enums;
 using onlysats.domain.Events;
 using onlysats.domain.Services.Repositories;
 using onlysats.domain.Services.Request.Onboarding;
@@ -45,18 +47,18 @@ public class OnboardingService : IOnboardingService
     private readonly IUserAccountRepository _UserAccountRepository;
     private readonly ICreatorRepository _CreatorRepository;
     private readonly IPatronRepository _PatronRepository;
-    private readonly DaprClient _DaprClient;
+    private readonly MessagePublisherProxy _MessagePublisher;
 
     public OnboardingService(IUserAccountRepository userAccountRepository,
                             ICreatorRepository creatorRepository,
                             IPatronRepository patronRepository,
-                            DaprClient daprClient
+                            MessagePublisherProxy messagePublisher
                             )
     {
         _UserAccountRepository = userAccountRepository;
         _CreatorRepository = creatorRepository;
         _PatronRepository = patronRepository;
-        _DaprClient = daprClient;
+        _MessagePublisher = messagePublisher;
     }
 
     public async Task<SetupCreatorResponse> SetupCreator(SetupCreatorRequest request)
@@ -67,18 +69,45 @@ public class OnboardingService : IOnboardingService
                         .BadRequest(CErrorMessage.SETUP_CREATOR_BAD_REQUEST);
         }
 
-        // TODO: Create UserAccount 
+        var userAccount = await _UserAccountRepository.UpsertUserAccount(new UserAccount
+        {
+            Username = request.Username,
+            UserId = request.UserId,
+            IdpSource = request.IdpSource,
+            Email = request.Email,
+            Role = EUserRole.CREATOR
+        });
 
-        // TODO: Create Creator
+        if (userAccount == null)
+        {
+            return new SetupCreatorResponse()
+                        .ServerError(CErrorMessage.SETUP_CREATOR_FAIL_USER_ACCOUNT);
+        }
+
+        var creator = await _CreatorRepository.UpsertCreator(new Creator
+        {
+            UserAccountId = userAccount.Id,
+            /* TODO: Others */
+        });
+
+        if (creator == null)
+        {
+            return new SetupCreatorResponse()
+                        .ServerError(CErrorMessage.SETUP_CREATOR_FAIL);
+        }
 
         var domainEvent = new NewCreatorJoinedEvent
         {
-            // TODO
+            CreatorId = creator.Id,
+            Username = userAccount.Username
         };
 
-        await _DaprClient.PublishEventAsync(CDefaults.PUB_SUB_NAME, domainEvent.Topic, domainEvent);
+        await _MessagePublisher.PublishEvent(domainEvent.Topic, domainEvent);
 
-        throw new NotImplementedException();
+        return new SetupCreatorResponse
+        {
+            // TODO
+        }.OK();
     }
 
     public async Task<SetupPatronResponse> SetupPatron(SetupPatronRequest request)
@@ -88,6 +117,17 @@ public class OnboardingService : IOnboardingService
             return new SetupPatronResponse()
                         .BadRequest(CErrorMessage.SETUP_PATRON_BAD_REQUEST);
         }
+
+        // TODO: Create UserAccount 
+
+        // TODO: Create Patron
+
+        var domainEvent = new NewPatronJoinedEvent
+        {
+            // TODO
+        };
+
+        await _MessagePublisher.PublishEvent(domainEvent.Topic, domainEvent);
 
         throw new NotImplementedException();
     }

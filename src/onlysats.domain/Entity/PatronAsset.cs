@@ -5,14 +5,8 @@ namespace onlysats.domain.Entity;
 /// Stores the assets a Patron has purchased from a Creator. Once a Patron purchases an 
 /// asset, they can access it indefinitely.
 /// </summary>
-public class PatronAsset
+public class PatronAsset : BaseEntity
 {
-
-    /// <summary>
-    /// The global unique identifier
-    /// </summary>
-    public int Id { get; set; }
-
     /// <summary>
     /// The Patron who owns a copy of the Asset
     /// </summary>

@@ -18,14 +18,13 @@ public interface IUserEngagementService
 public class UserEngagementService : IUserEngagementService
 {
     private readonly INotificationRepository _NotificationRepository;
-
-    private readonly DaprClient _DaprClient;
+    private readonly MessagePublisherProxy _MessagePublisher;
 
     public UserEngagementService(INotificationRepository notificationRepository,
-                                DaprClient daprClient)
+                                MessagePublisherProxy messagePublisher)
     {
         _NotificationRepository = notificationRepository;
-        _DaprClient = daprClient;
+        _MessagePublisher = messagePublisher;
     }
 
 }

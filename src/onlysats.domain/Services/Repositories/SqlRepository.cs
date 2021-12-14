@@ -9,18 +9,31 @@ namespace onlysats.domain.Services.Repositories;
 /// </summary>
 public interface ISqlRepository
 {
-
+    Task<T> SelectSingle<T>(string sql);
+    Task<IEnumerable<T>> SelectMultiple<T>(string sql);
+    Task<T> Upsert<T>(string sql);
 }
 
 
 public class SqlRepository : ISqlRepository
 {
-    private readonly string _ConnectionString;
-
     public SqlRepository(OnlySatsConfiguration config)
     {
-        // TODO: Remove this, won't need to store reference to connection string
-        _ConnectionString = config.SqlConnectionString;
         // TODO: Rest of Driver-specific setup    
+    }
+
+    public Task<IEnumerable<T>> SelectMultiple<T>(string sql)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<T> SelectSingle<T>(string sql)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<T> Upsert<T>(string sql)
+    {
+        throw new NotImplementedException();
     }
 }

@@ -13,7 +13,7 @@ public class ContentManagementTests
     private Mock<IAssetRepository> _MockAssetRepository;
     private Mock<IVaultRepository> _MockVaultRepository;
     private Mock<IBlobRepository> _MockBlobRepository;
-    private Mock<DaprClient> _MockDaprClient;
+    private Mock<MessagePublisherProxy> _MockMessagePublisher;
 
     private IContentManagementService _ContentManagementService;
 
@@ -22,7 +22,7 @@ public class ContentManagementTests
         _MockAssetRepository = new Mock<IAssetRepository>();
         _MockVaultRepository = new Mock<IVaultRepository>();
         _MockBlobRepository = new Mock<IBlobRepository>();
-        _MockDaprClient = SetupInternalDependencies.SetupDaprClient();
+        _MockMessagePublisher = SetupInternalDependencies.SetupMessagePublisher();
 
         Setup();
 
@@ -30,7 +30,7 @@ public class ContentManagementTests
             assetRepository: _MockAssetRepository.Object,
             vaultRepository: _MockVaultRepository.Object,
             blobRepository: _MockBlobRepository.Object,
-            daprClient: _MockDaprClient.Object
+            messagePublisher: _MockMessagePublisher.Object
         );
     }
 
@@ -39,7 +39,7 @@ public class ContentManagementTests
         Assert.NotNull(_MockAssetRepository);
         Assert.NotNull(_MockVaultRepository);
         Assert.NotNull(_MockBlobRepository);
-        Assert.NotNull(_MockDaprClient);
+        Assert.NotNull(_MockMessagePublisher);
 
         // TODO: Setup Asset Repository
 

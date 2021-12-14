@@ -5,14 +5,8 @@ namespace onlysats.domain.Entity;
 /// <summary>
 /// User related info for identification and authentication purposes
 /// </summary>
-public class UserAccount
+public class UserAccount : BaseEntity
 {
-
-    /// <summary>
-    /// The global unique identifier of this User
-    /// </summary>
-    public int Id { get; set; }
-
     /// <summary>
     /// The displayname that is shown in Chat, Profile, Feed, etc.
     /// </summary>

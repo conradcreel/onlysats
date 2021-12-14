@@ -8,13 +8,8 @@ namespace onlysats.domain.Entity;
 /// transferred to Patrons. Assets cannot be purchased directly but can be grouped
 /// together in an unlimited number of packages to be sold/transferred
 /// </summary>
-public class Asset
+public class Asset : BaseEntity
 {
-    /// <summary>
-    /// The global unique identifier of this Asset
-    /// </summary>
-    public int Id { get; set; }
-
     /// <summary>
     /// A reference to the Vault where this Asset is stored
     /// </summary>

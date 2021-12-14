@@ -6,6 +6,10 @@ public static class CErrorMessage
 
     public static readonly string SETUP_CREATOR_BAD_REQUEST = "";
 
+    public static readonly string SETUP_CREATOR_FAIL_USER_ACCOUNT = "Could not create UserAccount";
+
+    public static readonly string SETUP_CREATOR_FAIL = "Could not create Creator";
+
     public static readonly string SETUP_PATRON_BAD_REQUEST = "";
 
     public static readonly string UPDATE_CREATOR_SETTINGS_BAD_REQUEST = "";
