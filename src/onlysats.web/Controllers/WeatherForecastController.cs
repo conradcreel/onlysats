@@ -13,9 +13,9 @@ public class WeatherForecastController : ControllerBase
     };
 
     private readonly ILogger<WeatherForecastController> _logger;
-    private readonly BtcPayServerProxy _BtcPayProxy;
+    private readonly IBitcoinPaymentProcessor _BtcPayProxy;
 
-    public WeatherForecastController(ILogger<WeatherForecastController> logger, BtcPayServerProxy btcPayProxy)
+    public WeatherForecastController(ILogger<WeatherForecastController> logger, IBitcoinPaymentProcessor btcPayProxy)
     {
         _logger = logger;
         _BtcPayProxy = btcPayProxy;
@@ -35,7 +35,7 @@ public class WeatherForecastController : ControllerBase
     [HttpGet("stores")]
     public async Task<IActionResult> GetStores()
     {
-        var stores = await _BtcPayProxy.Client.GetStores();
+        var stores = await _BtcPayProxy.GetAccounts();
         return Ok(stores);
     }
 }

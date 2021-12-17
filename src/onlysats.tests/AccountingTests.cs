@@ -12,21 +12,21 @@ namespace onlysats.tests;
 public class AccountingTests
 {
     private Mock<IPaymentRepository> _MockPaymentRepository;
-    private Mock<BtcPayServerProxy> _MockBtcPayServerProxy;
+    private Mock<IBitcoinPaymentProcessor> _MockBitcoinPaymentProcessor;
     private Mock<MessagePublisherProxy> _MockMessagePublisher;
     private IAccountingService _AccountingService;
 
     public AccountingTests()
     {
         _MockPaymentRepository = new Mock<IPaymentRepository>();
-        _MockBtcPayServerProxy = new Mock<BtcPayServerProxy>();
+        _MockBitcoinPaymentProcessor = SetupExternalDependencies.SetupBitcoinPaymentProcessor();
         _MockMessagePublisher = SetupInternalDependencies.SetupMessagePublisher();
 
         Setup();
 
         _AccountingService = new AccountingService(
             paymentRepository: _MockPaymentRepository.Object,
-            btcPayProxy: _MockBtcPayServerProxy.Object,
+            bitcoinPaymentProcessor: _MockBitcoinPaymentProcessor.Object,
             messagePublisher: _MockMessagePublisher.Object
         );
     }
@@ -34,7 +34,7 @@ public class AccountingTests
     private void Setup()
     {
         Assert.NotNull(_MockPaymentRepository);
-        Assert.NotNull(_MockBtcPayServerProxy);
+        Assert.NotNull(_MockBitcoinPaymentProcessor);
         Assert.NotNull(_MockMessagePublisher);
 
         // TODO: Setup Payment Repository

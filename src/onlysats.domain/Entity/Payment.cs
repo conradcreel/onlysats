@@ -12,5 +12,5 @@ public class Payment : BaseEntity
     /// </summary>
     public EPaymentType Type { get; set; }
 
-    // TODO: more
+    // TODO: more properties + references to Ids in BtcPay Server
 }

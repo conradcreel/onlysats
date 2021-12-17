@@ -8,7 +8,7 @@ namespace onlysats.domain.Services.Repositories;
 /// </summary>
 public interface IUserAccountRepository
 {
-    Task<UserAccount> GetUserAccount(int id);
+    Task<UserAccount?> GetUserAccount(int id);
     Task<UserAccount> UpsertUserAccount(UserAccount userAccount);
 }
 
@@ -23,7 +23,7 @@ public class UserAccountRepository : IUserAccountRepository
         _Repository = sqlRepository;
     }
 
-    public async Task<UserAccount> GetUserAccount(int id)
+    public async Task<UserAccount?> GetUserAccount(int id)
     {
         const string sql = $@"";
 

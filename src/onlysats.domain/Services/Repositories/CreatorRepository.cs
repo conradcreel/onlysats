@@ -12,12 +12,12 @@ public interface ICreatorRepository
     /// Convenience method that will execute a performant query to get 
     /// all Creator data including settings. Retrieve only
     /// </summary>
-    Task<CreatorModel> GetCreatorDetail(int id);
+    Task<CreatorModel?> GetCreatorDetail(int id);
 
     /// <summary>
     /// Retrieves base Creator entity from its Id
     /// </summary>
-    Task<Creator> GetCreator(int id);
+    Task<Creator?> GetCreator(int id);
 
     /// <summary>
     /// Updates or inserts a base Creator entity. On insert, it 
@@ -28,7 +28,7 @@ public interface ICreatorRepository
     /// <summary>
     /// Retrieves a Creator's account settings
     /// </summary>
-    Task<CreatorAccountSettings> GetCreatorAccountSettings(int creatorId);
+    Task<CreatorAccountSettings?> GetCreatorAccountSettings(int creatorId);
 
     /// <summary>
     /// Updates or inserts a Creator's account settings
@@ -38,7 +38,7 @@ public interface ICreatorRepository
     /// <summary>
     /// Retrieves a Creator's chat settings
     /// </summary>
-    Task<CreatorChatSettings> GetCreatorChatSettings(int creatorId);
+    Task<CreatorChatSettings?> GetCreatorChatSettings(int creatorId);
 
     /// <summary>
     /// Updates or inserts a Creator's chat settings
@@ -48,7 +48,7 @@ public interface ICreatorRepository
     /// <summary>
     /// Retrieves a Creator's notification settings
     /// </summary>
-    Task<CreatorNotificationSettings> GetCreatorNotificationSettings(int creatorId);
+    Task<CreatorNotificationSettings?> GetCreatorNotificationSettings(int creatorId);
 
     /// <summary>
     ///  Updates or inserts a Creator's notification settings
@@ -58,7 +58,7 @@ public interface ICreatorRepository
     /// <summary>
     /// Retrieves a Creator's profile settings
     /// </summary>
-    Task<CreatorProfileSettings> GetCreatorProfileSettings(int creatorId);
+    Task<CreatorProfileSettings?> GetCreatorProfileSettings(int creatorId);
 
     /// <summary>
     ///  Updates or inserts a Creator's profile settings
@@ -68,7 +68,7 @@ public interface ICreatorRepository
     /// <summary>
     /// Retrieves a Creator's profile settings
     /// </summary>
-    Task<CreatorSecuritySettings> GetCreatorSecuritySettings(int creatorId);
+    Task<CreatorSecuritySettings?> GetCreatorSecuritySettings(int creatorId);
 
     /// <summary>
     ///  Updates or inserts a Creator's security settings
@@ -87,37 +87,37 @@ public class CreatorRepository : ICreatorRepository
         _Repository = sqlRepository;
     }
 
-    public Task<CreatorModel> GetCreatorDetail(int id)
+    public Task<CreatorModel?> GetCreatorDetail(int id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<Creator> GetCreator(int id)
+    public Task<Creator?> GetCreator(int id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<CreatorAccountSettings> GetCreatorAccountSettings(int creatorId)
+    public Task<CreatorAccountSettings?> GetCreatorAccountSettings(int creatorId)
     {
         throw new NotImplementedException();
     }
 
-    public Task<CreatorChatSettings> GetCreatorChatSettings(int creatorId)
+    public Task<CreatorChatSettings?> GetCreatorChatSettings(int creatorId)
     {
         throw new NotImplementedException();
     }
 
-    public Task<CreatorNotificationSettings> GetCreatorNotificationSettings(int creatorId)
+    public Task<CreatorNotificationSettings?> GetCreatorNotificationSettings(int creatorId)
     {
         throw new NotImplementedException();
     }
 
-    public Task<CreatorProfileSettings> GetCreatorProfileSettings(int creatorId)
+    public Task<CreatorProfileSettings?> GetCreatorProfileSettings(int creatorId)
     {
         throw new NotImplementedException();
     }
 
-    public Task<CreatorSecuritySettings> GetCreatorSecuritySettings(int creatorId)
+    public Task<CreatorSecuritySettings?> GetCreatorSecuritySettings(int creatorId)
     {
         throw new NotImplementedException();
     }

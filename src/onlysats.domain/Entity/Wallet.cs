@@ -20,5 +20,5 @@ public class Wallet : BaseEntity
     /// The StoreId in BTCPay Server. From the StoreId and CryptoCode (fixed "BTC")
     /// you can retrieve the Payment Method (xPubKey, addresses, etc.)
     /// </summary>
-    public string? BtcPayServerStoreId { get; set; }
+    public string? BtcPayServerAccountId { get; set; }
 }

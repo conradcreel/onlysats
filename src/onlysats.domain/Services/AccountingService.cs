@@ -23,16 +23,16 @@ public interface IAccountingService
 
 public class AccountingService : IAccountingService
 {
-    private readonly BtcPayServerProxy _BtcPayProxy;
+    private readonly IBitcoinPaymentProcessor _BitcoinPaymentProcessor;
     private readonly IPaymentRepository _PaymentRepository;
     private readonly MessagePublisherProxy _MessagePublisher;
 
-    public AccountingService(IPaymentRepository paymentRepository, 
-                            BtcPayServerProxy btcPayProxy, 
+    public AccountingService(IPaymentRepository paymentRepository,
+                            IBitcoinPaymentProcessor bitcoinPaymentProcessor,
                             MessagePublisherProxy messagePublisher)
     {
         _PaymentRepository = paymentRepository;
-        _BtcPayProxy = btcPayProxy;
+        _BitcoinPaymentProcessor = bitcoinPaymentProcessor;
         _MessagePublisher = messagePublisher;
     }
 

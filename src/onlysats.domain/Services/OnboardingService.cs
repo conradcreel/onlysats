@@ -1,4 +1,3 @@
-using Dapr.Client;
 using onlysats.domain.Constants;
 using onlysats.domain.Entity;
 using onlysats.domain.Enums;
@@ -106,7 +105,8 @@ public class OnboardingService : IOnboardingService
 
         return new SetupCreatorResponse
         {
-            // TODO
+            UserAccountId = userAccount.Id,
+            CreatorId = creator.Id
         }.OK();
     }
 

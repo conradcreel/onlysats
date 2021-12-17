@@ -22,7 +22,7 @@ public static class ContainerRegistration
 
         services.AddSingleton(onlySatsConfig);
 
-        services.AddHttpClient<BtcPayServerProxy>(); // TODO: Add Polly Policies
+        services.AddHttpClient<IBitcoinPaymentProcessor, BtcPayServerProxy>(); // TODO: Add Polly Policies
 
         services.AddScoped<MessagePublisherProxy>();
         services.AddScoped<ISqlRepository, SqlRepository>();
