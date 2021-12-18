@@ -3,7 +3,12 @@ using onlysats.domain.Models;
 
 namespace onlysats.domain.Services;
 
-public class MessagePublisherProxy
+public interface IMessagePublisher
+{
+    Task PublishEvent<T>(string topicName, T data, CancellationToken cancellationToken = default);
+}
+
+public class MessagePublisherProxy : IMessagePublisher
 {
     private readonly DaprClient _DaprClient;
     private readonly OnlySatsConfiguration _Configuration;

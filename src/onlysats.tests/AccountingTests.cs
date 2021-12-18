@@ -13,7 +13,7 @@ public class AccountingTests
 {
     private Mock<IPaymentRepository> _MockPaymentRepository;
     private Mock<IBitcoinPaymentProcessor> _MockBitcoinPaymentProcessor;
-    private Mock<MessagePublisherProxy> _MockMessagePublisher;
+    private Mock<IMessagePublisher> _MockMessagePublisher;
     private IAccountingService _AccountingService;
 
     public AccountingTests()

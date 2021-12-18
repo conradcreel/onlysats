@@ -16,10 +16,10 @@ public interface IFeedService
 public class FeedService : IFeedService
 {
     private readonly IFeedRepository _FeedRepository;
-    private readonly MessagePublisherProxy _MessagePublisher;
+    private readonly IMessagePublisher _MessagePublisher;
 
     public FeedService(IFeedRepository feedRepository,
-                      MessagePublisherProxy messagePublisher)
+                      IMessagePublisher messagePublisher)
     {
         _FeedRepository = feedRepository;
         _MessagePublisher = messagePublisher;

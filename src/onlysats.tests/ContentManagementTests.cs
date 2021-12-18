@@ -13,7 +13,7 @@ public class ContentManagementTests
     private Mock<IAssetRepository> _MockAssetRepository;
     private Mock<IVaultRepository> _MockVaultRepository;
     private Mock<IBlobRepository> _MockBlobRepository;
-    private Mock<MessagePublisherProxy> _MockMessagePublisher;
+    private Mock<IMessagePublisher> _MockMessagePublisher;
 
     private IContentManagementService _ContentManagementService;
 

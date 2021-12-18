@@ -18,10 +18,10 @@ public interface IUserEngagementService
 public class UserEngagementService : IUserEngagementService
 {
     private readonly INotificationRepository _NotificationRepository;
-    private readonly MessagePublisherProxy _MessagePublisher;
+    private readonly IMessagePublisher _MessagePublisher;
 
     public UserEngagementService(INotificationRepository notificationRepository,
-                                MessagePublisherProxy messagePublisher)
+                                IMessagePublisher messagePublisher)
     {
         _NotificationRepository = notificationRepository;
         _MessagePublisher = messagePublisher;

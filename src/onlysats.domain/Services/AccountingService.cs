@@ -25,11 +25,11 @@ public class AccountingService : IAccountingService
 {
     private readonly IBitcoinPaymentProcessor _BitcoinPaymentProcessor;
     private readonly IPaymentRepository _PaymentRepository;
-    private readonly MessagePublisherProxy _MessagePublisher;
+    private readonly IMessagePublisher _MessagePublisher;
 
     public AccountingService(IPaymentRepository paymentRepository,
                             IBitcoinPaymentProcessor bitcoinPaymentProcessor,
-                            MessagePublisherProxy messagePublisher)
+                            IMessagePublisher messagePublisher)
     {
         _PaymentRepository = paymentRepository;
         _BitcoinPaymentProcessor = bitcoinPaymentProcessor;

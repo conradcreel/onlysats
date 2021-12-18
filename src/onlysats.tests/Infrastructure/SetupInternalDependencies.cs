@@ -16,14 +16,14 @@ public static class SetupInternalDependencies
         };
     }
 
-    public static Mock<MessagePublisherProxy> SetupMessagePublisher()
+    public static Mock<IMessagePublisher> SetupMessagePublisher()
     {
-        var mockDaprClient = new Mock<MessagePublisherProxy>();
+        var mockMessagePublisher = new Mock<IMessagePublisher>();
         
-        mockDaprClient.Setup(s =>
+        mockMessagePublisher.Setup(s =>
             s.PublishEvent(It.IsAny<string>(), It.IsAny<It.IsAnyType>(), It.IsAny<CancellationToken>()))
         .Returns(Task.CompletedTask);
 
-        return mockDaprClient;
+        return mockMessagePublisher;
     }
 }

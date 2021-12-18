@@ -9,5 +9,6 @@ public enum EPaymentType
 {
     SUBSCRIPTION = 1,
     ASSET_PACKAGE = 2,
-    TIP = 3
+    TIP = 3,
+    PROMOTION = 4
 }

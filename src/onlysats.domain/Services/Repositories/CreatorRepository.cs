@@ -26,16 +26,6 @@ public interface ICreatorRepository
     Task<Creator> UpsertCreator(Creator creator);
 
     /// <summary>
-    /// Retrieves a Creator's account settings
-    /// </summary>
-    Task<CreatorAccountSettings?> GetCreatorAccountSettings(int creatorId);
-
-    /// <summary>
-    /// Updates or inserts a Creator's account settings
-    /// </summary>
-    Task<CreatorAccountSettings> UpsertCreatorAccountSettings(CreatorAccountSettings creatorAccountSettings);
-
-    /// <summary>
     /// Retrieves a Creator's chat settings
     /// </summary>
     Task<CreatorChatSettings?> GetCreatorChatSettings(int creatorId);
@@ -97,11 +87,6 @@ public class CreatorRepository : ICreatorRepository
         throw new NotImplementedException();
     }
 
-    public Task<CreatorAccountSettings?> GetCreatorAccountSettings(int creatorId)
-    {
-        throw new NotImplementedException();
-    }
-
     public Task<CreatorChatSettings?> GetCreatorChatSettings(int creatorId)
     {
         throw new NotImplementedException();
@@ -124,11 +109,8 @@ public class CreatorRepository : ICreatorRepository
 
     public Task<Creator> UpsertCreator(Creator creator)
     {
-        throw new NotImplementedException();
-    }
-
-    public Task<CreatorAccountSettings> UpsertCreatorAccountSettings(CreatorAccountSettings creatorAccountSettings)
-    {
+        // TODO: Ensure that the Insert statement also inserts all default settings
+        // in a single transaction
         throw new NotImplementedException();
     }
 

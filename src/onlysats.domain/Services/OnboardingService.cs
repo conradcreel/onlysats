@@ -2,6 +2,7 @@ using onlysats.domain.Constants;
 using onlysats.domain.Entity;
 using onlysats.domain.Enums;
 using onlysats.domain.Events;
+using onlysats.domain.Models;
 using onlysats.domain.Services.Repositories;
 using onlysats.domain.Services.Request.Onboarding;
 using onlysats.domain.Services.Response;
@@ -37,6 +38,16 @@ public interface IOnboardingService
     /// Updates a Patron's Settings/Preferences
     /// </summary>
     Task<UpdatePatronSettingsResponse> UpdatePatronSettings(UpdatePatronSettingsRequest request);
+
+    /// <summary>
+    /// Loads the details of a Creator
+    /// </summary>
+    Task<LoadCreatorProfileResponse> LoadCreatorProfile(LoadCreatorProfileRequest request);
+
+    /// <summary>
+    /// Loads the details of a Patron
+    /// </summary>
+    Task<LoadPatronProfileResponse> LoadPatronProfile(LoadPatronProfileRequest request);
 }
 
 #region Implementation
@@ -46,18 +57,44 @@ public class OnboardingService : IOnboardingService
     private readonly IUserAccountRepository _UserAccountRepository;
     private readonly ICreatorRepository _CreatorRepository;
     private readonly IPatronRepository _PatronRepository;
-    private readonly MessagePublisherProxy _MessagePublisher;
+    private readonly IMessagePublisher _MessagePublisher;
 
     public OnboardingService(IUserAccountRepository userAccountRepository,
                             ICreatorRepository creatorRepository,
                             IPatronRepository patronRepository,
-                            MessagePublisherProxy messagePublisher
+                            IMessagePublisher messagePublisher
                             )
     {
         _UserAccountRepository = userAccountRepository;
         _CreatorRepository = creatorRepository;
         _PatronRepository = patronRepository;
         _MessagePublisher = messagePublisher;
+    }
+
+    public async Task<LoadCreatorProfileResponse> LoadCreatorProfile(LoadCreatorProfileRequest request)
+    {
+        if (request == null || !request.IsValid())
+        {
+            return new LoadCreatorProfileResponse()
+                        .BadRequest(CErrorMessage.LOAD_CREATOR_BAD_REQUEST);
+        }
+
+        var creatorDetails = await _CreatorRepository.GetCreatorDetail(request.CreatorId);
+
+        if (creatorDetails == null)
+        {
+            return new LoadCreatorProfileResponse().NotFound();
+        }
+
+        return new LoadCreatorProfileResponse
+        {
+            Creator = creatorDetails
+        }.OK();
+    }
+
+    public Task<LoadPatronProfileResponse> LoadPatronProfile(LoadPatronProfileRequest request)
+    {
+        throw new NotImplementedException();
     }
 
     public async Task<SetupCreatorResponse> SetupCreator(SetupCreatorRequest request)
@@ -85,8 +122,7 @@ public class OnboardingService : IOnboardingService
 
         var creator = await _CreatorRepository.UpsertCreator(new Creator
         {
-            UserAccountId = userAccount.Id,
-            /* TODO: Others */
+            UserAccountId = userAccount.Id
         });
 
         if (creator == null)
@@ -140,7 +176,43 @@ public class OnboardingService : IOnboardingService
                         .BadRequest(CErrorMessage.UPDATE_CREATOR_SETTINGS_BAD_REQUEST);
         }
 
-        throw new NotImplementedException();
+        if (request.ChatHideOutgoingMassMessages != null ||
+            request.ChatShowWelcomeMessage != null)
+        {
+            // TODO: Update Chat Settings
+        }
+
+        if (request.NotificationUsePush != null ||
+            request.NotificationUseEmail != null ||
+            request.NotificationNewMessage != null ||
+            request.NotificationNewSubscriber != null ||
+            request.NotificationNewTip != null ||
+            request.NotificationNewPurchase != null)
+        {
+            // TODO: Update Notification Settings
+        }
+
+        if (request.DisplayName != null ||
+            request.CoverPhotoUri != null ||
+            request.ProfilePhotoUri != null ||
+            request.SubscriptionPricePerMonth != null ||
+            request.AboutHtml != null ||
+            request.AmazonWishList != null)
+        {
+            // TODO: Update Profile Settings
+        }
+
+        if (request.ShowActivityStatus != null ||
+            request.FullyPrivateProfile != null ||
+            request.ShowPatronCount != null ||
+            request.ShowMediaCount != null ||
+            request.WatermarkPhotos != null ||
+            request.WatermarkVideos != null)
+        {
+            // TODO: Update Security Settings
+        }
+
+        return new UpdateCreatorSettingsResponse().OK();
     }
 
     public async Task<UpdatePatronSettingsResponse> UpdatePatronSettings(UpdatePatronSettingsRequest request)

@@ -24,7 +24,7 @@ public static class ContainerRegistration
 
         services.AddHttpClient<IBitcoinPaymentProcessor, BtcPayServerProxy>(); // TODO: Add Polly Policies
 
-        services.AddScoped<MessagePublisherProxy>();
+        services.AddScoped<IMessagePublisher, MessagePublisherProxy>();
         services.AddScoped<ISqlRepository, SqlRepository>();
         services.AddScoped<IBlobRepository, BlobRepository>();
 
@@ -35,6 +35,7 @@ public static class ContainerRegistration
         services.AddTransient<IUserAccountRepository, UserAccountRepository>();
         services.AddTransient<IVaultRepository, VaultRepository>();
         services.AddTransient<INotificationRepository, NotificationRepository>();
+        services.AddTransient<IPromotionRepository, PromotionRepository>();
 
         services.AddTransient<IAccountingService, AccountingService>();
         services.AddTransient<IChatService, ChatService>();

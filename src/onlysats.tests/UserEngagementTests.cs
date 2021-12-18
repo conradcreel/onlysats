@@ -11,7 +11,7 @@ namespace onlysats.tests;
 public class UserEngagementTests
 {
     private Mock<INotificationRepository> _MockNotificationRepository;
-    private Mock<MessagePublisherProxy> _MockMessagePublisher;
+    private Mock<IMessagePublisher> _MockMessagePublisher;
 
     private IUserEngagementService _UserEngagementService;
 
