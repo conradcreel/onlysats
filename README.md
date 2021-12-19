@@ -26,7 +26,7 @@ Introduction
 
 High-Level Architecture
 ----------------------------
-<p align="center"><img src="https://github.com/conradcreel/onlysats/blob/master/Documentation/High-Level%20Architecture.png?raw=true" alt="OnlySats High-Level Architecture" /></p>
+<p align="center"><img src="https://github.com/conradcreel/onlysats/blob/master/Documentation/High-Level%20Architecture.png?raw=true&v=1" alt="OnlySats High-Level Architecture" /></p>
 See the Documentation folder for a set of WIP architecture diagrams
 
 Projects we use
