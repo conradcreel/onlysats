@@ -495,6 +495,10 @@ public class OnboardingTests
         response.Should().NotBeNull();
         response.ResponseDetails.Should().NotBeNull();
         response?.ResponseDetails?.IsSuccess.Should().BeTrue();
+        response?.UpdatedChatSettings.Should().BeTrue();
+        response?.UpdatedNotificationSettings.Should().BeFalse();
+        response?.UpdatedSecuritySettings.Should().BeFalse();
+        response?.UpdatedProfileSettings.Should().BeFalse();
     }
 
     [Fact]
@@ -510,6 +514,10 @@ public class OnboardingTests
         response.Should().NotBeNull();
         response.ResponseDetails.Should().NotBeNull();
         response?.ResponseDetails?.IsSuccess.Should().BeTrue();
+        response?.UpdatedChatSettings.Should().BeFalse();
+        response?.UpdatedNotificationSettings.Should().BeTrue();
+        response?.UpdatedSecuritySettings.Should().BeFalse();
+        response?.UpdatedProfileSettings.Should().BeFalse();
     }
 
     [Fact]
@@ -525,6 +533,10 @@ public class OnboardingTests
         response.Should().NotBeNull();
         response.ResponseDetails.Should().NotBeNull();
         response?.ResponseDetails?.IsSuccess.Should().BeTrue();
+        response?.UpdatedChatSettings.Should().BeFalse();
+        response?.UpdatedNotificationSettings.Should().BeFalse();
+        response?.UpdatedSecuritySettings.Should().BeFalse();
+        response?.UpdatedProfileSettings.Should().BeTrue();
     }
 
     [Fact]
@@ -540,5 +552,29 @@ public class OnboardingTests
         response.Should().NotBeNull();
         response.ResponseDetails.Should().NotBeNull();
         response?.ResponseDetails?.IsSuccess.Should().BeTrue();
+        response?.UpdatedChatSettings.Should().BeFalse();
+        response?.UpdatedNotificationSettings.Should().BeFalse();
+        response?.UpdatedSecuritySettings.Should().BeTrue();
+        response?.UpdatedProfileSettings.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task Can_Update_Multiple_Creator_Settings()
+    {
+        var request = new UpdateCreatorSettingsRequest
+        {
+            CreatorId = EXISTING_CREATOR_ID,
+            ShowActivityStatus = new Include<bool>(true),
+            DisplayName = new Include<string>("Changing Profile")
+        };
+
+        var response = await _OnboardingService.UpdateCreatorSettings(request);
+        response.Should().NotBeNull();
+        response.ResponseDetails.Should().NotBeNull();
+        response?.ResponseDetails?.IsSuccess.Should().BeTrue();
+        response?.UpdatedChatSettings.Should().BeFalse();
+        response?.UpdatedNotificationSettings.Should().BeFalse();
+        response?.UpdatedSecuritySettings.Should().BeTrue();
+        response?.UpdatedProfileSettings.Should().BeTrue();
     }
 }

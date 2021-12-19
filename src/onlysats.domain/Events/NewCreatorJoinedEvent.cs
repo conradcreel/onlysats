@@ -5,6 +5,7 @@ namespace onlysats.domain.Events;
 /// </summary>
 public class NewCreatorJoinedEvent : EventBase
 {
+    public int UserAccountId { get; set; }
     public int CreatorId { get; set; }
     public string Username { get; set; } = string.Empty;
     public override string Topic => nameof(NewCreatorJoinedEvent);

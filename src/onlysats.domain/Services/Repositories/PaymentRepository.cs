@@ -1,3 +1,4 @@
+using onlysats.domain.Entity;
 using onlysats.domain.Models;
 
 namespace onlysats.domain.Services.Repositories;
@@ -7,7 +8,8 @@ namespace onlysats.domain.Services.Repositories;
 /// </summary>
 public interface IPaymentRepository
 {
-
+    Task<IEnumerable<Wallet>> GetWallets(int userAccountId);
+    Task<Wallet> UpsertWallet(Wallet wallet);
 }
 
 #region Implementation
@@ -19,6 +21,16 @@ public class PaymentRepository : IPaymentRepository
     public PaymentRepository(ISqlRepository sqlRepository)
     {
         _Repository = sqlRepository;
+    }
+
+    public Task<IEnumerable<Wallet>> GetWallets(int userAccountId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<Wallet> UpsertWallet(Wallet wallet)
+    {
+        throw new NotImplementedException();
     }
 }
 

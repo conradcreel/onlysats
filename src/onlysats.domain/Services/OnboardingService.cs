@@ -2,7 +2,6 @@ using onlysats.domain.Constants;
 using onlysats.domain.Entity;
 using onlysats.domain.Enums;
 using onlysats.domain.Events;
-using onlysats.domain.Models;
 using onlysats.domain.Services.Repositories;
 using onlysats.domain.Services.Request.Onboarding;
 using onlysats.domain.Services.Response;
@@ -92,9 +91,25 @@ public class OnboardingService : IOnboardingService
         }.OK();
     }
 
-    public Task<LoadPatronProfileResponse> LoadPatronProfile(LoadPatronProfileRequest request)
+    public async Task<LoadPatronProfileResponse> LoadPatronProfile(LoadPatronProfileRequest request)
     {
-        throw new NotImplementedException();
+        if (request == null || !request.IsValid())
+        {
+            return new LoadPatronProfileResponse()
+                        .BadRequest(CErrorMessage.LOAD_PATRON_BAD_REQUEST);
+        }
+
+        var patronDetails = await _PatronRepository.GetPatronDetail(request.PatronId);
+
+        if (patronDetails == null)
+        {
+            return new LoadPatronProfileResponse().NotFound();
+        }
+
+        return new LoadPatronProfileResponse
+        {
+            Patron = patronDetails
+        }.OK();
     }
 
     public async Task<SetupCreatorResponse> SetupCreator(SetupCreatorRequest request)
@@ -133,6 +148,7 @@ public class OnboardingService : IOnboardingService
 
         var domainEvent = new NewCreatorJoinedEvent
         {
+            UserAccountId = userAccount.Id,
             CreatorId = creator.Id,
             Username = userAccount.Username
         };
@@ -154,18 +170,45 @@ public class OnboardingService : IOnboardingService
                         .BadRequest(CErrorMessage.SETUP_PATRON_BAD_REQUEST);
         }
 
-        // TODO: Create UserAccount 
+        var userAccount = await _UserAccountRepository.UpsertUserAccount(new UserAccount
+        {
+            Username = request.Username,
+            UserId = request.UserId,
+            IdpSource = request.IdpSource,
+            Email = request.Email,
+            Role = EUserRole.PATRON
+        });
 
-        // TODO: Create Patron
+        if (userAccount == null)
+        {
+            return new SetupPatronResponse()
+                        .ServerError(CErrorMessage.SETUP_PATRON_FAIL_USER_ACCOUNT);
+        }
+
+        var patron = await _PatronRepository.UpsertPatron(new Patron
+        {
+            UserAccountId = userAccount.Id,
+            MemberUntil = request.MemberUntil
+        });
+
+        if (patron == null)
+        {
+            return new SetupPatronResponse()
+                        .ServerError(CErrorMessage.SETUP_PATRON_FAIL);
+        }
 
         var domainEvent = new NewPatronJoinedEvent
         {
-            // TODO
+            PatronId = patron.Id,
         };
 
         await _MessagePublisher.PublishEvent(domainEvent.Topic, domainEvent);
 
-        throw new NotImplementedException();
+        return new SetupPatronResponse
+        {
+            PatronId = patron.Id,
+            UserAccountId = userAccount.Id
+        }.OK();
     }
 
     public async Task<UpdateCreatorSettingsResponse> UpdateCreatorSettings(UpdateCreatorSettingsRequest request)
@@ -176,12 +219,34 @@ public class OnboardingService : IOnboardingService
                         .BadRequest(CErrorMessage.UPDATE_CREATOR_SETTINGS_BAD_REQUEST);
         }
 
+        bool updatedChatSettings = false;
         if (request.ChatHideOutgoingMassMessages != null ||
             request.ChatShowWelcomeMessage != null)
         {
-            // TODO: Update Chat Settings
+            var chatSettings = await _CreatorRepository.GetCreatorChatSettings(request.CreatorId);
+
+            if (chatSettings == null)
+            {
+                return new UpdateCreatorSettingsResponse()
+                            .ServerError(CErrorMessage.UPDATE_CREATOR_SETTINGS_FAIL);
+            }
+
+            if (request.ChatHideOutgoingMassMessages != null)
+            {
+                chatSettings.HideOutgoingMassMessages = request.ChatHideOutgoingMassMessages.Value;
+            }
+
+            if (request.ChatShowWelcomeMessage != null)
+            {
+                chatSettings.ShowWelcomeMessage = request.ChatShowWelcomeMessage.Value;
+            }
+
+            chatSettings = await _CreatorRepository.UpsertCreatorChatSettings(chatSettings);
+
+            updatedChatSettings = chatSettings != null;
         }
 
+        bool updatedNotificationSettings = false;
         if (request.NotificationUsePush != null ||
             request.NotificationUseEmail != null ||
             request.NotificationNewMessage != null ||
@@ -189,9 +254,49 @@ public class OnboardingService : IOnboardingService
             request.NotificationNewTip != null ||
             request.NotificationNewPurchase != null)
         {
-            // TODO: Update Notification Settings
+            var notificationSettings = await _CreatorRepository.GetCreatorNotificationSettings(request.CreatorId);
+
+            if (notificationSettings == null)
+            {
+                return new UpdateCreatorSettingsResponse()
+                            .ServerError(CErrorMessage.UPDATE_CREATOR_SETTINGS_FAIL);
+            }
+
+            if (request.NotificationUsePush != null)
+            {
+                notificationSettings.UsePush = request.NotificationUsePush.Value;
+            }
+
+            if (request.NotificationUseEmail != null)
+            {
+                notificationSettings.UseEmail = request.NotificationUseEmail.Value;
+            }
+
+            if (request.NotificationNewMessage != null)
+            {
+                notificationSettings.NewMessage = request.NotificationNewMessage.Value;
+            }
+
+            if (request.NotificationNewSubscriber != null)
+            {
+                notificationSettings.NewSubscriber = request.NotificationNewSubscriber.Value;
+            }
+
+            if (request.NotificationNewTip != null)
+            {
+                notificationSettings.NewTip = request.NotificationNewTip.Value;
+            }
+
+            if (request.NotificationNewPurchase != null)
+            {
+                notificationSettings.NewPurchase = request.NotificationNewPurchase.Value;
+            }
+
+            notificationSettings = await _CreatorRepository.UpsertCreatorNotificationSettings(notificationSettings);
+            updatedNotificationSettings = notificationSettings != null;
         }
 
+        bool updatedProfileSettings = false;
         if (request.DisplayName != null ||
             request.CoverPhotoUri != null ||
             request.ProfilePhotoUri != null ||
@@ -199,9 +304,49 @@ public class OnboardingService : IOnboardingService
             request.AboutHtml != null ||
             request.AmazonWishList != null)
         {
-            // TODO: Update Profile Settings
+            var profileSettings = await _CreatorRepository.GetCreatorProfileSettings(request.CreatorId);
+
+            if (profileSettings == null)
+            {
+                return new UpdateCreatorSettingsResponse()
+                            .ServerError(CErrorMessage.UPDATE_CREATOR_SETTINGS_FAIL);
+            }
+
+            if (request.DisplayName != null)
+            {
+                profileSettings.DisplayName = request.DisplayName.Value;
+            }
+
+            if (request.CoverPhotoUri != null)
+            {
+                profileSettings.CoverPhotoUri = request.CoverPhotoUri.Value;
+            }
+
+            if (request.ProfilePhotoUri != null)
+            {
+                profileSettings.ProfilePhotoUri = request.ProfilePhotoUri.Value;
+            }
+
+            if (request.SubscriptionPricePerMonth != null)
+            {
+                profileSettings.SubscriptionPricePerMonth = request.SubscriptionPricePerMonth.Value;
+            }
+
+            if (request.AboutHtml != null)
+            {
+                profileSettings.AboutHtml = request.AboutHtml.Value;
+            }
+
+            if (request.AmazonWishList != null)
+            {
+                profileSettings.AmazonWishList = request.AmazonWishList.Value;
+            }
+
+            profileSettings = await _CreatorRepository.UpsertCreatorProfileSettings(profileSettings);
+            updatedProfileSettings = profileSettings != null;
         }
 
+        bool updatedSecuritySettings = false;
         if (request.ShowActivityStatus != null ||
             request.FullyPrivateProfile != null ||
             request.ShowPatronCount != null ||
@@ -209,10 +354,55 @@ public class OnboardingService : IOnboardingService
             request.WatermarkPhotos != null ||
             request.WatermarkVideos != null)
         {
-            // TODO: Update Security Settings
+            var securitySettings = await _CreatorRepository.GetCreatorSecuritySettings(request.CreatorId);
+
+            if (securitySettings == null)
+            {
+                return new UpdateCreatorSettingsResponse()
+                            .ServerError(CErrorMessage.UPDATE_CREATOR_SETTINGS_FAIL);
+            }
+
+            if (request.ShowActivityStatus != null)
+            {
+                securitySettings.ShowActivityStatus = request.ShowActivityStatus.Value;
+            }
+
+            if (request.FullyPrivateProfile != null)
+            {
+                securitySettings.FullyPrivateProfile = request.FullyPrivateProfile.Value;
+            }
+
+            if (request.ShowPatronCount != null)
+            {
+                securitySettings.ShowPatronCount = request.ShowPatronCount.Value;
+            }
+
+            if (request.ShowMediaCount != null)
+            {
+                securitySettings.ShowMediaCount = request.ShowMediaCount.Value;
+            }
+
+            if (request.WatermarkPhotos != null)
+            {
+                securitySettings.WatermarkPhotos = request.WatermarkPhotos.Value;
+            }
+
+            if (request.WatermarkVideos != null)
+            {
+                securitySettings.WatermarkVideos = request.WatermarkVideos.Value;
+            }
+
+            securitySettings = await _CreatorRepository.UpsertCreatorSecuritySettings(securitySettings);
+            updatedSecuritySettings = securitySettings != null;
         }
 
-        return new UpdateCreatorSettingsResponse().OK();
+        return new UpdateCreatorSettingsResponse
+        {
+            UpdatedChatSettings = updatedChatSettings,
+            UpdatedNotificationSettings = updatedNotificationSettings,
+            UpdatedProfileSettings = updatedProfileSettings,
+            UpdatedSecuritySettings = updatedSecuritySettings
+        }.OK();
     }
 
     public async Task<UpdatePatronSettingsResponse> UpdatePatronSettings(UpdatePatronSettingsRequest request)

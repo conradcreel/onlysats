@@ -1,5 +1,7 @@
+using BTCPayServer.Client.Models;
 using Dapr.Client;
 using onlysats.domain.Constants;
+using onlysats.domain.Entity;
 using onlysats.domain.Services.Repositories;
 using onlysats.domain.Services.Request.Accounting;
 using onlysats.domain.Services.Response;
@@ -44,9 +46,68 @@ public class AccountingService : IAccountingService
                         .BadRequest(CErrorMessage.SETUP_WALLET_BAD_REQUEST);
         }
 
-        await Task.Delay(1); // TODO: remove
+        var wallets = await _PaymentRepository.GetWallets(request.UserAccountId);
+        var wallet = wallets?.FirstOrDefault();
+        var btcPayAccountId = string.Empty;
 
-        throw new NotImplementedException();
+        if (wallet == null)
+        {
+            var btcPayAccount = await _BitcoinPaymentProcessor.CreateAccount(new CreateStoreRequest
+            {
+                Name = request.Username
+            });
+
+            if (btcPayAccount == null)
+            {
+                return new SetupWalletResponse()
+                            .ServerError(CErrorMessage.SETUP_WALLET_CANNOT_CREATE_ACCOUNT);
+            }
+
+            btcPayAccountId = btcPayAccount.Id;
+
+            wallet = await _PaymentRepository.UpsertWallet(new Wallet
+            {
+                UserAccountId = request.UserAccountId,
+                BtcPayServerAccountId = btcPayAccountId,
+                Nickname = $"{request.Username}_wallet"
+            });
+
+            if (wallet == null)
+            {
+                return new SetupWalletResponse()
+                            .ServerError(CErrorMessage.SETUP_WALLET_CANNOT_CREATE_WALLET);
+            }
+        }
+        else
+        {
+            if (wallet.BtcPayServerAccountId == null)
+            {
+                throw new Exception("TODO: Shouldn't happen");
+            }
+
+            btcPayAccountId = wallet.BtcPayServerAccountId;
+        }
+
+        var paymentMethod = await _BitcoinPaymentProcessor.UpdateOnChainPaymentMethod(btcPayAccountId, new UpdateOnChainPaymentMethodRequest
+        {
+            Enabled = true,
+            DerivationScheme = request.XPubKey,
+            Label = wallet.Nickname
+        });
+
+        if (paymentMethod == null)
+        {
+            return new SetupWalletResponse()
+                        .ServerError(CErrorMessage.SETUP_WALLET_CANNOT_UPDATE_WALLET);
+        }
+
+        return new SetupWalletResponse
+        {
+            WalletId = wallet.Id,
+            UserAccountId = wallet.UserAccountId,
+            Nickname = wallet.Nickname,
+            BtcPaymentProcessorId = wallet.BtcPayServerAccountId
+        }.OK();
     }
 }
 
