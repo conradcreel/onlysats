@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2021-12-19T16:13:53.752Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" etag="euGEP3Tgn9yg3afZvWVr" version="15.9.6" type="github" pages="4">
+<mxfile host="app.diagrams.net" modified="2021-12-19T16:21:11.410Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" etag="NIQsfph1s4577SzyK69j" version="15.9.6" type="github" pages="4">
   <diagram id="UM9CCpyptlKB11P23nob" name="High Level Architecture">
-    <mxGraphModel dx="1259" dy="1297" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1985" dy="1115" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -440,7 +440,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="FGe-NIGKiNJefncX9kMf" name="Asset Protection">
-    <mxGraphModel dx="1259" dy="1297" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2382" dy="1338" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="gYaDekvQK9E_WQCxuBST-0" />
         <mxCell id="gYaDekvQK9E_WQCxuBST-1" parent="gYaDekvQK9E_WQCxuBST-0" />
