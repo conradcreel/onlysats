@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2021-12-19T16:21:11.410Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" etag="NIQsfph1s4577SzyK69j" version="15.9.6" type="github" pages="4">
+<mxfile host="app.diagrams.net" modified="2021-12-19T16:22:46.298Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" etag="T39TWd1pL2btNJbHzX3N" version="15.9.6" type="github" pages="4">
   <diagram id="UM9CCpyptlKB11P23nob" name="High Level Architecture">
     <mxGraphModel dx="1985" dy="1115" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -192,7 +192,7 @@
     </mxGraphModel>
   </diagram>
   <diagram id="zcNcs3lnPOsroXwbLT3g" name="ERD">
-    <mxGraphModel dx="1259" dy="1297" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="2382" dy="1338" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="JB9asxPkLL9rlQLwhxBm-0" />
         <mxCell id="JB9asxPkLL9rlQLwhxBm-1" parent="JB9asxPkLL9rlQLwhxBm-0" />
@@ -202,7 +202,7 @@
         <mxCell id="JB9asxPkLL9rlQLwhxBm-27" value="Asset Package" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" parent="JB9asxPkLL9rlQLwhxBm-1" vertex="1">
           <mxGeometry x="625" y="483" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="JB9asxPkLL9rlQLwhxBm-28" value="Creator" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="JB9asxPkLL9rlQLwhxBm-1" vertex="1">
+        <mxCell id="JB9asxPkLL9rlQLwhxBm-28" value="Creator" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" parent="JB9asxPkLL9rlQLwhxBm-1" vertex="1">
           <mxGeometry x="255" y="513" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="JB9asxPkLL9rlQLwhxBm-30" value="Chat Settings" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" parent="JB9asxPkLL9rlQLwhxBm-1" vertex="1">
@@ -223,7 +223,7 @@
         <mxCell id="JB9asxPkLL9rlQLwhxBm-35" value="Feed&lt;br&gt;&lt;i&gt;&amp;lt;Computed&amp;gt;&lt;/i&gt;" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" parent="JB9asxPkLL9rlQLwhxBm-1" vertex="1">
           <mxGeometry x="70" y="513" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="JB9asxPkLL9rlQLwhxBm-36" value="Patron" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="JB9asxPkLL9rlQLwhxBm-1" vertex="1">
+        <mxCell id="JB9asxPkLL9rlQLwhxBm-36" value="Patron" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" parent="JB9asxPkLL9rlQLwhxBm-1" vertex="1">
           <mxGeometry x="445" y="641" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="JB9asxPkLL9rlQLwhxBm-37" value="Patron Assets" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" parent="JB9asxPkLL9rlQLwhxBm-1" vertex="1">
@@ -232,7 +232,7 @@
         <mxCell id="JB9asxPkLL9rlQLwhxBm-38" value="Payment" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" parent="JB9asxPkLL9rlQLwhxBm-1" vertex="1">
           <mxGeometry x="255" y="730" width="100" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="JB9asxPkLL9rlQLwhxBm-39" value="User Account" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;fillColor=#fff2cc;strokeColor=#d6b656;" parent="JB9asxPkLL9rlQLwhxBm-1" vertex="1">
+        <mxCell id="JB9asxPkLL9rlQLwhxBm-39" value="User Account" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" parent="JB9asxPkLL9rlQLwhxBm-1" vertex="1">
           <mxGeometry x="255" y="641" width="100" height="40" as="geometry" />
         </mxCell>
         <mxCell id="JB9asxPkLL9rlQLwhxBm-40" value="Vault" style="rounded=1;arcSize=10;whiteSpace=wrap;html=1;align=center;" parent="JB9asxPkLL9rlQLwhxBm-1" vertex="1">
