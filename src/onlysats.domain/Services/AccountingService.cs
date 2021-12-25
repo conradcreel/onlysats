@@ -2,6 +2,7 @@ using BTCPayServer.Client.Models;
 using Dapr.Client;
 using onlysats.domain.Constants;
 using onlysats.domain.Entity;
+using onlysats.domain.Events;
 using onlysats.domain.Services.Repositories;
 using onlysats.domain.Services.Request.Accounting;
 using onlysats.domain.Services.Response;
@@ -100,6 +101,16 @@ public class AccountingService : IAccountingService
             return new SetupWalletResponse()
                         .ServerError(CErrorMessage.SETUP_WALLET_CANNOT_UPDATE_WALLET);
         }
+
+        var domainEvent = new WalletUpdatedEvent
+        {
+            Nickname = wallet.Nickname,
+            BtcPaymentProcessorId = wallet.BtcPayServerAccountId,
+            UserAccountId = wallet.UserAccountId,
+            WalletId = wallet.Id
+        };
+
+        await _MessagePublisher.PublishEvent(domainEvent.Topic, domainEvent);
 
         return new SetupWalletResponse
         {

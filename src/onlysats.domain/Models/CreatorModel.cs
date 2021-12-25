@@ -7,7 +7,7 @@ public class CreatorModel
 {
     public int UserAccountId { get; set; }
     public int CreatorId { get; set; }
-    public string? Username { get; set; }
+    public string Username { get; set; } = string.Empty;
     public string? DisplayName { get; set; }
     public string? Email { get; set; }
 

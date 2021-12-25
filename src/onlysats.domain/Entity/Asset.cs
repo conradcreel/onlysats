@@ -11,6 +11,12 @@ namespace onlysats.domain.Entity;
 public class Asset : BaseEntity
 {
     /// <summary>
+    /// For convenience, store the Creator of this Asset even though we can 
+    /// retrieve it from the Vault this Asset belongs to
+    /// </summary>
+    public int CreatorId { get; set; }
+
+    /// <summary>
     /// A reference to the Vault where this Asset is stored
     /// </summary>
     public int VaultId { get; set; }
@@ -46,6 +52,11 @@ public class Asset : BaseEntity
     /// Full link to the protected remote location of this asset
     /// </summary>
     public string RemoteLocation { get; set; } = string.Empty;
+
+    /// <summary>
+    /// The Id of this asset in Blob Storage
+    /// </summary>
+    public string BlobId { get; set; } = string.Empty;
 
     /// <summary>
     /// The current status of this Asset. e.g. active or inactive.

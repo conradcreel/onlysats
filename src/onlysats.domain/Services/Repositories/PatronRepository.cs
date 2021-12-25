@@ -24,6 +24,12 @@ public interface IPatronRepository
     /// will insert default settings in a single transaction
     /// </summary>
     Task<Patron> UpsertPatron(Patron Patron);
+
+    /// <summary>
+    /// Retrieves all of the assets purchased by a Patron and optionally 
+    /// filters it by those purchased from a specific Creator
+    /// </summary>
+    Task<IEnumerable<PatronAsset>> GetPatronAssets(int patronId, int? creatorId = null);
 }
 
 #region Implementation
@@ -38,6 +44,11 @@ public class PatronRepository : IPatronRepository
     }
 
     public Task<Patron?> GetPatron(int id)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<IEnumerable<PatronAsset>> GetPatronAssets(int patronId, int? creatorId = null)
     {
         throw new NotImplementedException();
     }

@@ -426,7 +426,6 @@ public class OnboardingTests
         response.Should().NotBeNull();
         response.ResponseDetails.Should().NotBeNull();
         response?.ResponseDetails?.IsSuccess.Should().BeFalse();
-        response?.ResponseDetails?.IsSuccess.Should().BeFalse();
         response?.ResponseDetails?.StatusCode.Should().Be(CResponseStatus.BAD_REQUEST);
     }
 

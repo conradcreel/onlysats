@@ -1,3 +1,6 @@
+using System;
+using System.Threading;
+using BTCPayServer.Client.Models;
 using Moq;
 using onlysats.domain.Services;
 using onlysats.domain.Services.Repositories;
@@ -28,7 +31,27 @@ public static class SetupExternalDependencies
     {
         var mock = new Mock<IBitcoinPaymentProcessor>();
 
-        // TODO: Setup
+        mock.Setup(b => b.CreateAccount(It.IsAny<CreateStoreRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((CreateStoreRequest request, CancellationToken cancellationToken) =>
+            {
+                return new StoreData
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    Name = request.Name
+                };
+            });
+
+
+        mock.Setup(b => b.UpdateOnChainPaymentMethod(It.IsAny<string>(), It.IsAny<UpdateOnChainPaymentMethodRequest>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync((string accountId, UpdateOnChainPaymentMethodRequest request, CancellationToken cancellationToken) =>
+            {
+                return new OnChainPaymentMethodData
+                {
+                    
+                };
+            });
+
+        //TODO: Setup rest of methods
 
         return mock;
     }

@@ -8,7 +8,7 @@ namespace onlysats.domain.Services.Repositories;
 /// </summary>
 public interface IPaymentRepository
 {
-    Task<IEnumerable<Wallet>> GetWallets(int userAccountId);
+    Task<IEnumerable<Wallet>?> GetWallets(int userAccountId);
     Task<Wallet> UpsertWallet(Wallet wallet);
 }
 
@@ -23,7 +23,7 @@ public class PaymentRepository : IPaymentRepository
         _Repository = sqlRepository;
     }
 
-    public Task<IEnumerable<Wallet>> GetWallets(int userAccountId)
+    public Task<IEnumerable<Wallet>?> GetWallets(int userAccountId)
     {
         throw new NotImplementedException();
     }

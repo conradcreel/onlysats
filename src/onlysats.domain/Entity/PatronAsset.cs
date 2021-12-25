@@ -33,6 +33,16 @@ public class PatronAsset : BaseEntity
     public string? AssetPackageName { get; set; }
 
     /// <summary>
+    /// This URI will contain the SAS for this specific Patron. 
+    /// Note: Could consider removing this in the future and generating SAS on the fly each time but that could be 
+    /// non-performant depending on number of Assets being loaded at once. While it's true
+    /// if this link is shared, the content can be shared with anyone (even to those not 
+    /// using OnlySats), a malicious Patron could also save the content locally and distribute
+    /// on their own so it's considered an acceptable risk at the moment. 
+    /// </summary>
+    public string? UniqueAssetUri { get; set; }
+
+    /// <summary>
     /// The timestamp of when the Patron acquired this Asset
     /// </summary>
     public DateTime DateAcquired { get; set; }

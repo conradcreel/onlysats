@@ -9,6 +9,12 @@ namespace onlysats.domain.Entity;
 public class AssetPackage : BaseEntity
 {
     /// <summary>
+    /// For convenience, store the Creator of this Asset Package even though we can 
+    /// retrieve it from the Vault this Asset Package belongs to
+    /// </summary>
+    public int CreatorId { get; set; }
+
+    /// <summary>
     /// A reference to the Vault where this AssetPackage is stored
     /// Note an AssetPackage can only contain Assets from the same 
     /// Vault. However, those Assets can be in different folders 
@@ -29,14 +35,15 @@ public class AssetPackage : BaseEntity
     /// <summary>
     /// The Assets contained within this package
     /// </summary>
-    public List<int>? AssetIds { get; set; }
+    public List<int> AssetIds { get; set; } = new List<int>();
 
     /// <summary>
-    /// The Id of the Asset that will be publicly viewable as a 
-    //  teaser for this package. Could be used as a package cover
-    //  photo
+    /// The link to the cover photo for this asset package. This URI
+    /// must contain the SAS token so that it is viewable by anyone
+    /// so keep that in mind when choosing a Cover/Thumbnail for an 
+    /// Asset Package
     /// </summary>
-    public int TeaserAssetId { get; set; }
+    public string? CoverPhotoUri { get; set; }
 
     /// <summary>
     /// The price in the Creator's selected currency (which will be converted to Sats)
