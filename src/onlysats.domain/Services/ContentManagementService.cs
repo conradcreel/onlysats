@@ -3,6 +3,8 @@ using System.Reflection.Metadata;
 using System.Runtime.ConstrainedExecution;
 using onlysats.domain.Constants;
 using onlysats.domain.Entity;
+using onlysats.domain.Enums;
+using onlysats.domain.Events;
 using onlysats.domain.Models;
 using onlysats.domain.Services.ContentManagement;
 using onlysats.domain.Services.Repositories;
@@ -52,6 +54,8 @@ public interface IContentManagementService
 }
 
 #region Implementation
+
+// TODO: Create and Fire events
 
 public class ContentManagementService : IContentManagementService
 {
@@ -284,6 +288,8 @@ public class ContentManagementService : IContentManagementService
                         .BadRequest(CErrorMessage.SET_ASSET_BAD_REQUEST);
         }
 
+        var eventsToFire = new List<EventBase>();
+
         Asset asset;
         var creator = await _CreatorRepository.GetCreatorDetail(request.CreatorId);
 
@@ -349,6 +355,27 @@ public class ContentManagementService : IContentManagementService
 
             if (request.Status != null)
             {
+                if (asset.Status == EAssetStatus.ACTIVE && request.Status.Value == EAssetStatus.INACTIVE)
+                {
+                    eventsToFire.Add(new AssetDeactivatedEvent
+                    {
+                        CreatorId = asset.CreatorId,
+                        AssetId = asset.Id,
+                        AssetName = asset.DisplayName,
+                        VaultId = asset.VaultId
+                    });
+                }
+                else if (asset.Status == EAssetStatus.INACTIVE && request.Status.Value == EAssetStatus.ACTIVE)
+                {
+                    eventsToFire.Add(new AssetPublishedEvent
+                    {
+                        CreatorId = asset.CreatorId,
+                        AssetId = asset.Id,
+                        AssetName = asset.DisplayName,
+                        VaultId = asset.VaultId
+                    });
+                }
+
                 asset.Status = request.Status.Value;
             }
 
@@ -382,6 +409,22 @@ public class ContentManagementService : IContentManagementService
                 return new SetAssetResponse()
                             .ServerError(CErrorMessage.SET_ASSET_COULD_NOT_CREATE);
             }
+
+            if (asset.Status == EAssetStatus.ACTIVE)
+            {
+                eventsToFire.Add(new AssetPublishedEvent
+                {
+                    CreatorId = asset.CreatorId,
+                    AssetId = asset.Id,
+                    AssetName = asset.DisplayName,
+                    VaultId = asset.VaultId
+                });
+            }
+        }
+
+        foreach (var eventToFire in eventsToFire)
+        {
+            await _MessagePublisher.PublishEvent(eventToFire.Topic, eventToFire);
         }
 
         return new SetAssetResponse
@@ -397,6 +440,8 @@ public class ContentManagementService : IContentManagementService
             return new SetAssetPackageResponse()
                         .BadRequest(CErrorMessage.SET_ASSET_PACKAGE_BAD_REQUEST);
         }
+
+        var eventsToFire = new List<EventBase>();
 
         AssetPackage assetPackage;
         var creator = await _CreatorRepository.GetCreatorDetail(request.CreatorId);
@@ -487,6 +532,27 @@ public class ContentManagementService : IContentManagementService
 
             if (request.Status != null)
             {
+                if (assetPackage.Status == EAssetPackageStatus.ACTIVE && request.Status.Value == EAssetPackageStatus.INACTIVE)
+                {
+                    eventsToFire.Add(new AssetPackageDeactivatedEvent
+                    {
+                        CreatorId = assetPackage.CreatorId,
+                        AssetPackageId = assetPackage.Id,
+                        AssetPackageName = assetPackage.DisplayName,
+                        VaultId = assetPackage.VaultId
+                    });
+                }
+                else if (assetPackage.Status == EAssetPackageStatus.INACTIVE && request.Status.Value == EAssetPackageStatus.ACTIVE)
+                {
+                    eventsToFire.Add(new AssetPackagePublishedEvent
+                    {
+                        CreatorId = assetPackage.CreatorId,
+                        AssetPackageId = assetPackage.Id,
+                        AssetPackageName = assetPackage.DisplayName,
+                        VaultId = assetPackage.VaultId
+                    });
+                }
+
                 assetPackage.Status = request.Status.Value;
             }
 
@@ -519,6 +585,22 @@ public class ContentManagementService : IContentManagementService
                 return new SetAssetPackageResponse()
                             .ServerError(CErrorMessage.SET_ASSET_PACKAGE_COULD_NOT_CREATE);
             }
+
+            if (assetPackage.Status == EAssetPackageStatus.ACTIVE)
+            {
+                eventsToFire.Add(new AssetPackagePublishedEvent
+                {
+                    CreatorId = assetPackage.CreatorId,
+                    AssetPackageId = assetPackage.Id,
+                    AssetPackageName = assetPackage.DisplayName,
+                    VaultId = assetPackage.VaultId
+                });
+            }
+        }
+
+        foreach (var eventToFire in eventsToFire)
+        {
+            await _MessagePublisher.PublishEvent(eventToFire.Topic, eventToFire);
         }
 
         return new SetAssetPackageResponse
@@ -534,6 +616,8 @@ public class ContentManagementService : IContentManagementService
             return new SetVaultResponse()
                         .BadRequest(CErrorMessage.SET_VAULT_BAD_REQUEST);
         }
+
+        var eventsToFire = new List<EventBase>();
 
         Vault vault;
         var creator = await _CreatorRepository.GetCreatorDetail(request.CreatorId);
@@ -619,6 +703,18 @@ public class ContentManagementService : IContentManagementService
                 return new SetVaultResponse()
                             .ServerError(CErrorMessage.SET_VAULT_COULD_NOT_CREATE);
             }
+
+            eventsToFire.Add(new NewVaultCreatedEvent
+            {
+                CreatorId = vault.CreatorId,
+                VaultId = vault.Id,
+                VaultName = vault.Name
+            });
+        }
+
+        foreach (var eventToFire in eventsToFire)
+        {
+            await _MessagePublisher.PublishEvent(eventToFire.Topic, eventToFire);
         }
 
         return new SetVaultResponse
