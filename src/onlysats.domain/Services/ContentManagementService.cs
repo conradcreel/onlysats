@@ -55,8 +55,6 @@ public interface IContentManagementService
 
 #region Implementation
 
-// TODO: Create and Fire events
-
 public class ContentManagementService : IContentManagementService
 {
     private readonly IAssetRepository _AssetRepository;
@@ -288,8 +286,6 @@ public class ContentManagementService : IContentManagementService
                         .BadRequest(CErrorMessage.SET_ASSET_BAD_REQUEST);
         }
 
-        var eventsToFire = new List<EventBase>();
-
         Asset asset;
         var creator = await _CreatorRepository.GetCreatorDetail(request.CreatorId);
 
@@ -357,23 +353,27 @@ public class ContentManagementService : IContentManagementService
             {
                 if (asset.Status == EAssetStatus.ACTIVE && request.Status.Value == EAssetStatus.INACTIVE)
                 {
-                    eventsToFire.Add(new AssetDeactivatedEvent
+                    var domainEvent = new AssetDeactivatedEvent
                     {
                         CreatorId = asset.CreatorId,
                         AssetId = asset.Id,
                         AssetName = asset.DisplayName,
                         VaultId = asset.VaultId
-                    });
+                    };
+
+                    await _MessagePublisher.PublishEvent(domainEvent.Topic, domainEvent);
                 }
                 else if (asset.Status == EAssetStatus.INACTIVE && request.Status.Value == EAssetStatus.ACTIVE)
                 {
-                    eventsToFire.Add(new AssetPublishedEvent
+                    var domainEvent = new AssetPublishedEvent
                     {
                         CreatorId = asset.CreatorId,
                         AssetId = asset.Id,
                         AssetName = asset.DisplayName,
                         VaultId = asset.VaultId
-                    });
+                    };
+
+                    await _MessagePublisher.PublishEvent(domainEvent.Topic, domainEvent);
                 }
 
                 asset.Status = request.Status.Value;
@@ -412,19 +412,16 @@ public class ContentManagementService : IContentManagementService
 
             if (asset.Status == EAssetStatus.ACTIVE)
             {
-                eventsToFire.Add(new AssetPublishedEvent
+                var domainEvent = new AssetPublishedEvent
                 {
                     CreatorId = asset.CreatorId,
                     AssetId = asset.Id,
                     AssetName = asset.DisplayName,
                     VaultId = asset.VaultId
-                });
-            }
-        }
+                };
 
-        foreach (var eventToFire in eventsToFire)
-        {
-            await _MessagePublisher.PublishEvent(eventToFire.Topic, eventToFire);
+                await _MessagePublisher.PublishEvent(domainEvent.Topic, domainEvent);
+            }
         }
 
         return new SetAssetResponse
@@ -440,8 +437,6 @@ public class ContentManagementService : IContentManagementService
             return new SetAssetPackageResponse()
                         .BadRequest(CErrorMessage.SET_ASSET_PACKAGE_BAD_REQUEST);
         }
-
-        var eventsToFire = new List<EventBase>();
 
         AssetPackage assetPackage;
         var creator = await _CreatorRepository.GetCreatorDetail(request.CreatorId);
@@ -534,23 +529,27 @@ public class ContentManagementService : IContentManagementService
             {
                 if (assetPackage.Status == EAssetPackageStatus.ACTIVE && request.Status.Value == EAssetPackageStatus.INACTIVE)
                 {
-                    eventsToFire.Add(new AssetPackageDeactivatedEvent
+                    var domainEvent = new AssetPackageDeactivatedEvent
                     {
                         CreatorId = assetPackage.CreatorId,
                         AssetPackageId = assetPackage.Id,
                         AssetPackageName = assetPackage.DisplayName,
                         VaultId = assetPackage.VaultId
-                    });
+                    };
+
+                    await _MessagePublisher.PublishEvent(domainEvent.Topic, domainEvent);
                 }
                 else if (assetPackage.Status == EAssetPackageStatus.INACTIVE && request.Status.Value == EAssetPackageStatus.ACTIVE)
                 {
-                    eventsToFire.Add(new AssetPackagePublishedEvent
+                    var domainEvent = new AssetPackagePublishedEvent
                     {
                         CreatorId = assetPackage.CreatorId,
                         AssetPackageId = assetPackage.Id,
                         AssetPackageName = assetPackage.DisplayName,
                         VaultId = assetPackage.VaultId
-                    });
+                    };
+
+                    await _MessagePublisher.PublishEvent(domainEvent.Topic, domainEvent);
                 }
 
                 assetPackage.Status = request.Status.Value;
@@ -588,19 +587,16 @@ public class ContentManagementService : IContentManagementService
 
             if (assetPackage.Status == EAssetPackageStatus.ACTIVE)
             {
-                eventsToFire.Add(new AssetPackagePublishedEvent
+                var domainEvent = new AssetPackagePublishedEvent
                 {
                     CreatorId = assetPackage.CreatorId,
                     AssetPackageId = assetPackage.Id,
                     AssetPackageName = assetPackage.DisplayName,
                     VaultId = assetPackage.VaultId
-                });
-            }
-        }
+                };
 
-        foreach (var eventToFire in eventsToFire)
-        {
-            await _MessagePublisher.PublishEvent(eventToFire.Topic, eventToFire);
+                await _MessagePublisher.PublishEvent(domainEvent.Topic, domainEvent);
+            }
         }
 
         return new SetAssetPackageResponse
@@ -616,8 +612,6 @@ public class ContentManagementService : IContentManagementService
             return new SetVaultResponse()
                         .BadRequest(CErrorMessage.SET_VAULT_BAD_REQUEST);
         }
-
-        var eventsToFire = new List<EventBase>();
 
         Vault vault;
         var creator = await _CreatorRepository.GetCreatorDetail(request.CreatorId);
@@ -704,17 +698,14 @@ public class ContentManagementService : IContentManagementService
                             .ServerError(CErrorMessage.SET_VAULT_COULD_NOT_CREATE);
             }
 
-            eventsToFire.Add(new NewVaultCreatedEvent
+            var domainEvent = new NewVaultCreatedEvent
             {
                 CreatorId = vault.CreatorId,
                 VaultId = vault.Id,
                 VaultName = vault.Name
-            });
-        }
+            };
 
-        foreach (var eventToFire in eventsToFire)
-        {
-            await _MessagePublisher.PublishEvent(eventToFire.Topic, eventToFire);
+            await _MessagePublisher.PublishEvent(domainEvent.Topic, domainEvent);
         }
 
         return new SetVaultResponse
