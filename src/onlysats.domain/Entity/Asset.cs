@@ -64,4 +64,9 @@ public class Asset : BaseEntity
     /// to it indefinitely, regardless if you deactivate it.
     /// </summary>
     public EAssetStatus Status { get; set; }
+
+    /// <summary>
+    /// This will enable this Asset to be listed in the Creator's store
+    /// </summary>
+    public bool IncludeInStore { get; set; }
 }

@@ -56,4 +56,11 @@ public static class CErrorMessage
 
     public static readonly string SET_VAULT_COULD_NOT_CREATE = "Could not create Vault";
 
+    public static readonly string GET_PATRON_ASSETS_BAD_REQUEST = "Must supply PatronId and optional filters";
+
+    public static readonly string SET_PATRON_ASSETS_BAD_REQUEST = "";
+
+    public static readonly string SET_PATRON_ASSETS_NO_ASSETS_FOUND = "";
+
+    
 }

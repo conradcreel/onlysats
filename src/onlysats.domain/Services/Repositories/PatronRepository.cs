@@ -29,7 +29,17 @@ public interface IPatronRepository
     /// Retrieves all of the assets purchased by a Patron and optionally 
     /// filters it by those purchased from a specific Creator
     /// </summary>
-    Task<IEnumerable<PatronAsset>> GetPatronAssets(int patronId, int? creatorId = null);
+    Task<IEnumerable<PatronAsset>> GetPatronAssets(int patronId, int? creatorId = null, List<int>? assetIds = null);
+
+    /// <summary>
+    /// Updates or inserts a Patron Asset
+    /// </summary>
+    Task<PatronAsset> UpsertPatronAsset(PatronAsset patronAsset);
+
+    /// <summary>
+    /// Adds (no updates) new Patron Assets in bulk
+    /// </summary>
+    Task<IEnumerable<PatronAsset>> AddPatronAssetsBulk(List<PatronAsset> patronAssets);
 }
 
 #region Implementation
@@ -43,12 +53,17 @@ public class PatronRepository : IPatronRepository
         _Repository = sqlRepository;
     }
 
+    public Task<IEnumerable<PatronAsset>> AddPatronAssetsBulk(List<PatronAsset> patronAssets)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<Patron?> GetPatron(int id)
     {
         throw new NotImplementedException();
     }
 
-    public Task<IEnumerable<PatronAsset>> GetPatronAssets(int patronId, int? creatorId = null)
+    public Task<IEnumerable<PatronAsset>> GetPatronAssets(int patronId, int? creatorId = null, List<int>? assetIds = null)
     {
         throw new NotImplementedException();
     }
@@ -59,6 +74,11 @@ public class PatronRepository : IPatronRepository
     }
 
     public Task<Patron> UpsertPatron(Patron Patron)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<PatronAsset> UpsertPatronAsset(PatronAsset patronAsset)
     {
         throw new NotImplementedException();
     }

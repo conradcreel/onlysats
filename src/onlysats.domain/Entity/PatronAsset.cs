@@ -19,8 +19,9 @@ public class PatronAsset : BaseEntity
 
     /// <summary>
     /// A reference to the Payment that provided the Patron with this Asset
+    /// if relevant
     /// </summary>
-    public int PaymentId { get; set; }
+    public int? PaymentId { get; set; }
 
     /// <summary>
     /// A reference to the Asset the Patron purchased

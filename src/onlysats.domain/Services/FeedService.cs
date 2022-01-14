@@ -1,5 +1,6 @@
-using Dapr.Client;
 using onlysats.domain.Services.Repositories;
+using onlysats.domain.Services.Request.Feed;
+using onlysats.domain.Services.Response.Feed;
 
 namespace onlysats.domain.Services;
 
@@ -8,7 +9,9 @@ namespace onlysats.domain.Services;
 /// </summary>
 public interface IFeedService
 {
-
+    Task<GetFeedResponse> GetFeed(GetFeedRequest request);
+    Task<GetPostResponse> GetPost(GetPostRequest request);
+    Task<SetPostResponse> SetPost(SetPostRequest request);
 }
 
 #region Implementation
@@ -23,6 +26,21 @@ public class FeedService : IFeedService
     {
         _FeedRepository = feedRepository;
         _MessagePublisher = messagePublisher;
+    }
+
+    public Task<GetFeedResponse> GetFeed(GetFeedRequest request)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<GetPostResponse> GetPost(GetPostRequest request)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<SetPostResponse> SetPost(SetPostRequest request)
+    {
+        throw new NotImplementedException();
     }
 }
 

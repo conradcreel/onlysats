@@ -64,4 +64,9 @@ public class AssetPackage : BaseEntity
     /// with the Asset Package prior to Activating it. 
     /// </summary>
     public EAssetPackageStatus Status { get; set; }
+
+    /// <summary>
+    /// This will enable this Asset Package to be listed in the Creator's store
+    /// </summary>
+    public bool IncludeInStore { get; set; }
 }

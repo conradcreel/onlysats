@@ -1,7 +1,7 @@
 using onlysats.domain.Models;
 using onlysats.domain.Services.Response;
 
-namespace onlysats.domain.Services.ContentManagement;
+namespace onlysats.domain.Services.Response.ContentManagement;
 
 public class SetAssetPackageResponse : ResponseBase
 {

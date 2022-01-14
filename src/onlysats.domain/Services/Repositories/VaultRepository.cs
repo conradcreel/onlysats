@@ -12,12 +12,17 @@ public interface IVaultRepository
     /// <summary>
     ///
     /// </sumamry>
-    Task<Vault> GetVault(int vaultId);
+    Task<Vault?> GetVault(int vaultId);
 
     /// <summary>
     ///
     /// </sumamry>
-    Task<IEnumerable<Vault>> GetVaults(int creatorId, int top = 10, int skip = 0);
+    Task<IEnumerable<Vault>?> GetVaults(int creatorId, int top = 10, int skip = 0);
+
+    /// <summary>
+    /// Returns the number of Vaults this Creator has access to
+    /// </summary>
+    Task<int> GetVaultCount(int creatorId);
 
     /// <summary>
     ///
@@ -37,6 +42,11 @@ public class VaultRepository : IVaultRepository
     }
 
     public Task<Vault> GetVault(int vaultId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<int> GetVaultCount(int creatorId)
     {
         throw new NotImplementedException();
     }

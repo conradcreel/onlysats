@@ -24,7 +24,7 @@ public class FeedPost : BaseEntity
 
     /// <summary>
     /// The content of the post. Typically contains some media and a link
-    /// to purchase some asset
+    /// to purchase some asset (via a Promotion)
     /// </summary>
     public string Content { get; set; } = string.Empty;
 

@@ -40,4 +40,14 @@ public class CreatorProfileSettings : BaseEntity
     /// Link to Creator's Amazon wishlist
     /// </summary>
     public string? AmazonWishList { get; set; }
+
+    /// <summary>
+    /// Show "Chat with Me" link on Profile
+    /// </summary>
+    public bool ChatEnabled { get; set; }
+
+    /// <summary>
+    /// Show "Subscribe" link on Profile
+    /// </summary>
+    public bool SubscribeEnabled { get; set; }
 }

@@ -5,7 +5,8 @@ namespace onlysats.domain.Entity;
 /// <summary>
 /// Creators can run promotions on content. These promotions can 
 /// then be sent out as mass messages to all (or a subset) of 
-/// subscribers
+/// subscribers. A Promotion is also used in individual chat messages
+/// when content is shared 
 /// </summary>
 public class Promotion : BaseEntity
 {
@@ -38,6 +39,11 @@ public class Promotion : BaseEntity
     public List<int>? AssetPackageIds { get; set; }
 
     /// <summary>
+    /// The Assets not already included in a package included in this promotion
+    /// </summary>
+    public List<int>? AssetIds {get;set;}
+
+    /// <summary>
     /// The earliest this promotion is valid. If null,
     /// it is immediately available
     /// </summary>
@@ -60,4 +66,9 @@ public class Promotion : BaseEntity
     /// The status of this promotion
     /// </summary>
     public EPromotionStatus Status { get; set; }
+
+    /// <summary>
+    /// This will enable this Promotion to be listed in the Creator's store
+    /// </summary>
+    public bool IncludeInStore { get; set; }
 }

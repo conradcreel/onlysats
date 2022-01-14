@@ -1,15 +1,12 @@
-using System.ComponentModel.DataAnnotations;
-using System.Reflection.Metadata;
-using System.Runtime.ConstrainedExecution;
 using onlysats.domain.Constants;
 using onlysats.domain.Entity;
 using onlysats.domain.Enums;
 using onlysats.domain.Events;
 using onlysats.domain.Models;
-using onlysats.domain.Services.ContentManagement;
 using onlysats.domain.Services.Repositories;
 using onlysats.domain.Services.Request.ContentManagement;
 using onlysats.domain.Services.Response;
+using onlysats.domain.Services.Response.ContentManagement;
 
 namespace onlysats.domain.Services;
 
@@ -51,6 +48,17 @@ public interface IContentManagementService
     /// Sets the Asset Package details
     /// </summary>
     Task<SetAssetPackageResponse> SetAssetPackage(SetAssetPackageRequest request);
+
+    /// <summary>
+    /// Retrieves Assets a Patron has been sent or Purchased
+    /// </summary>
+    Task<GetPatronAssetsResponse> GetPatronAssets(GetPatronAssetsRequest request);
+
+    /// <summary>
+    /// Give a Patron access to a Creator's assets. It will create unique URLs
+    /// for each Asset granted to the Patron.
+    /// </summary>
+    Task<SetPatronAssetsResponse> SetPatronAssets(SetPatronAssetsRequest request);
 }
 
 #region Implementation
@@ -62,17 +70,20 @@ public class ContentManagementService : IContentManagementService
     private readonly IBlobRepository _BlobRepository;
     private readonly IMessagePublisher _MessagePublisher;
     private readonly ICreatorRepository _CreatorRepository;
+    private readonly IPatronRepository _PatronRepository;
 
     public ContentManagementService(IAssetRepository assetRepository,
                                     IVaultRepository vaultRepository,
                                     IBlobRepository blobRepository,
                                     ICreatorRepository creatorRepository,
+                                    IPatronRepository patronRepository,
                                     IMessagePublisher messagePublisher)
     {
         _AssetRepository = assetRepository;
         _VaultRepository = vaultRepository;
         _BlobRepository = blobRepository;
         _CreatorRepository = creatorRepository;
+        _PatronRepository = patronRepository;
         _MessagePublisher = messagePublisher;
     }
 
@@ -90,8 +101,6 @@ public class ContentManagementService : IContentManagementService
         // Should be fine for now.
         var creator = await _CreatorRepository.GetCreatorDetail(request.CreatorId);
 
-        var total = 0; // TODO: Retrieve total for the filters so the frontend can display the max # of pages
-
         if (creator == null)
         {
             return new GetAssetPackagesResponse().NotFound();
@@ -107,16 +116,25 @@ public class ContentManagementService : IContentManagementService
                     return new GetAssetPackagesResponse().NotFound();
                 }
 
+                // This is the only path where an Unauthorized is returned to ensure that no 
+                // Assets are returned to the wrong caller. Everywhere else does a hard check
+                // on CreatorId in the query and therefore will filter out assetPackages which
+                // do not belong to this Creator
+                if (assets.Any(a => a.CreatorId != creator.CreatorId))
+                {
+                    return new GetAssetPackagesResponse()
+                                .Unauthorized();
+                }
+
                 assetPackages = (await _AssetRepository.GetAssetPackages(request.CreatorId, assetPackageIds: request.AssetPackageIds))
-                                .Select(ap => new AssetPackageModel(ap, creator.Username, assets))
+                                ?.Select(ap => new AssetPackageModel(ap, creator.Username, assets))
                                 .ToList();
-                total = 1;
             }
             else
             {
                 assetPackages = (await _AssetRepository.GetAssetPackages(request.CreatorId, assetPackageIds: request.AssetPackageIds,
                                                                             top: request.Top, skip: request.Skip))
-                                .Select(ap => new AssetPackageModel(ap, creator.Username))
+                                ?.Select(ap => new AssetPackageModel(ap, creator.Username))
                                 .ToList();
             }
 
@@ -126,7 +144,7 @@ public class ContentManagementService : IContentManagementService
             // Get all Asset Packages in this Vault
             assetPackages = (await _AssetRepository.GetAssetPackages(request.CreatorId, vaultId: request.VaultId,
                                                                     top: request.Top, skip: request.Skip))
-                            .Select(ap => new AssetPackageModel(ap, creator.Username))
+                            ?.Select(ap => new AssetPackageModel(ap, creator.Username))
                             .ToList();
         }
         else
@@ -134,9 +152,17 @@ public class ContentManagementService : IContentManagementService
             // Get all Asset Packages for this Creator across all Vaults
             assetPackages = (await _AssetRepository.GetAssetPackages(request.CreatorId,
                                                                      top: request.Top, skip: request.Skip))
-                            .Select(ap => new AssetPackageModel(ap, creator.Username))
+                            ?.Select(ap => new AssetPackageModel(ap, creator.Username))
                             .ToList();
         }
+
+        if (assetPackages == null || assetPackages.Count == 0)
+        {
+            return new GetAssetPackagesResponse()
+                        .NotFound();
+        }
+
+        var total = await _AssetRepository.GetAssetPackageCount(request.CreatorId, request.VaultId, request.AssetPackageIds);
 
         return new GetAssetPackagesResponse
         {
@@ -162,8 +188,6 @@ public class ContentManagementService : IContentManagementService
         // Should be fine for now.
         var creator = await _CreatorRepository.GetCreatorDetail(request.CreatorId);
 
-        var total = 0; // TODO: Retrieve total for the filters so the frontend can display the max # of pages
-
         if (creator == null)
         {
             return new GetAssetsResponse().NotFound();
@@ -180,15 +204,19 @@ public class ContentManagementService : IContentManagementService
                     return new GetAssetsResponse().NotFound();
                 }
 
-                assets.Add(new AssetModel(asset, creator.Username));
+                if (asset.CreatorId != creator.CreatorId)
+                {
+                    return new GetAssetsResponse()
+                                .Unauthorized();
+                }
 
-                total = 1;
+                assets.Add(new AssetModel(asset, creator.Username));
             }
             else
             {
                 assets = (await _AssetRepository.GetAssets(request.CreatorId, assetIds: request.AssetIds,
                                                             top: request.Top, skip: request.Skip))
-                                .Select(a => new AssetModel(a, creator.Username))
+                                ?.Select(a => new AssetModel(a, creator.Username))
                                 .ToList();
             }
 
@@ -198,7 +226,7 @@ public class ContentManagementService : IContentManagementService
             // Get all Assets in this Vault
             assets = (await _AssetRepository.GetAssets(request.CreatorId, vaultId: request.VaultId,
                                                         top: request.Top, skip: request.Skip))
-                            .Select(a => new AssetModel(a, creator.Username))
+                            ?.Select(a => new AssetModel(a, creator.Username))
                             .ToList();
         }
         else
@@ -206,9 +234,17 @@ public class ContentManagementService : IContentManagementService
             // Get all Assets for this Creator across all Vaults
             assets = (await _AssetRepository.GetAssets(request.CreatorId,
                                                         top: request.Top, skip: request.Skip))
-                            .Select(a => new AssetModel(a, creator.Username))
+                            ?.Select(a => new AssetModel(a, creator.Username))
                             .ToList();
         }
+
+        if (assets == null || assets.Count == 0)
+        {
+            return new GetAssetsResponse()
+                        .NotFound();
+        }
+
+        var total = await _AssetRepository.GetAssetCount(request.CreatorId, request.VaultId, request.AssetIds);
 
         return new GetAssetsResponse
         {
@@ -217,6 +253,54 @@ public class ContentManagementService : IContentManagementService
             Top = request.Top,
             Skip = request.Top,
             Total = total
+        }.OK();
+    }
+
+    public async Task<GetPatronAssetsResponse> GetPatronAssets(GetPatronAssetsRequest request)
+    {
+        if (request == null || !request.IsValid())
+        {
+            return new GetPatronAssetsResponse()
+                        .BadRequest(CErrorMessage.GET_PATRON_ASSETS_BAD_REQUEST);
+        }
+
+        var patronAssets = await _PatronRepository.GetPatronAssets(request.PatronId, request.CreatorId, request.AssetIds);
+
+        if (!patronAssets.Any())
+        {
+            return new GetPatronAssetsResponse().NotFound();
+        }
+
+        var assetIds = patronAssets.Select(p => p.AssetId).ToList();
+
+        if (request.AssetIds?.Count > 0 && request.AssetIds.Count != assetIds.Count)
+        {
+            return new GetPatronAssetsResponse().Unauthorized();
+        }
+
+        var assets = await _AssetRepository.GetAssets(assetIds: assetIds, top: request.Top, skip: request.Skip);
+
+        if (assets == null)
+        {
+            return new GetPatronAssetsResponse().NotFound();
+        }
+
+        var patronAssetModels = new List<PatronAssetModel>();
+
+        foreach (var asset in assets)
+        {
+            var patronAsset = patronAssets.FirstOrDefault(p => p.AssetId == asset.Id);
+            if (patronAsset == null)
+            {
+                continue;
+            }
+
+            patronAssetModels.Add(new PatronAssetModel(patronAsset, asset));
+        }
+
+        return new GetPatronAssetsResponse
+        {
+            Assets = patronAssetModels
         }.OK();
     }
 
@@ -234,8 +318,6 @@ public class ContentManagementService : IContentManagementService
         // Should be fine for now.
         var creator = await _CreatorRepository.GetCreatorDetail(request.CreatorId);
 
-        var total = 0; // TODO: Retrieve total for the filters so the frontend can display the max # of pages
-
         if (creator == null)
         {
             return new GetVaultsResponse().NotFound();
@@ -251,6 +333,12 @@ public class ContentManagementService : IContentManagementService
                 return new GetVaultsResponse().NotFound();
             }
 
+            if (vault.CreatorId != creator.CreatorId)
+            {
+                return new GetVaultsResponse()
+                            .Unauthorized();
+            }
+
             // Get all assets. Note: Removing this for now, might include it if we find a use case for it
             // currently, they should just be calling GetAssets(vaultId, top, skip) so they can page through
             // assets once a vault is selected. Maybe in this endpoint we'll only need to return the number 
@@ -258,15 +346,22 @@ public class ContentManagementService : IContentManagementService
             // var assets = await _AssetRepository.GetAssets(request.CreatorId, request.VaultId.Value, top: int.MaxValue, skip: 0);
 
             vaults.Add(new VaultModel(vault, creator.Username));
-            total = 1;
         }
         else
         {
             // Get all vaults for this Creator
             vaults = (await _VaultRepository.GetVaults(request.CreatorId, top: request.Top, skip: request.Skip))
-                        .Select(v => new VaultModel(v, creator.Username))
+                        ?.Select(v => new VaultModel(v, creator.Username))
                         .ToList();
         }
+
+        if (vaults == null || vaults.Count == 0)
+        {
+            return new GetVaultsResponse()
+                        .NotFound();
+        }
+
+        var total = await _VaultRepository.GetVaultCount(request.CreatorId);
 
         return new GetVaultsResponse
         {
@@ -286,7 +381,7 @@ public class ContentManagementService : IContentManagementService
                         .BadRequest(CErrorMessage.SET_ASSET_BAD_REQUEST);
         }
 
-        Asset asset;
+        Asset? asset;
         var creator = await _CreatorRepository.GetCreatorDetail(request.CreatorId);
 
         if (creator == null)
@@ -438,7 +533,7 @@ public class ContentManagementService : IContentManagementService
                         .BadRequest(CErrorMessage.SET_ASSET_PACKAGE_BAD_REQUEST);
         }
 
-        AssetPackage assetPackage;
+        AssetPackage? assetPackage;
         var creator = await _CreatorRepository.GetCreatorDetail(request.CreatorId);
 
         if (creator == null)
@@ -485,7 +580,7 @@ public class ContentManagementService : IContentManagementService
             {
                 var assetCheck = await _AssetRepository.GetAssets(request.CreatorId, assetIds: request.AssetIdsToAdd.Value, skip: 0, top: int.MaxValue);
 
-                if (assetCheck.Count() != request.AssetIdsToAdd.Value.Count)
+                if (assetCheck?.Count() != request.AssetIdsToAdd.Value.Count)
                 {
                     // Attempted to add at least one Asset to this package that the 
                     // Creator doesn't own.
@@ -605,6 +700,68 @@ public class ContentManagementService : IContentManagementService
         }.OK();
     }
 
+    public async Task<SetPatronAssetsResponse> SetPatronAssets(SetPatronAssetsRequest request)
+    {
+        if (request == null || !request.IsValid())
+        {
+            return new SetPatronAssetsResponse()
+                        .BadRequest(CErrorMessage.SET_PATRON_ASSETS_BAD_REQUEST);
+        }
+
+        // TODO: 
+        // 0. Filter out assets already granted to Patron (if more than one AssetId is provided)
+        // 1. Retrieve Assets 
+        // 2. Generate SAS URIs for each Asset
+        // 3. Add each Asset as a Patron Asset via the BulkAdd repository method
+
+        var existing = await _PatronRepository.GetPatronAssets(request.PatronId, request.CreatorId);
+        var existingAssetIds = existing.Select(a => a.AssetId);
+
+        var assetIds = request.AssetIds;
+        if (assetIds.Count > 1 && existingAssetIds.Any())
+        {
+            assetIds = assetIds.Where(a => !existingAssetIds.Contains(a)).ToList();
+        }
+
+        var assets = await _AssetRepository.GetAssets(assetIds: assetIds, top: assetIds.Count);
+        if (assets == null)
+        {
+            return new SetPatronAssetsResponse()
+                        .BadRequest(CErrorMessage.SET_PATRON_ASSETS_NO_ASSETS_FOUND);
+        }
+
+        var sasUriMap = new Dictionary<int, string>();
+        var assetMap = new Dictionary<int, Asset>();
+
+        foreach (var asset in assets)
+        {
+            var sasUri = await _BlobRepository.GenerateSharedAccessSignature(asset.BlobId);
+            sasUriMap.Add(asset.Id, sasUri);
+            assetMap.Add(asset.Id, asset);
+        }
+
+        var now = DateTime.UtcNow;
+
+        var patronAssets = await _PatronRepository.AddPatronAssetsBulk(
+            assets.Select(a => new PatronAsset
+            {
+                UniqueAssetUri = sasUriMap[a.Id],
+                PatronId = request.PatronId,
+                CreatorId = request.CreatorId,
+                PaymentId = request.PaymentId,
+                AssetPackageName = request.AssetPackageName,
+                AssetId = a.Id,
+                DateAcquired = now
+            }).ToList()
+        );
+
+
+        return new SetPatronAssetsResponse
+        {
+            Assets = patronAssets.Select(p => new PatronAssetModel(p, assetMap[p.AssetId])).ToList()
+        }.OK();
+    }
+
     public async Task<SetVaultResponse> SetVault(SetVaultRequest request)
     {
         if (request == null || !request.IsValid())
@@ -613,7 +770,7 @@ public class ContentManagementService : IContentManagementService
                         .BadRequest(CErrorMessage.SET_VAULT_BAD_REQUEST);
         }
 
-        Vault vault;
+        Vault? vault;
         var creator = await _CreatorRepository.GetCreatorDetail(request.CreatorId);
 
         if (creator == null)
