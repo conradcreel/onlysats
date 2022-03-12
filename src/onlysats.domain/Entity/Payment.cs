@@ -8,7 +8,7 @@ namespace onlysats.domain.Entity;
 public class Payment : BaseEntity
 {
     /// <summary>
-    /// The type of payment. E.g. subscription, content/asset purchase, tip, etc.
+    /// The type of payment. E.g. subscription, content purchase, tip, etc.
     /// </summary>
     public EPaymentType Type { get; set; }
 
