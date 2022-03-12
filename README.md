@@ -39,5 +39,4 @@ Projects we use
 
 Timeline
 ----------------------------
-- Proof of concept with core capabilities by EOY 2021
-- OnlyFans feature parity by Q2 2022
+- OnlyFans feature parity by Q4 2022
