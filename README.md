@@ -36,7 +36,9 @@ Projects we use
 - [Matrix](https://github.com/matrix-org)
 - [Dapr](https://github.com/dapr)
 - [.NET](https://github.com/dotnet)
+- [EmbassyOS](https://store.start9.com/collections/embassy/products/embassyos-software-download)
 
 Timeline
 ----------------------------
-- OnlyFans feature parity by Q4 2022
+- OnlyFans feature parity by Q4 2022, hopefully
+- Real timeline to come after a couple of POCs are complete

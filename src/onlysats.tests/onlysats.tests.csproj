@@ -1,10 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <Nullable>enable</Nullable>
-
-    <IsPackable>false</IsPackable>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,8 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\onlysats.domain\onlysats.domain.csproj" />
-    <ProjectReference Include="..\onlysats.web\onlysats.web.csproj" />
+    <ProjectReference Include="..\onlysatsdomain\onlysatsdomain.csproj" />
   </ItemGroup>
 
 </Project>

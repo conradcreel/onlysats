@@ -4,26 +4,28 @@ using Moq;
 using onlysats.domain.Models;
 using onlysats.domain.Services;
 
-namespace onlysats.tests.Infrastructure;
-
-public static class SetupInternalDependencies
+namespace onlysats.tests.Infrastructure
 {
-    public static OnlySatsConfiguration SetupConfiguration()
+
+    public static class SetupInternalDependencies
     {
-        return new OnlySatsConfiguration
+        public static OnlySatsConfiguration SetupConfiguration()
         {
-            // TODO
-        };
-    }
+            return new OnlySatsConfiguration
+            {
+                // TODO
+            };
+        }
 
-    public static Mock<IMessagePublisher> SetupMessagePublisher()
-    {
-        var mockMessagePublisher = new Mock<IMessagePublisher>();
-        
-        mockMessagePublisher.Setup(s =>
-            s.PublishEvent(It.IsAny<string>(), It.IsAny<It.IsAnyType>(), It.IsAny<CancellationToken>()))
-        .Returns(Task.CompletedTask);
+        public static Mock<IMessagePublisher> SetupMessagePublisher()
+        {
+            var mockMessagePublisher = new Mock<IMessagePublisher>();
 
-        return mockMessagePublisher;
+            mockMessagePublisher.Setup(s =>
+                s.PublishEvent(It.IsAny<string>(), It.IsAny<It.IsAnyType>(), It.IsAny<CancellationToken>()))
+            .Returns(Task.CompletedTask);
+
+            return mockMessagePublisher;
+        }
     }
 }

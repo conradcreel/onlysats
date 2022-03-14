@@ -3,42 +3,42 @@ using FluentAssertions;
 using Moq;
 using onlysats.domain.Services;
 using onlysats.domain.Services.Repositories;
-using Dapr.Client;
 using onlysats.tests.Infrastructure;
 
-namespace onlysats.tests;
-
-public class UserEngagementTests
+namespace onlysats.tests
 {
-    private Mock<INotificationRepository> _MockNotificationRepository;
-    private Mock<IMessagePublisher> _MockMessagePublisher;
-
-    private IUserEngagementService _UserEngagementService;
-
-    public UserEngagementTests()
+    public class UserEngagementTests
     {
-        _MockMessagePublisher = SetupInternalDependencies.SetupMessagePublisher();
-        _MockNotificationRepository = new Mock<INotificationRepository>();
+        private Mock<INotificationRepository> _MockNotificationRepository;
+        private Mock<IMessagePublisher> _MockMessagePublisher;
 
-        Setup();
+        private IUserEngagementService _UserEngagementService;
 
-        _UserEngagementService = new UserEngagementService(
-            notificationRepository: _MockNotificationRepository.Object,
-            messagePublisher: _MockMessagePublisher.Object
-        );
-    }
+        public UserEngagementTests()
+        {
+            _MockMessagePublisher = SetupInternalDependencies.SetupMessagePublisher();
+            _MockNotificationRepository = new Mock<INotificationRepository>();
 
-    private void Setup()
-    {
-        Assert.NotNull(_MockNotificationRepository);
-        Assert.NotNull(_MockMessagePublisher);
+            Setup();
 
-        // TODO: Setup Notification Repository
-    }
+            _UserEngagementService = new UserEngagementService(
+                notificationRepository: _MockNotificationRepository.Object,
+                messagePublisher: _MockMessagePublisher.Object
+            );
+        }
 
-    [Fact]
-    public void Test1()
-    {
-        Assert.Equal(1, 1);
+        private void Setup()
+        {
+            Assert.NotNull(_MockNotificationRepository);
+            Assert.NotNull(_MockMessagePublisher);
+
+            // TODO: Setup Notification Repository
+        }
+
+        [Fact]
+        public void Test1()
+        {
+            Assert.Equal(1, 1);
+        }
     }
 }

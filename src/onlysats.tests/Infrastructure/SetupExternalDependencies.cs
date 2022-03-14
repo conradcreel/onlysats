@@ -5,54 +5,56 @@ using Moq;
 using onlysats.domain.Services;
 using onlysats.domain.Services.Repositories;
 
-namespace onlysats.tests.Infrastructure;
-
-public static class SetupExternalDependencies
+namespace onlysats.tests.Infrastructure
 {
-    public static Mock<ISqlRepository> SetupSqlRepository()
+
+    public static class SetupExternalDependencies
     {
-        var mock = new Mock<ISqlRepository>();
+        public static Mock<ISqlRepository> SetupSqlRepository()
+        {
+            var mock = new Mock<ISqlRepository>();
 
-        // TODO: Setup
+            // TODO: Setup
 
-        return mock;
-    }
+            return mock;
+        }
 
-    public static Mock<IBlobRepository> SetupBlobRepository()
-    {
-        var mock = new Mock<IBlobRepository>();
+        public static Mock<IBlobRepository> SetupBlobRepository()
+        {
+            var mock = new Mock<IBlobRepository>();
 
-        // TODO: Setup
+            // TODO: Setup
 
-        return mock;
-    }
+            return mock;
+        }
 
-    public static Mock<IBitcoinPaymentProcessor> SetupBitcoinPaymentProcessor()
-    {
-        var mock = new Mock<IBitcoinPaymentProcessor>();
+        public static Mock<IBitcoinPaymentProcessor> SetupBitcoinPaymentProcessor()
+        {
+            var mock = new Mock<IBitcoinPaymentProcessor>();
 
-        mock.Setup(b => b.CreateAccount(It.IsAny<CreateStoreRequest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((CreateStoreRequest request, CancellationToken cancellationToken) =>
-            {
-                return new StoreData
+            mock.Setup(b => b.CreateAccount(It.IsAny<CreateStoreRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((CreateStoreRequest request, CancellationToken cancellationToken) =>
                 {
-                    Id = Guid.NewGuid().ToString(),
-                    Name = request.Name
-                };
-            });
+                    return new StoreData
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        Name = request.Name
+                    };
+                });
 
 
-        mock.Setup(b => b.UpdateOnChainPaymentMethod(It.IsAny<string>(), It.IsAny<UpdateOnChainPaymentMethodRequest>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync((string accountId, UpdateOnChainPaymentMethodRequest request, CancellationToken cancellationToken) =>
-            {
-                return new OnChainPaymentMethodData
+            mock.Setup(b => b.UpdateOnChainPaymentMethod(It.IsAny<string>(), It.IsAny<UpdateOnChainPaymentMethodRequest>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync((string accountId, UpdateOnChainPaymentMethodRequest request, CancellationToken cancellationToken) =>
                 {
-                    
-                };
-            });
+                    return new OnChainPaymentMethodData
+                    {
 
-        //TODO: Setup rest of methods
+                    };
+                });
 
-        return mock;
+            //TODO: Setup rest of methods
+
+            return mock;
+        }
     }
 }

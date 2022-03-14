@@ -3,13 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30114.105
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "onlysats.domain", "onlysats.domain\onlysats.domain.csproj", "{221CC3A8-8F3F-4791-A6D4-9422637F3887}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "onlysatsdomain", "onlysatsdomain\onlysatsdomain.csproj", "{221CC3A8-8F3F-4791-A6D4-9422637F3887}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "onlysats.tests", "onlysats.tests\onlysats.tests.csproj", "{571AA420-7D4C-40DA-BF67-D458E6B56E1D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "onlysatsweb", "onlysatsweb\onlysatsweb.csproj", "{9AB01758-A28A-4EB8-BB58-33953142EDED}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "onlysats.web", "onlysats.web\onlysats.web.csproj", "{94AB929D-894C-4C81-9344-B602675B5DB2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "sandbox", "sandbox\sandbox.csproj", "{9B687661-EDE0-4E6F-B570-30C9BF314852}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "onlysats.tests", "onlysats.tests\onlysats.tests.csproj", "{ADEB5E0C-EE67-43F6-98F7-F272F834CA34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,5 +34,17 @@ Global
 		{9B687661-EDE0-4E6F-B570-30C9BF314852}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B687661-EDE0-4E6F-B570-30C9BF314852}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B687661-EDE0-4E6F-B570-30C9BF314852}.Release|Any CPU.Build.0 = Release|Any CPU
+		{499AF401-562A-4C95-BA85-268BC7389DB5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{499AF401-562A-4C95-BA85-268BC7389DB5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{499AF401-562A-4C95-BA85-268BC7389DB5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{499AF401-562A-4C95-BA85-268BC7389DB5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9AB01758-A28A-4EB8-BB58-33953142EDED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9AB01758-A28A-4EB8-BB58-33953142EDED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9AB01758-A28A-4EB8-BB58-33953142EDED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9AB01758-A28A-4EB8-BB58-33953142EDED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ADEB5E0C-EE67-43F6-98F7-F272F834CA34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ADEB5E0C-EE67-43F6-98F7-F272F834CA34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ADEB5E0C-EE67-43F6-98F7-F272F834CA34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ADEB5E0C-EE67-43F6-98F7-F272F834CA34}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

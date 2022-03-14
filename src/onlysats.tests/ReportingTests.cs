@@ -1,13 +1,15 @@
 using Xunit;
 using FluentAssertions;
 
-namespace onlysats.tests;
-
-public class ReportingTests
+namespace onlysats.tests
 {
-    [Fact]
-    public void Test1()
+
+    public class ReportingTests
     {
-        Assert.Equal(1,1);
+        [Fact]
+        public void Test1()
+        {
+            Assert.Equal(1, 1);
+        }
     }
 }

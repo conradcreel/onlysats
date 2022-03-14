@@ -1,0 +1,95 @@
+id: onlysats
+title: Only Sats
+version: "0.1"
+release-notes: "Testing Deployment"
+license: mit
+wrapper-repo: "https://github.com/conradcreel/onlysats"
+upstream-repo: "https://github.com/conradcreel/onlysats"
+support-site: "https://github.com/conradcreel/onlysats"
+marketing-site: "https://github.com/conradcreel/onlysats"
+donation-url: "https://github.com/conradcreel/onlysats"
+build: ["make"]
+description:
+  short: OnlyFans on Bitcoin
+  long: |
+    This is where I'd provide a longer description
+assets:
+  license: LICENSE
+  icon: icon.png
+  instructions: instructions.md
+  docker-images: image.tar
+main:
+  type: docker
+  image: main
+  entrypoint: "docker_entrypoint.sh"
+  args: []
+  mounts:
+    main: /datadir
+  io-format: yaml
+health-checks:
+  web-ui:
+    name: Web UI
+    success-message: OnlySats is ready to visit in a web browser
+    type: docker
+    image: main
+    entrypoint: health_check.sh
+    args: ["web"]
+    io-format: json
+    inject: true
+volumes:
+  main:
+    type: data
+  compat:
+    type: assets
+  utils:
+    type: assets
+alerts:
+  install: |
+    This would contain the install instructions for OnlySats
+  uninstall: |
+    This would contain the uninstall instructions for OnlySats
+  restore: "Some restore notes for OnlySats"
+interfaces:
+  main:
+    name: Web Interface
+    description: User interface for interacting with OnlySats in a browser.
+    tor-config:
+      port-mapping:
+        80: "23001"
+    lan-config:
+      443:
+        ssl: true
+        internal: 23002
+    ui: true
+    protocols:
+      - tcp
+      - http
+backup:
+  create:
+    type: docker
+    image: compat
+    system: true
+    entrypoint: compat
+    args:
+      - duplicity
+      - create
+      - /mnt/backup
+      - /datadir
+    mounts:
+      BACKUP: /mnt/backup
+      main: /datadir
+    io-format: yaml
+  restore:
+    type: docker
+    image: compat
+    system: true
+    entrypoint: compat
+    args:
+      - duplicity
+      - restore
+      - /mnt/backup
+      - /datadir
+    mounts:
+      BACKUP: /mnt/backup
+      main: /datadir
+    io-format: yaml

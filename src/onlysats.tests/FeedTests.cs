@@ -4,38 +4,40 @@ using onlysats.domain.Services.Repositories;
 using onlysats.domain.Services;
 using onlysats.tests.Infrastructure;
 
-namespace onlysats.tests;
-
-public class FeedTests
+namespace onlysats.tests
 {
-    private Mock<IFeedRepository> _MockFeedRepository;
-    private Mock<IMessagePublisher> _MockMessagePublisher;
-    private IFeedService _FeedService;
 
-    public FeedTests()
+    public class FeedTests
     {
-        _MockFeedRepository = new Mock<IFeedRepository>();
-        _MockMessagePublisher = SetupInternalDependencies.SetupMessagePublisher();
+        private Mock<IFeedRepository> _MockFeedRepository;
+        private Mock<IMessagePublisher> _MockMessagePublisher;
+        private IFeedService _FeedService;
 
-        Setup();
+        public FeedTests()
+        {
+            _MockFeedRepository = new Mock<IFeedRepository>();
+            _MockMessagePublisher = SetupInternalDependencies.SetupMessagePublisher();
 
-        _FeedService = new FeedService(
-            feedRepository: _MockFeedRepository.Object,
-            messagePublisher: _MockMessagePublisher.Object
-        );
-    }
+            Setup();
 
-    private void Setup()
-    {
-        Assert.NotNull(_MockFeedRepository);
-        Assert.NotNull(_MockMessagePublisher);
+            _FeedService = new FeedService(
+                feedRepository: _MockFeedRepository.Object,
+                messagePublisher: _MockMessagePublisher.Object
+            );
+        }
 
-        // TODO: Setup Feed Repository
-    }
-    
-    [Fact]
-    public void Test1()
-    {
-        Assert.Equal(1,1);
+        private void Setup()
+        {
+            Assert.NotNull(_MockFeedRepository);
+            Assert.NotNull(_MockMessagePublisher);
+
+            // TODO: Setup Feed Repository
+        }
+
+        [Fact]
+        public void Test1()
+        {
+            Assert.Equal(1, 1);
+        }
     }
 }
