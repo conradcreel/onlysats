@@ -1,6 +1,6 @@
-<mxfile host="app.diagrams.net" modified="2022-01-13T19:36:33.198Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.110 Safari/537.36" etag="FnPxXC4uBOvDhANfeP9j" version="16.0.3" type="github" pages="5">
+<mxfile host="app.diagrams.net" modified="2022-04-10T20:39:54.043Z" agent="5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36" etag="6BdVYP_5BXbnO5mUcWT3" version="16.5.6" type="github" pages="6">
   <diagram id="UM9CCpyptlKB11P23nob" name="High Level Architecture">
-    <mxGraphModel dx="1259" dy="1297" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+    <mxGraphModel dx="1581" dy="1110" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
@@ -694,6 +694,53 @@
         </mxCell>
         <mxCell id="LFRYRVIBiWF-F4SETPV2-35" value="Purchases available content on-demand. Successful fulfillment results in the linked assets being granted to the Patron&lt;br&gt;&amp;nbsp;&lt;span style=&quot;color: rgba(0 , 0 , 0 , 0) ; font-family: monospace ; font-size: 0px&quot;&gt;%3CmxGraphModel%3E%3Croot%3E%3CmxCell%20id%3D%220%22%2F%3E%3CmxCell%20id%3D%221%22%20parent%3D%220%22%2F%3E%3CmxCell%20id%3D%222%22%20value%3D%22Successful%20fulfillment%20results%20in%20the%20linked%20assets%20being%20granted%20to%20the%20Patron%22%20style%3D%22text%3Bhtml%3D1%3BstrokeColor%3Dnone%3BfillColor%3Dnone%3Balign%3Dcenter%3BverticalAlign%3Dmiddle%3BwhiteSpace%3Dwrap%3Brounded%3D0%3Brotation%3D-50%3B%22%20vertex%3D%221%22%20parent%3D%221%22%3E%3CmxGeometry%20x%3D%22200%22%20y%3D%22535%22%20width%3D%22170%22%20height%3D%2230%22%20as%3D%22geometry%22%2F%3E%3C%2FmxCell%3E%3C%2Froot%3E%3C%2FmxGraphModel%3E&lt;/span&gt;" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;" vertex="1" parent="VZ4JAdg4isAAo80FsyF1-1">
           <mxGeometry x="110" y="780" width="650" height="30" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+  <diagram id="zvnIsrwY13V9c7HUKIvL" name="Synapse API calls">
+    <mxGraphModel dx="1399" dy="944" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="d94EgEqfrwJeS8P4uoFS-0" />
+        <mxCell id="d94EgEqfrwJeS8P4uoFS-1" parent="d94EgEqfrwJeS8P4uoFS-0" />
+        <mxCell id="d94EgEqfrwJeS8P4uoFS-4" value="admin:createUser" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="d94EgEqfrwJeS8P4uoFS-1">
+          <mxGeometry x="40" y="160" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="d94EgEqfrwJeS8P4uoFS-5" value="admin:createRoom" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="d94EgEqfrwJeS8P4uoFS-1">
+          <mxGeometry x="40" y="320" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="d94EgEqfrwJeS8P4uoFS-6" value="login" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="d94EgEqfrwJeS8P4uoFS-1">
+          <mxGeometry x="40" y="240" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="d94EgEqfrwJeS8P4uoFS-7" value="admin:getRoomDetails" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="d94EgEqfrwJeS8P4uoFS-1">
+          <mxGeometry x="40" y="480" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="d94EgEqfrwJeS8P4uoFS-8" value="listUserRooms" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="d94EgEqfrwJeS8P4uoFS-1">
+          <mxGeometry x="40" y="400" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="d94EgEqfrwJeS8P4uoFS-9" value="admin:addUserToRoom" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="d94EgEqfrwJeS8P4uoFS-1">
+          <mxGeometry x="240" y="320" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="d94EgEqfrwJeS8P4uoFS-11" value="listRoomEvents" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="d94EgEqfrwJeS8P4uoFS-1">
+          <mxGeometry x="240" y="480" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="d94EgEqfrwJeS8P4uoFS-12" value="sendRoomEvent" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="d94EgEqfrwJeS8P4uoFS-1">
+          <mxGeometry x="440" y="480" width="160" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="d94EgEqfrwJeS8P4uoFS-13" value="Creates the user account in Synapse" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" vertex="1" parent="d94EgEqfrwJeS8P4uoFS-1">
+          <mxGeometry x="640" y="160" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="d94EgEqfrwJeS8P4uoFS-14" value="Obtains a Synapse access token" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" vertex="1" parent="d94EgEqfrwJeS8P4uoFS-1">
+          <mxGeometry x="640" y="240" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="d94EgEqfrwJeS8P4uoFS-15" value="Creates a DM between Patron and Creator by creating a Room and then adding both users to it" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" vertex="1" parent="d94EgEqfrwJeS8P4uoFS-1">
+          <mxGeometry x="640" y="320" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="d94EgEqfrwJeS8P4uoFS-16" value="Constructs the DM list the user can select from. For a Patron, it is at most 1. For a Creator, it&#39;s many" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" vertex="1" parent="d94EgEqfrwJeS8P4uoFS-1">
+          <mxGeometry x="640" y="400" width="200" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="d94EgEqfrwJeS8P4uoFS-17" value="Provides the encrypted and private Chat capability" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;whiteSpace=wrap;rounded=0;" vertex="1" parent="d94EgEqfrwJeS8P4uoFS-1">
+          <mxGeometry x="640" y="480" width="200" height="50" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
