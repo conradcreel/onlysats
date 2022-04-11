@@ -18,21 +18,41 @@ namespace onlysats.web.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _Client = new HttpClient();
-        }
-
-        public async Task<IActionResult> Index()
-        {
-            var response = await _Client.GetAsync("https://google.com");
-            response.EnsureSuccessStatusCode();
-
-            var data = await response.Content.ReadAsStringAsync();
-            var vm = new HomeModel
+            var handler = new HttpClientHandler()
             {
-                DataSize = data.Length
+                ServerCertificateCustomValidationCallback = HttpClientHandler.DangerousAcceptAnyServerCertificateValidator
             };
 
-            return View(vm);
+            _Client = new HttpClient(handler);
+        }
+
+        public async Task<IActionResult> Index(int x = 0)
+        {
+            if (x > 0)
+            {
+                try
+                {
+                    var response = await _Client.GetAsync("https://synapse.embassy:8448/_matrix/client/r0/publicRooms?access_token=syt_YWRtaW4_SWbYUHIsJFCZvdPmCbqG_01oq9A");
+                    response.EnsureSuccessStatusCode();
+
+                    var data = await response.Content.ReadAsStringAsync();
+                    var vm = new HomeModel
+                    {
+                        DataSize = data.Length
+                    };
+
+
+                    return View(vm);
+                }
+                catch (Exception ex)
+                {
+                    return View(new HomeModel { DataSize = -1 });
+                }
+            }
+            else
+            {
+                return View(new HomeModel());
+            }
         }
 
         public IActionResult Privacy()

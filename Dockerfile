@@ -56,7 +56,6 @@ ENV ONLYSATS_DATADIR=/datadir/onlysats
 ENV LC_ALL=C 
 
 EXPOSE 23001 80
-EXPOSE 23002 443
 #ADD ./configurator/target/aarch64-unknown-linux-musl/release/configurator /usr/local/bin/configurator
 COPY ./docker_entrypoint.sh /usr/local/bin/docker_entrypoint.sh
 COPY assets/utils/health_check.sh /usr/local/bin/health_check.sh

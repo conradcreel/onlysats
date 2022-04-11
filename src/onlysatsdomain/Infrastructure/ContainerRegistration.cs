@@ -7,7 +7,7 @@ using onlysats.domain.Services.Repositories;
 namespace onlysats.domain.Infrastructure
 {
     public static class ContainerRegistration
-    { 
+    {
         public static void Register(IServiceCollection services, IConfiguration configuration)
         {
             var onlySatsConfig = new OnlySatsConfiguration
@@ -22,6 +22,7 @@ namespace onlysats.domain.Infrastructure
             services.AddSingleton(onlySatsConfig);
 
             services.AddHttpClient<IBitcoinPaymentProcessor, BtcPayServerProxy>(); // TODO: Add Polly Policies
+            services.AddHttpClient<IChatService, SynapseChatService>(); // TODO: Add Polly Policies
 
             services.AddScoped<IMessagePublisher, MessagePublisherProxy>();
             services.AddScoped<ISqlRepository, SqlRepository>();
@@ -38,7 +39,6 @@ namespace onlysats.domain.Infrastructure
             services.AddTransient<IPaymentRepository, PaymentRepository>();
 
             services.AddTransient<IAccountingService, AccountingService>();
-            services.AddTransient<IChatService, ChatService>();
             services.AddTransient<IContentManagementService, ContentManagementService>();
             services.AddTransient<IFeedService, FeedService>();
             services.AddTransient<IFinderService, FinderService>();

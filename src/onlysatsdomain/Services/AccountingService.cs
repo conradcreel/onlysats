@@ -21,8 +21,28 @@ namespace onlysats.domain.Services
         /// <summary>
         /// Sets up a Store and Wallet in BTCPay Server
         /// Updates the Wallet state in OnlySats
+        /// TODO: Delete this. Assume BTC PayServer is configured and setup properly.
         /// </summary>
         Task<SetupWalletResponse> SetupWallet(SetupWalletRequest request);
+
+        /*
+        /// <summary>
+        /// Handles the InvoiceReceivedPayment webhook by updating the status of the queued message
+        /// </summary>
+        Task<InvoiceReceivedPaymentResponse> HandleInvoiceReceivedPayment(InvoiceReceivedPaymentRequest request);
+
+        /// <summary>
+        /// Handles the InvoiceProcessing webhook by updating the status of the queued message
+        /// </summary>
+        Task<InvoiceProcessingResponse> HandleInvoiceProcessing(InvoiceProcessingRequest request);
+
+        */
+
+        /// <summary>
+        /// Handles the InvoiceSettled webhook. At this time, the payment has been completed and the queued 
+        /// message can be released to Synapse and displayed to the Patron
+        /// </summary>
+        Task<InvoiceSettledResponse> HandleInvoiceSettled(InvoiceSettledRequest request);
     }
 
     #region Implementation
@@ -40,6 +60,11 @@ namespace onlysats.domain.Services
             _PaymentRepository = paymentRepository;
             _BitcoinPaymentProcessor = bitcoinPaymentProcessor;
             _MessagePublisher = messagePublisher;
+        }
+
+        public Task<InvoiceSettledResponse> HandleInvoiceSettled(InvoiceSettledRequest request)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<SetupWalletResponse> SetupWallet(SetupWalletRequest request)

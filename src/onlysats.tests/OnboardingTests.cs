@@ -88,8 +88,6 @@ namespace onlysats.tests
             Username = "satoshi",
             Email = "satoshi@bitcoin.org",
             Role = userAccountId == EXISTING_CREATOR_USER_ACCOUNT_ID ? EUserRole.CREATOR : EUserRole.PATRON,
-            UserId = "user290919",
-            IdpSource = "Auth0",
             DateAddedUtc = DateTime.UtcNow,
             DateUpdatedUtc = DateTime.UtcNow
         };

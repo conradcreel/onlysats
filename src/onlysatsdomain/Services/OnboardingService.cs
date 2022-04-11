@@ -126,8 +126,6 @@ namespace onlysats.domain.Services
             var userAccount = await _UserAccountRepository.UpsertUserAccount(new UserAccount
             {
                 Username = request.Username,
-                UserId = request.UserId,
-                IdpSource = request.IdpSource,
                 Email = request.Email,
                 Role = EUserRole.CREATOR
             });
@@ -176,8 +174,6 @@ namespace onlysats.domain.Services
             var userAccount = await _UserAccountRepository.UpsertUserAccount(new UserAccount
             {
                 Username = request.Username,
-                UserId = request.UserId,
-                IdpSource = request.IdpSource,
                 Email = request.Email,
                 Role = EUserRole.PATRON
             });
