@@ -7,7 +7,7 @@ namespace onlysats.web.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    public class ReportingController : ControllerBase
+    public class ReportingController : _BaseController
     {
         private readonly ILogger<ReportingController> _Logger;
         private readonly IReportingService _ReportingService;

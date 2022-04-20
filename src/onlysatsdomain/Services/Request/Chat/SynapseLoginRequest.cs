@@ -2,7 +2,7 @@ using System.Text.Json.Serialization;
 
 namespace onlysats.domain.Services.Request.Chat
 {
-    public class LoginRequest : SynapseRequestBase
+    public class SynapseLoginRequest : SynapseRequestBase
     {
         [JsonPropertyName("type")]
         public string Type { get; set; } = "m.login.password";

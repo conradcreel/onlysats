@@ -15,8 +15,15 @@ namespace onlysats.domain.Entity
         public string Username { get; set; } = string.Empty;
 
         /// <summary>
+        /// The user's password hashed by SHA-256
+        /// </summary>
+        public string PasswordHash { get; set; }
+
+        /// <summary>
         /// Never displayed or available to the user. Used to authenticate
-        /// with Synapse in the backend
+        /// with Synapse in the backend. Needs to be plaintext for our 
+        /// purposes but is generally safe as Synapse is used as a backend
+        /// once the user has securely authenticated with OnlySats
         /// </summary>
         public string ChatPassword { get; set; }
 

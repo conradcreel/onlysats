@@ -12,6 +12,9 @@ using onlysats.domain.Models;
 using onlysats.domain.Enums;
 using onlysats.domain.Constants;
 using onlysats.domain.Services.Request;
+using onlysats.domain.Services.Request.Chat;
+using onlysats.domain.Services.Response.Chat;
+using onlysats.domain.Services.Response;
 
 namespace onlysats.tests
 {
@@ -30,6 +33,7 @@ namespace onlysats.tests
         private Mock<ICreatorRepository> _MockCreatorRepository;
         private Mock<IPatronRepository> _MockPatronRepository;
         private Mock<IMessagePublisher> _MockMessagePublisher;
+        private Mock<IChatService> _MockChatService;
 
         private IOnboardingService _OnboardingService;
 
@@ -39,6 +43,7 @@ namespace onlysats.tests
             _MockCreatorRepository = new Mock<ICreatorRepository>();
             _MockPatronRepository = new Mock<IPatronRepository>();
             _MockMessagePublisher = SetupInternalDependencies.SetupMessagePublisher();
+            _MockChatService = new Mock<IChatService>();
 
             Setup();
 
@@ -46,6 +51,7 @@ namespace onlysats.tests
                 userAccountRepository: _MockUserAccountRepository.Object,
                 creatorRepository: _MockCreatorRepository.Object,
                 patronRepository: _MockPatronRepository.Object,
+                chatService: _MockChatService.Object,
                 messagePublisher: _MockMessagePublisher.Object
             );
         }
@@ -207,6 +213,18 @@ namespace onlysats.tests
             Assert.NotNull(_MockCreatorRepository);
             Assert.NotNull(_MockPatronRepository);
             Assert.NotNull(_MockMessagePublisher);
+            Assert.NotNull(_MockChatService);
+
+            _MockChatService
+                .Setup(c => c.CreateUser(It.IsAny<CreateUserRequest>()))
+                .ReturnsAsync((CreateUserRequest request) =>
+                {
+                    return new CreateUserResponse
+                    {
+                        ResponseDetails = new ResponseEnvelope(),
+                        // TODO
+                    };
+                });
 
             _MockUserAccountRepository
                 .Setup(u => u.GetUserAccount(It.IsAny<int>()))
@@ -394,10 +412,9 @@ namespace onlysats.tests
         {
             var request = new SetupCreatorRequest
             {
-                UserId = Guid.NewGuid().ToString(),
-                IdpSource = "Auth0",
                 Email = "somenewcreator@gmail.com",
-                Username = "ignoring_it"
+                Username = "ignoring_it",
+                Password = "asdfkjl"
             };
 
             var response = await _OnboardingService.SetupCreator(request);
@@ -407,25 +424,6 @@ namespace onlysats.tests
             response?.ResponseDetails?.IsSuccess.Should().BeTrue();
             response?.UserAccountId.Should().Be(EXISTING_CREATOR_USER_ACCOUNT_ID);
             response?.CreatorId.Should().Be(EXISTING_CREATOR_ID);
-        }
-
-        [Fact]
-        public async Task Cannot_Register_Creator_With_Unsupported_IdP()
-        {
-            var request = new SetupCreatorRequest
-            {
-                IdpSource = Guid.NewGuid().ToString(),
-                Email = "doesnot@matter.com",
-                UserId = Guid.NewGuid().ToString(),
-                Username = "doesnotmatter"
-            };
-
-            var response = await _OnboardingService.SetupCreator(request);
-
-            response.Should().NotBeNull();
-            response.ResponseDetails.Should().NotBeNull();
-            response?.ResponseDetails?.IsSuccess.Should().BeFalse();
-            response?.ResponseDetails?.StatusCode.Should().Be(CResponseStatus.BAD_REQUEST);
         }
 
         [Fact]

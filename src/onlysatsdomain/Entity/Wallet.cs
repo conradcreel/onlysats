@@ -1,6 +1,7 @@
 namespace onlysats.domain.Entity
 {
     /// <summary>
+    /// TODO: DELETE?
     /// Stores reference data from BTCPayServer after importing their 
     /// xPubKey. We don't store the xPubkey to limit privacy implications
     /// </summary>

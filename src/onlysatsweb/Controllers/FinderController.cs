@@ -7,7 +7,7 @@ namespace onlysats.web.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    public class FinderController : ControllerBase
+    public class FinderController : _BaseController
     {
         private readonly ILogger<FinderController> _Logger;
         private readonly IFinderService _FinderService;

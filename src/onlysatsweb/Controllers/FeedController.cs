@@ -7,7 +7,7 @@ namespace onlysats.web.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    public class FeedController : ControllerBase
+    public class FeedController : _BaseController
     {
         private readonly ILogger<FeedController> _Logger;
         private readonly IFeedService _FeedService;

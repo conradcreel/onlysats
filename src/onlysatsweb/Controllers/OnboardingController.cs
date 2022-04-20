@@ -7,7 +7,7 @@ namespace onlysats.web.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    public class OnboardingController : ControllerBase
+    public class OnboardingController : _BaseController
     {
         private readonly ILogger<OnboardingController> _Logger;
         private readonly IOnboardingService _OnboardingService;

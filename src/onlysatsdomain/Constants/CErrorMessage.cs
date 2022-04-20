@@ -2,6 +2,10 @@ namespace onlysats.domain.Constants
 {
     public static class CErrorMessage
     {
+        public static readonly string LOGIN_BAD_REQUEST = "Must supply username and password";
+
+        public static readonly string LOGIN_INVALID = "Invalid Username and/or password";
+
         public static readonly string SETUP_WALLET_BAD_REQUEST = "Must supply UserAccountId, Username and xPubKey";
 
         public static readonly string SETUP_WALLET_CANNOT_CREATE_ACCOUNT = "Unable to create account with BTC Payment Processor";

@@ -16,7 +16,10 @@ namespace onlysats.domain.Infrastructure
                 BtcPayUri = configuration["BtcPayServer:Uri"],
                 BtcPayAdminUser = configuration["BtcPayServer:AdminUser"],
                 BtcPayAdminPass = configuration["BtcPayServer:AdminPass"],
-                PubSubName = configuration["PubSub:Name"]
+                PubSubName = configuration["PubSub:Name"],
+                SynapseUri = configuration["Synapse:Endpoint"],
+                SynapseAdminUser = configuration["Synapse:AdminUser"],
+                SynapseAdminPassword = configuration["Synapse:AdminPass"]
             };
 
             services.AddSingleton(onlySatsConfig);
@@ -30,6 +33,7 @@ namespace onlysats.domain.Infrastructure
 
             services.AddTransient<IAssetRepository, AssetRepository>();
             services.AddTransient<ICreatorRepository, CreatorRepository>();
+            services.AddTransient<IChatRepository, ChatRepository>();
             services.AddTransient<IFeedRepository, FeedRepository>();
             services.AddTransient<IPatronRepository, PatronRepository>();
             services.AddTransient<IUserAccountRepository, UserAccountRepository>();
@@ -39,6 +43,7 @@ namespace onlysats.domain.Infrastructure
             services.AddTransient<IPaymentRepository, PaymentRepository>();
 
             services.AddTransient<IAccountingService, AccountingService>();
+            services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IContentManagementService, ContentManagementService>();
             services.AddTransient<IFeedService, FeedService>();
             services.AddTransient<IFinderService, FinderService>();

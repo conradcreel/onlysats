@@ -7,7 +7,7 @@ namespace onlysats.web.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    public class ContentManagementController : ControllerBase
+    public class ContentManagementController : _BaseController
     {
         private readonly ILogger<ContentManagementController> _Logger;
         private readonly IContentManagementService _ContentManagementService;

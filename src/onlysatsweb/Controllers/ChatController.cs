@@ -7,7 +7,7 @@ namespace onlysats.web.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    public class ChatController : ControllerBase
+    public class ChatController : _BaseController
     {
         private readonly ILogger<ChatController> _Logger;
         private readonly IChatService _ChatService;

@@ -36,7 +36,7 @@ namespace onlysats.domain.Services
         /// token to use against the chat server backend. This username and password
         /// is not visible to the user, it's managed behind the scenes.
         /// </summary>
-        Task<LoginResponse> Login(LoginRequest request);
+        Task<SynapseLoginResponse> Login(SynapseLoginRequest request);
 
         /// <summary>
         /// Creates a private room for a (creator, patron) pair. This is how DMs will be implemented.
@@ -105,10 +105,10 @@ namespace onlysats.domain.Services
         private readonly HttpClient _HttpClient;
         private readonly OnlySatsConfiguration _Configuration;
         private readonly IChatRepository _ChatRepository;
-        private readonly BtcPayServerProxy _BitcoinPaymentProcessor;
+        private readonly IBitcoinPaymentProcessor _BitcoinPaymentProcessor;
 
         public SynapseChatService(IChatRepository chatRepository,
-                                  BtcPayServerProxy bitcoinPaymentProcessor,
+                                  IBitcoinPaymentProcessor bitcoinPaymentProcessor,
                                   OnlySatsConfiguration configuration,
                                   HttpClient client)
         {
@@ -174,29 +174,174 @@ namespace onlysats.domain.Services
             return await _HttpClient.SendAsync(httpRequestMessage).ConfigureAwait(continueOnCapturedContext: false);
         }
 
-        public Task<CreateRoomResponse> CreateRoom(CreateRoomRequest request)
+        public async Task<CreateRoomResponse> CreateRoom(CreateRoomRequest request)
         {
-            throw new System.NotImplementedException();
+            var response = await SendPutAsync<CreateRoomRequest>(request)
+                                    .ConfigureAwait(continueOnCapturedContext: false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                switch (response.StatusCode)
+                {
+                    case System.Net.HttpStatusCode.NotFound:
+                        return new CreateRoomResponse().NotFound();
+
+                    case System.Net.HttpStatusCode.BadRequest:
+                        return new CreateRoomResponse().BadRequest(errorBody);
+
+                    case System.Net.HttpStatusCode.Unauthorized:
+                        return new CreateRoomResponse().Unauthorized();
+
+                    case System.Net.HttpStatusCode.Forbidden:
+                        return new CreateRoomResponse().Forbidden();
+
+                    default:
+                        return new CreateRoomResponse().ServerError(errorBody);
+                }
+            }
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            var dto = JsonSerializer.Deserialize<CreateRoomResponse>(responseBody);
+
+            return dto.OK();
         }
 
-        public Task<CreateUserResponse> CreateUser(CreateUserRequest request)
+        public async Task<CreateUserResponse> CreateUser(CreateUserRequest request)
         {
-            throw new System.NotImplementedException();
+            var response = await SendPutAsync<CreateUserRequest>(request)
+                                    .ConfigureAwait(continueOnCapturedContext: false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                switch (response.StatusCode)
+                {
+                    case System.Net.HttpStatusCode.NotFound:
+                        return new CreateUserResponse().NotFound();
+
+                    case System.Net.HttpStatusCode.BadRequest:
+                        return new CreateUserResponse().BadRequest(errorBody);
+
+                    case System.Net.HttpStatusCode.Unauthorized:
+                        return new CreateUserResponse().Unauthorized();
+
+                    case System.Net.HttpStatusCode.Forbidden:
+                        return new CreateUserResponse().Forbidden();
+
+                    default:
+                        return new CreateUserResponse().ServerError(errorBody);
+                }
+            }
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            var dto = JsonSerializer.Deserialize<CreateUserResponse>(responseBody);
+
+            return dto.OK();
         }
 
-        public Task<GetRoomEventsResponse> GetRoomEvents(GetRoomEventsRequest request)
+        public async Task<GetRoomEventsResponse> GetRoomEvents(GetRoomEventsRequest request)
         {
-            throw new System.NotImplementedException();
+            var response = await SendGetAsync<GetRoomEventsRequest>(request)
+                                    .ConfigureAwait(continueOnCapturedContext: false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                switch (response.StatusCode)
+                {
+                    case System.Net.HttpStatusCode.NotFound:
+                        return new GetRoomEventsResponse().NotFound();
+
+                    case System.Net.HttpStatusCode.BadRequest:
+                        return new GetRoomEventsResponse().BadRequest(errorBody);
+
+                    case System.Net.HttpStatusCode.Unauthorized:
+                        return new GetRoomEventsResponse().Unauthorized();
+
+                    case System.Net.HttpStatusCode.Forbidden:
+                        return new GetRoomEventsResponse().Forbidden();
+
+                    default:
+                        return new GetRoomEventsResponse().ServerError(errorBody);
+                }
+            }
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            var dto = JsonSerializer.Deserialize<GetRoomEventsResponse>(responseBody);
+
+            return dto.OK();
         }
 
-        public Task<GetRoomListResponse> GetRoomList(GetRoomListRequest request)
+        public async Task<GetRoomListResponse> GetRoomList(GetRoomListRequest request)
         {
-            throw new System.NotImplementedException();
+            var response = await SendGetAsync<GetRoomListRequest>(request)
+                                    .ConfigureAwait(continueOnCapturedContext: false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                switch (response.StatusCode)
+                {
+                    case System.Net.HttpStatusCode.NotFound:
+                        return new GetRoomListResponse().NotFound();
+
+                    case System.Net.HttpStatusCode.BadRequest:
+                        return new GetRoomListResponse().BadRequest(errorBody);
+
+                    case System.Net.HttpStatusCode.Unauthorized:
+                        return new GetRoomListResponse().Unauthorized();
+
+                    case System.Net.HttpStatusCode.Forbidden:
+                        return new GetRoomListResponse().Forbidden();
+
+                    default:
+                        return new GetRoomListResponse().ServerError(errorBody);
+                }
+            }
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            var dto = JsonSerializer.Deserialize<GetRoomListResponse>(responseBody);
+
+            return dto.OK();
         }
 
-        public Task<LoginResponse> Login(LoginRequest request)
+        public async Task<SynapseLoginResponse> Login(SynapseLoginRequest request)
         {
-            throw new System.NotImplementedException();
+            var response = await SendPostAsync<SynapseLoginRequest>(request)
+                                    .ConfigureAwait(continueOnCapturedContext: false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                switch (response.StatusCode)
+                {
+                    case System.Net.HttpStatusCode.NotFound:
+                        return new SynapseLoginResponse().NotFound();
+
+                    case System.Net.HttpStatusCode.BadRequest:
+                        return new SynapseLoginResponse().BadRequest(errorBody);
+
+                    case System.Net.HttpStatusCode.Unauthorized:
+                        return new SynapseLoginResponse().Unauthorized();
+
+                    case System.Net.HttpStatusCode.Forbidden:
+                        return new SynapseLoginResponse().Forbidden();
+
+                    default:
+                        return new SynapseLoginResponse().ServerError(errorBody);
+                }
+            }
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            var dto = JsonSerializer.Deserialize<SynapseLoginResponse>(responseBody);
+
+            return dto.OK();
         }
 
         public async Task<QueueMessageResponse> QueueMessage(QueueMessageRequest request)
@@ -206,13 +351,10 @@ namespace onlysats.domain.Services
                 var chatServerResponse = await ReleaseMessage(new ReleaseMessageRequest
                 {
                     RoomId = request.RoomId,
-                    // etc.listRoomEvents
+                    Body = request.MessageContent,
+                    FormattedBody = request.MessageContent,
+                    AccessToken = request.SynapseAccessToken
                 }).ConfigureAwait(continueOnCapturedContext: false);
-
-                if (chatServerResponse.ResponseDetails.IsSuccess)
-                {
-                    return new QueueMessageResponse().OK();
-                }
 
                 return new QueueMessageResponse
                 {
@@ -226,7 +368,7 @@ namespace onlysats.domain.Services
             {
                 Amount = milliSats.ToString(),
                 Description = request.Description,
-                Expiry = new TimeSpan(0, 15, 0),
+                Expiry = new TimeSpan(0, 60, 0),
                 PrivateRouteHints = true
             });
 
@@ -241,11 +383,11 @@ namespace onlysats.domain.Services
             var msg = await _ChatRepository.QueueMessage(new QueuedMessage
             {
                 CreatorId = request.SenderUserId,
-                PatronId = request.ReceiverUserId,
                 RoomId = request.RoomId,
                 MessageContent = request.MessageContent,
                 InvoiceId = invoice.Id,
-                BOLT11 = invoice.BOLT11
+                BOLT11 = invoice.BOLT11,
+                SynapseAccessToken = request.SynapseAccessToken
             }).ConfigureAwait(continueOnCapturedContext: false);
 
             return new QueueMessageResponse

@@ -3,7 +3,7 @@ namespace onlysats.domain.Services.Request.Chat
     public class QueueMessageRequest : RequestBase
     {
         public int SenderUserId { get; set; }
-        public int ReceiverUserId { get; set; }
+        public string SynapseAccessToken { get; set; }
         public string RoomId { get; set; }
         public string MessageContent { get; set; }
 

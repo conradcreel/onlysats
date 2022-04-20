@@ -1,3 +1,4 @@
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using onlysats.domain.Constants;
 using onlysats.domain.Entity;
@@ -59,17 +60,20 @@ namespace onlysats.domain.Services
         private readonly IUserAccountRepository _UserAccountRepository;
         private readonly ICreatorRepository _CreatorRepository;
         private readonly IPatronRepository _PatronRepository;
+        private readonly IChatService _ChatService;
         private readonly IMessagePublisher _MessagePublisher;
 
         public OnboardingService(IUserAccountRepository userAccountRepository,
                                 ICreatorRepository creatorRepository,
-                            IPatronRepository patronRepository,
-                            IMessagePublisher messagePublisher
+                                IPatronRepository patronRepository,
+                                IChatService chatService,
+                                IMessagePublisher messagePublisher
                             )
         {
             _UserAccountRepository = userAccountRepository;
             _CreatorRepository = creatorRepository;
             _PatronRepository = patronRepository;
+            _ChatService = chatService;
             _MessagePublisher = messagePublisher;
         }
 
@@ -127,7 +131,8 @@ namespace onlysats.domain.Services
             {
                 Username = request.Username,
                 Email = request.Email,
-                Role = EUserRole.CREATOR
+                Role = EUserRole.CREATOR,
+                PasswordHash = HashService.SHA256(request.Password)
             });
 
             if (userAccount == null)
@@ -146,6 +151,8 @@ namespace onlysats.domain.Services
                 return new SetupCreatorResponse()
                             .ServerError(CErrorMessage.SETUP_CREATOR_FAIL);
             }
+
+            // TODO: create synapse user
 
             var domainEvent = new NewCreatorJoinedEvent
             {
@@ -175,7 +182,8 @@ namespace onlysats.domain.Services
             {
                 Username = request.Username,
                 Email = request.Email,
-                Role = EUserRole.PATRON
+                Role = EUserRole.PATRON,
+                PasswordHash = HashService.SHA256(request.Password)
             });
 
             if (userAccount == null)
@@ -195,6 +203,9 @@ namespace onlysats.domain.Services
                 return new SetupPatronResponse()
                             .ServerError(CErrorMessage.SETUP_PATRON_FAIL);
             }
+
+
+            // TODO: create synapse user
 
             var domainEvent = new NewPatronJoinedEvent
             {

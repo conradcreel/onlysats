@@ -7,7 +7,7 @@ namespace onlysats.web.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    public class UserEngagementController : ControllerBase
+    public class UserEngagementController : _BaseController
     {
         private readonly ILogger<UserEngagementController> _Logger;
         private readonly IUserEngagementService _UserEngagementService;

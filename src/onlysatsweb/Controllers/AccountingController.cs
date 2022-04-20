@@ -10,7 +10,7 @@ namespace onlysats.web.Controllers
 
     [ApiController]
     [Route("[controller]")]
-    public class AccountingController : ControllerBase
+    public class AccountingController : _BaseController
     {
         private readonly ILogger<AccountingController> _Logger;
         private readonly IAccountingService _AccountingService;

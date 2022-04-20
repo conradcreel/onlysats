@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
 using BTCPayServer.Client.Models;
 using onlysats.domain.Constants;
@@ -62,9 +63,15 @@ namespace onlysats.domain.Services
             _MessagePublisher = messagePublisher;
         }
 
-        public Task<InvoiceSettledResponse> HandleInvoiceSettled(InvoiceSettledRequest request)
+        public async Task<InvoiceSettledResponse> HandleInvoiceSettled(InvoiceSettledRequest request)
         {
-            throw new NotImplementedException();
+            // TODO
+            await Task.Delay(10);
+
+            return new InvoiceSettledResponse
+            {
+
+            }.OK();
         }
 
         public async Task<SetupWalletResponse> SetupWallet(SetupWalletRequest request)
