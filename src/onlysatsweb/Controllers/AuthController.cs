@@ -36,7 +36,7 @@ namespace onlysats.web.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginModel model, [FromQuery] string returnUrl = null)
+        public async Task<IActionResult> Login([FromForm] LoginModel model, [FromQuery] string returnUrl = null)
         {
             if (ModelState.IsValid)
             {
@@ -93,7 +93,7 @@ namespace onlysats.web.Controllers
                     new ClaimsPrincipal(claimsIdentity),
                     authProperties);
 
-                if (Url.IsLocalUrl(returnUrl))
+                if (!string.IsNullOrWhiteSpace(returnUrl) && Url.IsLocalUrl(returnUrl))
                     return Redirect(returnUrl);
 
                 return RedirectToAction("Index", "Home");
@@ -102,7 +102,7 @@ namespace onlysats.web.Controllers
             return View();
         }
 
-        [HttpGet("logout")]
+        [HttpGet]
         public async Task<IActionResult> Logout(string returnUrl = null)
         {
             // Clear the existing external cookie
