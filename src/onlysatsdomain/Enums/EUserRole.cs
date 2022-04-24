@@ -6,6 +6,7 @@ namespace onlysats.domain.Enums
     public enum EUserRole
     {
         CREATOR = 1,
-        PATRON = 2
+        PATRON = 2,
+        ADMIN = 3
     }
 }

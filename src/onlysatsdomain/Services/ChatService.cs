@@ -48,6 +48,9 @@ namespace onlysats.domain.Services
         /// Given a user's access token, retrieve a list of the rooms they have joined.
         /// For creators this will consist of every DM they've engaged with.
         /// For patrons this will usually only be one (their DM with the Creator)
+        /// 
+        /// If AdminRequest = true, it will call the admin API /rooms endpoint which 
+        /// will return all rooms
         ///
         /// Note: Currently investigating how we may use Synapse as the backend for
         /// the timeline. Might be more trouble than its worth
@@ -130,9 +133,9 @@ namespace onlysats.domain.Services
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"{_Configuration.SynapseUri}/{data.GenerateUrl()}");
             httpRequestMessage.Headers.Add("Accept", _Accept);
 
-            if (!string.IsNullOrWhiteSpace(data.AccessToken))
+            if (!string.IsNullOrWhiteSpace(data?.UserContext?.ChatAccessToken))//.AccessToken))
             {
-                httpRequestMessage.Headers.Add("Authorization", $"Bearer {data.AccessToken}");
+                httpRequestMessage.Headers.Add("Authorization", $"Bearer {data.UserContext.ChatAccessToken}");
             }
 
             var requestBody = JsonSerializer.Serialize(data, SerializerOptions);
@@ -148,9 +151,9 @@ namespace onlysats.domain.Services
             var httpRequestMessage = new HttpRequestMessage(HttpMethod.Put, $"{_Configuration.SynapseUri}/{data.GenerateUrl()}");
             httpRequestMessage.Headers.Add("Accept", _Accept);
 
-            if (!string.IsNullOrWhiteSpace(data.AccessToken))
+            if (!string.IsNullOrWhiteSpace(data?.UserContext?.ChatAccessToken))//.AccessToken))
             {
-                httpRequestMessage.Headers.Add("Authorization", $"Bearer {data.AccessToken}");
+                httpRequestMessage.Headers.Add("Authorization", $"Bearer {data.UserContext.ChatAccessToken}");
             }
 
             var requestBody = JsonSerializer.Serialize(data, SerializerOptions);
@@ -163,12 +166,12 @@ namespace onlysats.domain.Services
         protected async Task<HttpResponseMessage>
             SendGetAsync<TRequest>(TRequest data) where TRequest : SynapseRequestBase
         {
-            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"{_Configuration.SynapseUri}/{data.GenerateUrl()}");
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{_Configuration.SynapseUri}/{data.GenerateUrl()}");
             httpRequestMessage.Headers.Add("Accept", _Accept);
 
-            if (!string.IsNullOrWhiteSpace(data.AccessToken))
+            if (!string.IsNullOrWhiteSpace(data?.UserContext?.ChatAccessToken))//.AccessToken))
             {
-                httpRequestMessage.Headers.Add("Authorization", $"Bearer {data.AccessToken}");
+                httpRequestMessage.Headers.Add("Authorization", $"Bearer {data.UserContext.ChatAccessToken}");
             }
 
             return await _HttpClient.SendAsync(httpRequestMessage).ConfigureAwait(continueOnCapturedContext: false);

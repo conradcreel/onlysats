@@ -1,0 +1,14 @@
+@using onlysatsweb.Models.Chat
+@model RoomListModel
+
+@if (Model == null || !Model.Rooms.Any())
+{
+    <p>No Rooms</p>
+}
+else
+{
+    foreach (var room in Model.Rooms)
+    {
+        <p>@room.Name (@room.RoomId)</p>
+    }
+}

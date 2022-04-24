@@ -10,7 +10,7 @@ using System.Net.Http;
 
 namespace onlysats.web.Controllers
 {
-    public class HomeController : Controller
+    public class HomeController : _BaseController
     {
         private readonly ILogger<HomeController> _logger;
         private readonly HttpClient _Client;

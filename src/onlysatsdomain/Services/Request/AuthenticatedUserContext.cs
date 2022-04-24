@@ -11,5 +11,6 @@ namespace onlysats.domain.Services.Request
         public int UserAccountId { get; set; }
         public string Username { get; set; }
         public EUserRole UserRole { get; set; }
+        public string ChatAccessToken { get; set; }
     }
 }

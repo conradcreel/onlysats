@@ -13,6 +13,7 @@ using onlysats.domain.Services.Request.Auth;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
+using onlysats.domain.Models;
 
 namespace onlysats.web.Controllers
 {
@@ -20,12 +21,14 @@ namespace onlysats.web.Controllers
     {
         private readonly ILogger<AuthController> _logger;
         private readonly IAuthService _AuthService;
+        private readonly OnlySatsConfiguration _Configuration;
 
         public AuthController(IAuthService authService,
+                              OnlySatsConfiguration configuration,
                                 ILogger<AuthController> logger)
         {
             _logger = logger;
-
+            _Configuration = configuration;
             _AuthService = authService;
         }
 
@@ -53,12 +56,27 @@ namespace onlysats.web.Controllers
                     return View();
                 }
 
+                var adminLoginResponse = await _AuthService.Login(new LoginRequest
+                {
+                    Username = _Configuration.SynapseAdminUser,
+                    Password = _Configuration.SynapseAdminPassword,
+                    AdminRequest = true
+                }).ConfigureAwait(continueOnCapturedContext: false);
+
+                if (!adminLoginResponse.ResponseDetails.IsSuccess)
+                {
+                    ModelState.AddModelError(string.Empty, "Could not get synapse token");
+
+                    return View();
+                }
+
                 var claims = new List<Claim>
                 {
                     new Claim("Id", loginResponse.UserAccountId.ToString()),
                     new Claim("Role", loginResponse.Role.ToString()),
                     new Claim("ChatAccessToken", loginResponse.ChatAccessToken),
-                    new Claim("Username", loginResponse.Username)
+                    new Claim("Username", loginResponse.Username),
+                    new Claim("AdminChatAccessToken", adminLoginResponse.ChatAccessToken)
                 };
 
                 var claimsIdentity = new ClaimsIdentity(

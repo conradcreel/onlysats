@@ -6,6 +6,7 @@ using onlysats.domain.Services.Request.Chat;
 using onlysats.domain.Services.Request.Auth;
 using onlysats.domain.Services.Response;
 using onlysats.domain.Services.Response.Auth;
+using onlysats.domain.Entity;
 
 namespace onlysats.domain.Services
 {
@@ -43,19 +44,40 @@ namespace onlysats.domain.Services
                             .BadRequest(CErrorMessage.LOGIN_BAD_REQUEST);
             }
 
-            var userAccount = await _UserAccountRepository.GetUserAccount(request.Username, HashService.SHA256(request.Password));
+            SynapseLoginRequest synapseLoginRequest;
+            UserAccount userAccount;
 
-            if (userAccount == null || userAccount.Id <= 0)
+            if (!request.AdminRequest)
             {
-                return new LoginResponse()
-                            .NotFound();
+                userAccount = await _UserAccountRepository.GetUserAccount(request.Username, HashService.SHA256(request.Password));
+
+                if (userAccount == null || userAccount.Id <= 0)
+                {
+                    return new LoginResponse()
+                                .NotFound();
+                }
+
+                synapseLoginRequest = new SynapseLoginRequest
+                {
+                    User = userAccount.Username,
+                    Password = userAccount.ChatPassword
+                };
             }
-
-            var synapseLoginRequest = new SynapseLoginRequest
+            else
             {
-                User = userAccount.Username,
-                Password = userAccount.ChatPassword
-            };
+                userAccount = new UserAccount
+                {
+                    Id = 0,
+                    Username = $"admin:{request.Username}",
+                    Role = Enums.EUserRole.ADMIN
+                };
+
+                synapseLoginRequest = new SynapseLoginRequest
+                {
+                    User = request.Username,
+                    Password = request.Password
+                };
+            }
 
             var synapseLogin = await _ChatService.Login(synapseLoginRequest).ConfigureAwait(continueOnCapturedContext: false);
 

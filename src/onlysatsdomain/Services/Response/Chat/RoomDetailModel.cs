@@ -1,8 +1,8 @@
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
 
-namespace onlysats.domain.Services.Response.Chat
+namespace onlysatsdomain.Services.Response.Chat
 {
-    public class GetRoomDetailsResponse : ResponseBase
+    public class RoomDetailModel
     {
         [JsonPropertyName("room_id")]
         public string RoomId { get; set; }
@@ -34,16 +34,13 @@ namespace onlysats.domain.Services.Response.Chat
         [JsonPropertyName("join_rules")]
         public string JoinRules { get; set; }
 
+        [JsonPropertyName("guest_access")]
+        public string GuessAccess { get; set; }
+
         [JsonPropertyName("history_visibility")]
         public string HistoryVisibility { get; set; }
 
         [JsonPropertyName("state_events")]
         public int StateEvents { get; set; }
-
-        [JsonPropertyName("topic")]
-        public string Topic { get; set; }
-
-        [JsonPropertyName("joined_local_devices")]
-        public int JoinedLocalDevices { get; set; }
     }
 }

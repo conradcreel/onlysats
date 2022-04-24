@@ -21,7 +21,7 @@ namespace onlysats.web
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                    webBuilder.UseUrls("http://*:23001");//, "https://*:23002");
+                    //webBuilder.UseUrls("http://*:23001");//, "https://*:23002");
                 });
     }
 }
