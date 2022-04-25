@@ -67,5 +67,28 @@ namespace onlysats.web.Controllers
                 request.UserContext.ChatAccessToken = claims.FirstOrDefault(c => c.Type == "AdminChatAccessToken")?.Value;
             }
         }
+
+        protected EUserRole GetUserType()
+        {
+            var identity = User.Identity as ClaimsIdentity;
+
+            if (identity == null) return EUserRole.UNKNOWN;
+
+            var roleName = identity.Claims.FirstOrDefault(c => c.Type == "Role")?.Value;
+
+            return (EUserRole)Enum.Parse(typeof(EUserRole), roleName);
+        }
+        protected int GetUserAccountId()
+        {
+            var identity = User.Identity as ClaimsIdentity;
+
+            if (identity == null) return -1;
+
+            var userAccountIdName = identity.Claims.FirstOrDefault(c => c.Type == "Id")?.Value;
+            int userAccountId;
+            if (!int.TryParse(userAccountIdName, out userAccountId)) return -1;
+
+            return userAccountId;
+        }
     }
 }

@@ -7,6 +7,7 @@ namespace onlysats.domain.Enums
     {
         CREATOR = 1,
         PATRON = 2,
-        ADMIN = 3
+        ADMIN = 3,
+        UNKNOWN = 4
     }
 }

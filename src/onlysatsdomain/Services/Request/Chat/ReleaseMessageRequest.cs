@@ -12,7 +12,7 @@ namespace onlysats.domain.Services.Request.Chat
         {
             get
             {
-                return "2"; // TODO: Maybe hash this object?
+                return HashService.HashSHA256(FormattedBody);
             }
         }
 

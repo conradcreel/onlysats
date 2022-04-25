@@ -10,6 +10,8 @@ namespace onlysats.domain.Services.Response.Chat
 
         [JsonPropertyName("start")]
         public string Start { get; set; }
+        // Use "end" as the "from" parameter for the next request if loading 
+        // more historical messages
 
         [JsonPropertyName("end")]
         public string End { get; set; }

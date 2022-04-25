@@ -49,7 +49,7 @@ namespace onlysats.domain.Services
 
             if (!request.AdminRequest)
             {
-                userAccount = await _UserAccountRepository.GetUserAccount(request.Username, HashService.SHA256(request.Password));
+                userAccount = await _UserAccountRepository.GetUserAccount(request.Username, HashService.HashSHA256(request.Password));
 
                 if (userAccount == null || userAccount.Id <= 0)
                 {

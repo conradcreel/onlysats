@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using onlysats.domain.Services.Request.Chat;
 using onlysatsweb.Models.Chat;
 using System.Linq;
+using onlysats.domain.Enums;
 
 namespace onlysats.web.Controllers
 {
@@ -50,17 +51,9 @@ namespace onlysats.web.Controllers
             return View(vm);
         }
 
-        [HttpGet("chat/some_action")]
-        public async Task<IActionResult> SomeAction()
+        public async Task<IActionResult> Detail()
         {
-            await Task.Delay(10);
-            var obj = new
-            {
-                id = 33,
-                my_data = "some string"
-            };
-
-            return Json(obj);
+            return View();
         }
     }
 }

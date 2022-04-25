@@ -132,7 +132,7 @@ namespace onlysats.domain.Services
                 Username = request.Username,
                 Email = request.Email,
                 Role = EUserRole.CREATOR,
-                PasswordHash = HashService.SHA256(request.Password)
+                PasswordHash = HashService.HashSHA256(request.Password)
             });
 
             if (userAccount == null)
@@ -183,7 +183,7 @@ namespace onlysats.domain.Services
                 Username = request.Username,
                 Email = request.Email,
                 Role = EUserRole.PATRON,
-                PasswordHash = HashService.SHA256(request.Password)
+                PasswordHash = HashService.HashSHA256(request.Password)
             });
 
             if (userAccount == null)
