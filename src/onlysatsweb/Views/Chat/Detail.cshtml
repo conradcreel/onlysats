@@ -1,0 +1,28 @@
+@using onlysatsweb.Models.Chat
+@model ChatDetailModel
+
+@Html.HiddenFor(c => c.End)
+@Html.HiddenFor(c => c.RoomId)
+
+<div id="chatDetail">
+    <button type="button" onclick="javascript:loadPreviousMessages()" id="loadPrevious">Load Previous</button>
+    <p id="noMore" style="display:none">No more messages</p>
+    <div id="chatMessages">
+        @foreach (var message in Model.Messages)
+        {
+            <div class="chatMessage" id='msg-@message.EventId.Replace("$", "")'>
+                <b>@message.Sender (at @message.OriginServerTimestamp)</b>: @Html.Raw(message.Message.FormattedBody)
+            </div>
+        }
+    </div>
+    <div id="chatInput">
+        <input type="text" id="messageText" placeholder="Send a message" />
+        <button type="button" id="newMessage">Send new message</button>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+    <script src="~/js/chat.js"></script>
+}

@@ -1,7 +1,10 @@
+using System.Text.Json.Serialization;
+
 namespace onlysats.domain.Services.Response
 {
     public abstract class ResponseBase
     {
+        [JsonIgnore]
         public ResponseEnvelope ResponseDetails { get; set; }
     }
     public class ResponseEnvelope

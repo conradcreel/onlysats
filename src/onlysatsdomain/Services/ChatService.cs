@@ -59,7 +59,7 @@ namespace onlysats.domain.Services
 
         /// <summary>
         /// Queues a message which will be released to the Chat Server upon successful
-        /// completion of some Release conditions. For example, a Lightning invoice
+        /// completion of some release conditions. For example, a Lightning invoice
         /// can be attached to a particular message. It'll show up in the chat as 
         /// locked since the chat front end is a combination of the Synapse backend
         /// and queued messages. Once the condition is completed, e.g. Lightning invoice
@@ -68,16 +68,22 @@ namespace onlysats.domain.Services
         Task<QueueMessageResponse> QueueMessage(QueueMessageRequest request);
 
         /// <summary>
-        /// Releases a queued message to the chat server. This just means the queued message
-        /// is serialized into the appropriate format and pushed to the chat server
+        /// Sends a message to the chat server
         /// </summary>
-        Task<ReleaseMessageResponse> ReleaseMessage(ReleaseMessageRequest request);
+        Task<SendMessageResponse> SendMessage(SendMessageRequest request);
 
         /// <summary>
         /// Retrieve all events for a particular room. Most importantly, the messages
         /// for that room
         /// </summary>
         Task<GetRoomEventsResponse> GetRoomEvents(GetRoomEventsRequest request);
+
+        /// <summary>
+        /// Gets a single room event by Id
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        Task<GetRoomEventResponse> GetRoomEvent(GetRoomEventRequest request);
 
         /// <summary>
         /// Gets the Room details to display once the chat has been opened
@@ -245,6 +251,40 @@ namespace onlysats.domain.Services
             return dto.OK();
         }
 
+        public async Task<GetRoomEventResponse> GetRoomEvent(GetRoomEventRequest request)
+        {
+            var response = await SendGetAsync<GetRoomEventRequest>(request)
+                                    .ConfigureAwait(continueOnCapturedContext: false);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                var errorBody = await response.Content.ReadAsStringAsync();
+                switch (response.StatusCode)
+                {
+                    case System.Net.HttpStatusCode.NotFound:
+                        return new GetRoomEventResponse().NotFound();
+
+                    case System.Net.HttpStatusCode.BadRequest:
+                        return new GetRoomEventResponse().BadRequest(errorBody);
+
+                    case System.Net.HttpStatusCode.Unauthorized:
+                        return new GetRoomEventResponse().Unauthorized();
+
+                    case System.Net.HttpStatusCode.Forbidden:
+                        return new GetRoomEventResponse().Forbidden();
+
+                    default:
+                        return new GetRoomEventResponse().ServerError(errorBody);
+                }
+            }
+
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            var dto = JsonSerializer.Deserialize<GetRoomEventResponse>(responseBody);
+
+            return dto.OK();
+        }
+
         public async Task<GetRoomEventsResponse> GetRoomEvents(GetRoomEventsRequest request)
         {
             var response = await SendGetAsync<GetRoomEventsRequest>(request)
@@ -275,6 +315,7 @@ namespace onlysats.domain.Services
             var responseBody = await response.Content.ReadAsStringAsync();
 
             var dto = JsonSerializer.Deserialize<GetRoomEventsResponse>(responseBody);
+            dto.RoomEvents.Reverse(); // so newest is last
 
             return dto.OK();
         }
@@ -351,7 +392,7 @@ namespace onlysats.domain.Services
         {
             if (!request.PaymentRequired)
             {
-                var chatServerResponse = await ReleaseMessage(new ReleaseMessageRequest
+                var chatServerResponse = await SendMessage(new SendMessageRequest
                 {
                     RoomId = request.RoomId,
                     Body = request.MessageContent,
@@ -381,13 +422,15 @@ namespace onlysats.domain.Services
                 throw new Exception("Could not create Lightning invoice");
             }
 
+            var messageContent = string.Empty; // TODO: Construct the message content from the Package selected for this paid message
+
             // Since a payment is required, the Sender is always going to be the Creator
             // A Patron doesn't have the option to make a message require payment
             var msg = await _ChatRepository.QueueMessage(new QueuedMessage
             {
                 CreatorId = request.SenderUserId,
                 RoomId = request.RoomId,
-                MessageContent = request.MessageContent,
+                MessageContent = messageContent,
                 InvoiceId = invoice.Id,
                 BOLT11 = invoice.BOLT11,
                 SynapseAccessToken = request.SynapseAccessToken
@@ -401,9 +444,9 @@ namespace onlysats.domain.Services
             }.OK();
         }
 
-        public async Task<ReleaseMessageResponse> ReleaseMessage(ReleaseMessageRequest request)
+        public async Task<SendMessageResponse> SendMessage(SendMessageRequest request)
         {
-            var response = await SendPutAsync<ReleaseMessageRequest>(request)
+            var response = await SendPutAsync<SendMessageRequest>(request)
                                     .ConfigureAwait(continueOnCapturedContext: false);
 
             if (!response.IsSuccessStatusCode)
@@ -412,25 +455,25 @@ namespace onlysats.domain.Services
                 switch (response.StatusCode)
                 {
                     case System.Net.HttpStatusCode.NotFound:
-                        return new ReleaseMessageResponse().NotFound();
+                        return new SendMessageResponse().NotFound();
 
                     case System.Net.HttpStatusCode.BadRequest:
-                        return new ReleaseMessageResponse().BadRequest(errorBody);
+                        return new SendMessageResponse().BadRequest(errorBody);
 
                     case System.Net.HttpStatusCode.Unauthorized:
-                        return new ReleaseMessageResponse().Unauthorized();
+                        return new SendMessageResponse().Unauthorized();
 
                     case System.Net.HttpStatusCode.Forbidden:
-                        return new ReleaseMessageResponse().Forbidden();
+                        return new SendMessageResponse().Forbidden();
 
                     default:
-                        return new ReleaseMessageResponse().ServerError(errorBody);
+                        return new SendMessageResponse().ServerError(errorBody);
                 }
             }
 
             var responseBody = await response.Content.ReadAsStringAsync();
 
-            var dto = JsonSerializer.Deserialize<ReleaseMessageResponse>(responseBody);
+            var dto = JsonSerializer.Deserialize<SendMessageResponse>(responseBody);
 
             return dto.OK();
         }

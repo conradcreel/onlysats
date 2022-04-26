@@ -12,6 +12,7 @@ namespace onlysats.domain.Services.Request.Chat
         /// </summary>
         public string Description { get; set; }
         public bool PaymentRequired { get; set; }
+        public int? AssetPackageId { get; set; } // if packageId is null then MessageContent is constructed server-side
 
         /// <summary>
         /// How many Satoshis does this message cost?

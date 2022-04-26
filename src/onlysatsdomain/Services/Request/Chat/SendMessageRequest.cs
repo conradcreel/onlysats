@@ -1,8 +1,9 @@
+using System;
 using System.Text.Json.Serialization;
 
 namespace onlysats.domain.Services.Request.Chat
 {
-    public class ReleaseMessageRequest : SynapseRequestBase
+    public class SendMessageRequest : SynapseRequestBase
     {
         [JsonIgnore]
         public string RoomId { get; set; }
@@ -12,7 +13,12 @@ namespace onlysats.domain.Services.Request.Chat
         {
             get
             {
-                return HashService.HashSHA256(FormattedBody);
+                //return HashService.HashSHA256(FormattedBody);
+
+                // The above was a decent idea, but won't work because 
+                // it won't send the same message. Like if someone replied with "okay"
+                // it would send the first time but not subsequent messages
+                return Guid.NewGuid().ToString();
             }
         }
 

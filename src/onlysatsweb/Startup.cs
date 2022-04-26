@@ -10,6 +10,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using onlysats.domain.Infrastructure;
+using onlysatsweb.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace onlysats.web
 {
@@ -29,6 +31,7 @@ namespace onlysats.web
             ContainerRegistration.Register(services, Configuration);
 
             services.AddControllersWithViews();
+            services.AddSignalR();
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
             {
@@ -63,7 +66,10 @@ namespace onlysats.web
                 endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+                endpoints.MapHub<ChatHub>("/chatHub");
             });
+
         }
     }
 }

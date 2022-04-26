@@ -6,6 +6,7 @@ using onlysats.domain.Enums;
 using onlysats.domain.Services;
 using onlysats.domain.Services.Request.Chat;
 using onlysats.web.Controllers;
+using onlysatsweb.Models.Chat;
 using System.Threading.Tasks;
 
 namespace onlysatsweb.Controllers
@@ -50,16 +51,35 @@ namespace onlysatsweb.Controllers
         }
 
         [HttpPost("messages")]
-        public async Task<IActionResult> SendMessage()
+        public async Task<IActionResult> SendMessage([FromBody] SendMessageModel model)
         {
-            await Task.Delay(10);
-            var obj = new
+            var sendMessageRequest = new SendMessageRequest
             {
-                id = 33,
-                my_data = "some string"
+                RoomId = model.RoomId,
+                Body = model.Message,
+                FormattedBody = model.Message
             };
 
-            return Ok(obj);
+            SetRequest(sendMessageRequest);
+
+            var sendMessageResponse = await _ChatService.SendMessage(sendMessageRequest).ConfigureAwait(continueOnCapturedContext: false);
+
+            if (!sendMessageResponse.ResponseDetails.IsSuccess)
+            {
+                return MapResponse(sendMessageResponse);
+            }
+
+            var getRoomEventRequest = new GetRoomEventRequest
+            {
+                EventId = sendMessageResponse.EventId,
+                RoomId = model.RoomId
+            };
+
+            SetRequest(getRoomEventRequest);
+
+            var getRoomEventResponse = await _ChatService.GetRoomEvent(getRoomEventRequest).ConfigureAwait(continueOnCapturedContext: false);
+
+            return MapResponse(getRoomEventResponse, success: () => Ok(getRoomEventResponse));
         }
 
         [HttpPost("paid_messages")]

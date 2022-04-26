@@ -51,7 +51,33 @@ namespace onlysats.web.Controllers
             return View(vm);
         }
 
-        public async Task<IActionResult> Detail()
+        public async Task<IActionResult> Detail(string roomId)
+        {
+            // Load latest messages
+            var request = new GetRoomEventsRequest
+            {
+                RoomId = roomId
+            };
+
+            SetRequest(request);
+            var response = await _ChatService.GetRoomEvents(request).ConfigureAwait(continueOnCapturedContext: false);
+
+            if (!response.ResponseDetails.IsSuccess)
+            {
+                ModelState.AddModelError("messages_failed", "Could not retrieve messages");
+                // TODO
+                return View();
+            }
+
+            return View(new ChatDetailModel
+            {
+                End = response.End,
+                Messages = response.RoomEvents,
+                RoomId = roomId
+            });
+        }
+
+        public async Task<IActionResult> Temp(string roomId)
         {
             return View();
         }

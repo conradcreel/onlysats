@@ -15,6 +15,9 @@ namespace onlysats.domain.Services.Request.Chat
         [JsonIgnore]
         public string From { get; set; }
 
+        [JsonIgnore]
+        public bool FetchNew { get; set; }
+
         public override string GenerateUrl()
         {
             // TODO: Might want to add an option to this request 
@@ -28,8 +31,13 @@ namespace onlysats.domain.Services.Request.Chat
                     "m.room.message"
                 }
             };
+            string dir = "b";
+            if (FetchNew)
+            {
+                dir = "f";
+            }
 
-            var url = $"_matrix/client/v3/rooms/{RoomId}/messages?filter={JsonSerializer.Serialize(filter)}&limit={Limit}&dir=b";
+            var url = $"_matrix/client/v3/rooms/{RoomId}/messages?filter={JsonSerializer.Serialize(filter)}&limit={Limit}&dir={dir}";
 
             if (!string.IsNullOrWhiteSpace(From))
             {
