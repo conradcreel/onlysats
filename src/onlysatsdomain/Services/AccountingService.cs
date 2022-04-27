@@ -87,7 +87,7 @@ namespace onlysats.domain.Services
                 return new InvoiceSettledResponse().NotFound();
             }
 
-            var message = $"Thank you for paying Invoice {request.InvoiceId}";
+            var message = $"Thank you for paying Invoice {request.InvoiceId}. <p>Here's your content: {queuedMessage.MessageContent}</p>";
             var sendMessageRequest = new SendMessageRequest
             {
                 RoomId = queuedMessage.RoomId,

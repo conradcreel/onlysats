@@ -43,9 +43,9 @@ namespace onlysats.domain.Services.Repositories
                 BOLT11 = String.Empty,
                 CreatorId = 666,
                 Id = 222,
-                MessageContent = "TODO"
+                MessageContent = $"<ul class=\"assetList\"><li><img src=\"{"https://i.kym-cdn.com/photos/images/original/001/926/250/bd1.png"}\">{"Pic #1"}</li><li><img src=\"{"https://pbs.twimg.com/media/DWgReaDXcAAAvVQ.jpg"}\">{"Pic #2"}</li></ul>"
             };
-
+        
             return Task.FromResult(queuedMessage);
         }
 
