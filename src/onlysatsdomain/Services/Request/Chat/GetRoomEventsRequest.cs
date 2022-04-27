@@ -10,7 +10,7 @@ namespace onlysats.domain.Services.Request.Chat
         public string RoomId { get; set; }
 
         [JsonIgnore]
-        public uint Limit { get; set; } = 10;
+        public uint Limit { get; set; } = 1;//10;
 
         [JsonIgnore]
         public string From { get; set; }

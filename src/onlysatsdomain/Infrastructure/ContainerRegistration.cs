@@ -16,6 +16,7 @@ namespace onlysats.domain.Infrastructure
                 BtcPayUri = configuration["BtcPayServer:Uri"],
                 BtcPayAdminUser = configuration["BtcPayServer:AdminUser"],
                 BtcPayAdminPass = configuration["BtcPayServer:AdminPass"],
+                BtcPayStoreId = configuration["BtcPayServer:StoreId"],
                 PubSubName = configuration["PubSub:Name"],
                 SynapseUri = configuration["Synapse:Endpoint"],
                 SynapseAdminUser = configuration["Synapse:AdminUser"],

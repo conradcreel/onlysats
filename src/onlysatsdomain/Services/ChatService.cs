@@ -409,20 +409,30 @@ namespace onlysats.domain.Services
                 };
             }
 
-            var milliSats = 1000 * request.CostInSatoshis;
+            var invoiceId = string.Empty;
+            var bolt11 = string.Empty;
 
-            var invoice = await _BitcoinPaymentProcessor.CreateLightningInvoice(_Configuration.BtcPayStoreId, new BTCPayServer.Client.Models.CreateLightningInvoiceRequest
+            try
             {
-                Amount = milliSats.ToString(),
-                Description = request.Description,
-                Expiry = new TimeSpan(0, 60, 0),
-                PrivateRouteHints = true
-            }).ConfigureAwait(continueOnCapturedContext: false);
+                var invoice = await _BitcoinPaymentProcessor.CreateLightningInvoice(new Models.BtcPayServer.CreateLightningPaymentRequest
+                {
+                    Description = request.Description,
+                    ExpiryMinutes = 360,
+                    Satoshis = request.CostInSatoshis.Value
+                }).ConfigureAwait(continueOnCapturedContext: false);
 
-            if (string.IsNullOrWhiteSpace(invoice?.Id))
+                if (string.IsNullOrWhiteSpace(invoice?.Id))
+                {
+                    // TODO: Come back to this
+                    throw new Exception("Could not create Lightning invoice");
+                }
+
+                invoiceId = invoice.Id;
+                bolt11 = invoice.BOLT11;
+            }
+            catch (Exception ex)
             {
-                // TODO: Come back to this
-                throw new Exception("Could not create Lightning invoice");
+                Console.WriteLine(ex.Message);
             }
 
             var messageContent = string.Empty; // TODO: Construct the message content from the Package selected for this paid message
@@ -461,16 +471,16 @@ namespace onlysats.domain.Services
                 CreatorId = request.SenderUserId,
                 RoomId = request.RoomId,
                 MessageContent = messageContent,
-                InvoiceId = invoice.Id,
-                BOLT11 = invoice.BOLT11,
+                InvoiceId = invoiceId,
+                BOLT11 = bolt11,
                 SynapseAccessToken = request.SynapseAccessToken
             }).ConfigureAwait(continueOnCapturedContext: false);
 
             return new QueueMessageResponse
             {
                 QueuedMessageId = msg.Id,
-                InvoiceId = invoice.Id,
-                BOLT11 = invoice.BOLT11
+                InvoiceId = invoiceId,
+                BOLT11 = bolt11
             }.OK();
         }
 

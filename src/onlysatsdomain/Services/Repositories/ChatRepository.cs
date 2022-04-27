@@ -43,7 +43,8 @@ namespace onlysats.domain.Services.Repositories
                 BOLT11 = String.Empty,
                 CreatorId = 666,
                 Id = 222,
-                MessageContent = $"<ul class=\"assetList\"><li><img src=\"{"https://i.kym-cdn.com/photos/images/original/001/926/250/bd1.png"}\">{"Pic #1"}</li><li><img src=\"{"https://pbs.twimg.com/media/DWgReaDXcAAAvVQ.jpg"}\">{"Pic #2"}</li></ul>"
+                MessageContent = $"<ul class=\"assetList\"><li><img src=\"{"https://preview.redd.it/kvqfttwq32z51.jpg?auto=webp&s=4c3067e449d5bace6a560fd8ff8acdd372a3fc11"}\">{"Schiff Sniff"}</li>" +
+                $"<li><img src=\"{"https://pbs.twimg.com/media/DUwjs-RW4AAyiP6.jpg"}\">{"Fuck ETH"}</li></ul>"
             };
         
             return Task.FromResult(queuedMessage);
@@ -56,7 +57,8 @@ namespace onlysats.domain.Services.Repositories
 
         public Task<QueuedMessage> QueueMessage(QueuedMessage msg)
         {
-            throw new NotImplementedException();
+            // TODO
+            return Task.FromResult(msg);
         }
     }
 

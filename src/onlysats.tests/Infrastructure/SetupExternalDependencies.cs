@@ -32,25 +32,25 @@ namespace onlysats.tests.Infrastructure
         {
             var mock = new Mock<IBitcoinPaymentProcessor>();
 
-            mock.Setup(b => b.CreateAccount(It.IsAny<CreateStoreRequest>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync((CreateStoreRequest request, CancellationToken cancellationToken) =>
-                {
-                    return new StoreData
-                    {
-                        Id = Guid.NewGuid().ToString(),
-                        Name = request.Name
-                    };
-                });
+            //mock.Setup(b => b.CreateAccount(It.IsAny<CreateStoreRequest>(), It.IsAny<CancellationToken>()))
+            //    .ReturnsAsync((CreateStoreRequest request, CancellationToken cancellationToken) =>
+            //    {
+            //        return new StoreData
+            //        {
+            //            Id = Guid.NewGuid().ToString(),
+            //            Name = request.Name
+            //        };
+            //    });
 
 
-            mock.Setup(b => b.UpdateOnChainPaymentMethod(It.IsAny<string>(), It.IsAny<UpdateOnChainPaymentMethodRequest>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync((string accountId, UpdateOnChainPaymentMethodRequest request, CancellationToken cancellationToken) =>
-                {
-                    return new OnChainPaymentMethodData
-                    {
+            //mock.Setup(b => b.UpdateOnChainPaymentMethod(It.IsAny<string>(), It.IsAny<UpdateOnChainPaymentMethodRequest>(), It.IsAny<CancellationToken>()))
+            //    .ReturnsAsync((string accountId, UpdateOnChainPaymentMethodRequest request, CancellationToken cancellationToken) =>
+            //    {
+            //        return new OnChainPaymentMethodData
+            //        {
 
-                    };
-                });
+            //        };
+            //    });
 
             //TODO: Setup rest of methods
 

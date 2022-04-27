@@ -104,7 +104,15 @@ namespace onlysats.domain.Services.Repositories
             {
                 new Asset
                 {
-                    Type = Enums.EAssetType.IMG
+                    Type = Enums.EAssetType.IMG,
+                    Description = "Schiff Sniff",
+                    RemoteLocation = "https://preview.redd.it/kvqfttwq32z51.jpg?auto=webp&s=4c3067e449d5bace6a560fd8ff8acdd372a3fc11"
+                },
+                new Asset
+                {
+                    Type= Enums.EAssetType.IMG,
+                    Description = "Fuck ETH",
+                    RemoteLocation = "https://pbs.twimg.com/media/DUwjs-RW4AAyiP6.jpg"
                 }
             };
 

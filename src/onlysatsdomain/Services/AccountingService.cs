@@ -27,7 +27,7 @@ namespace onlysats.domain.Services
         /// Updates the Wallet state in OnlySats
         /// TODO: Delete this. Assume BTC PayServer is configured and setup properly.
         /// </summary>
-        Task<SetupWalletResponse> SetupWallet(SetupWalletRequest request);
+        //Task<SetupWalletResponse> SetupWallet(SetupWalletRequest request);
 
         /*
         /// <summary>
@@ -123,7 +123,7 @@ namespace onlysats.domain.Services
 
             }.OK();
         }
-
+        /*
         public async Task<SetupWalletResponse> SetupWallet(SetupWalletRequest request)
         {
             if (request == null || !request.IsValid())
@@ -205,6 +205,7 @@ namespace onlysats.domain.Services
                 BtcPaymentProcessorId = wallet.BtcPayServerAccountId
             }.OK();
         }
+        */
     }
 
     #endregion

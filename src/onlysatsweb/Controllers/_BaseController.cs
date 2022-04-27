@@ -90,5 +90,14 @@ namespace onlysats.web.Controllers
 
             return userAccountId;
         }
+
+        protected string GetChatAccessToken()
+        {
+            var identity = User.Identity as ClaimsIdentity;
+
+            if (identity == null) return null;
+
+            return identity.Claims.FirstOrDefault(c => c.Type == "ChatAccessToken")?.Value;
+        }
     }
 }

@@ -29,6 +29,17 @@ document.getElementById("newMessage").addEventListener("click", function (event)
     event.preventDefault();
 });
 
+document.getElementById("newPaidMessage").addEventListener("click", function (event) {
+    var roomId = document.getElementById("RoomId").value;
+    var message = document.getElementById("unlockedMessageText").value;
+    var assetPackageId = 1;
+    var sats = 25000;
+
+    sendPaidMessage(roomId, assetPackageId, message, sats);
+
+    event.preventDefault();
+});
+
 
 function loadPreviousMessages() {
     let from = $('#End').val();
@@ -96,6 +107,7 @@ function sendMessage(roomId, message) {
             }
 
             $('#messageText').val('');
+            $('#unlockedMessageText').val('');
         },
         error: function (jqXhr, textStatus, errorThrown) {
             alert(errorThrown);
@@ -112,8 +124,11 @@ function sendPaidMessage(roomId, assetPackageId, unlockedContent, costSatoshis) 
         data: JSON.stringify({ "RoomId": roomId, "AssetPackageId": assetPackageId, "CostInSatoshis": costSatoshis, "Description": unlockedContent }),
         processData: false,
         success: function (data, textStatus, jQxhr) {
-            let msg = `Pay ${costSatoshis} sats to ${data.bolt11} to unlock: ${unlockedContent}`;
-            sendMessage(roomId, msg);
+            $.get('/api/chat/QR', { s: data.bolt11 })
+                .done(function (qrData) {
+                    let msg = `<p>Pay ${costSatoshis} sats to <img height="256" width="256" style="image-rendering: pixelated;image-rendering: -moz-crisp-edges;" src="data:image/png;base64,${qrData.b64}" /><small>${data.bolt11}</small> to unlock: ${unlockedContent}</p>`;
+                    sendMessage(roomId, msg);
+                })
         },
         error: function (jqXhr, textStatus, errorThrown) {
             alert(errorThrown);

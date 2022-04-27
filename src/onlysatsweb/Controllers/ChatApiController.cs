@@ -7,6 +7,8 @@ using onlysats.domain.Services;
 using onlysats.domain.Services.Request.Chat;
 using onlysats.web.Controllers;
 using onlysatsweb.Models.Chat;
+using QRCoder;
+using System;
 using System.Threading.Tasks;
 
 namespace onlysatsweb.Controllers
@@ -93,7 +95,13 @@ namespace onlysatsweb.Controllers
 
             var request = new QueueMessageRequest
             {
-                // TODO
+                PaymentRequired = true,
+                SenderUserId = GetUserAccountId(),
+                SynapseAccessToken = GetChatAccessToken(),
+                RoomId = model.RoomId,
+                Description = model.Description,
+                AssetPackageId = model.AssetPackageId,
+                CostInSatoshis = model.CostInSatoshis
             };
 
             SetRequest(request);
@@ -105,6 +113,23 @@ namespace onlysatsweb.Controllers
                 Id = response.QueuedMessageId,
                 Bolt11 = response.BOLT11
             }));
+        }
+
+        private static QRCodeGenerator qrGenerator = new QRCodeGenerator();
+
+        [HttpGet("QR")]
+        public IActionResult GetQRCode(string s)
+        {
+            var bolt11 = s.ToUpper();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(bolt11, QRCodeGenerator.ECCLevel.Q);
+            PngByteQRCode qrCode = new PngByteQRCode(qrCodeData);
+            var bytes = qrCode.GetGraphic(5, new byte[] { 0, 0, 0, 255 }, new byte[] { 0xf5, 0xf5, 0xf7, 255 }, true);
+            var b64 = Convert.ToBase64String(bytes);
+
+            return Ok(new
+            {
+                b64 = b64
+            });
         }
     }
 }

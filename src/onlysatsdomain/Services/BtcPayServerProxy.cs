@@ -1,11 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Text;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 using BTCPayServer.Client;
 using BTCPayServer.Client.Models;
 using onlysats.domain.Models;
+using onlysats.domain.Models.BtcPayServer;
 
 namespace onlysats.domain.Services
 {
@@ -16,385 +21,12 @@ namespace onlysats.domain.Services
     /// </summary>
     public interface IBitcoinPaymentProcessor
     {
-        #region API Key Management
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<ApiKeyData> CreateAPIKey(
-            CreateApiKeyRequest request,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task RevokeCurrentAPIKeyInfo(
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task RevokeAPIKey(
-            string apiKey,
-            CancellationToken token = default);
-
-        #endregion
-
-        #region Wallet Setup
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<OnChainPaymentMethodData> UpdateOnChainPaymentMethod(
-            string accountId,
-            UpdateOnChainPaymentMethodRequest request,
-            CancellationToken token = default);
-
-        /// <summary>
-        /// Without persisting the xPub key, this will generate the first {amount} addresses
-        /// from the derivation Scheme
-        /// </summary>
-        Task<OnChainPaymentMethodPreviewResultData> PreviewProposedOnChainPaymentMethodAddresses(
-            string accountId,
-            UpdateOnChainPaymentMethodRequest paymentMethod,
-            int offset = 0,
-            int amount = 10,
-            CancellationToken token = default);
-
-        /// <summary>
-        /// This generates the first {amount} addresses from the xPub key (derivation scheme) for this account
-        /// </summary>
-        Task<OnChainPaymentMethodPreviewResultData> PreviewOnChainPaymentMethodAddresses(
-                string accountId,
-                int offset = 0,
-                int amount = 10,
-                CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<OnChainPaymentMethodData> GetOnChainPaymentMethod(
-            string accountId,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task RemoveOnChainPaymentMethod(
-            string accountId,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<StoreData> CreateAccount(
-            CreateStoreRequest request,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<IEnumerable<StoreData>> GetAccounts(
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<StoreData> GetAccount(
-            string accountId,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<StoreData> UpdateAccount(
-            string accountId,
-            UpdateStoreRequest request,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task RemoveAccount(
-            string accountId,
-            CancellationToken token = default);
-        #endregion
-
-        #region Invoices
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<IEnumerable<InvoiceData>> GetInvoices(
-            string accountId,
-            string[] orderId = null,
-            InvoiceStatus[] status = null,
-            DateTimeOffset? startDate = null,
-            DateTimeOffset? endDate = null,
-            string textSearch = null,
-            bool includeArchived = false,
-            int? skip = null,
-            int? take = null,
-            CancellationToken token = default);
-
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<InvoiceData> GetInvoice(
-            string accountId,
-            string invoiceId,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<InvoicePaymentMethodDataModel[]> GetInvoicePaymentMethods(
-            string accountId,
-            string invoiceId,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task ArchiveInvoice(
-            string accountId,
-            string invoiceId,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<InvoiceData> CreateInvoice(
-            string accountId,
-            CreateInvoiceRequest request,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<InvoiceData> UpdateInvoice(
-            string accountId,
-            string invoiceId,
-
-            UpdateInvoiceRequest request, CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<InvoiceData> MarkInvoiceStatus(
-            string accountId,
-            string invoiceId,
-            MarkInvoiceStatusRequest request,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<InvoiceData> UnarchiveInvoice(
-            string accountId,
-            string invoiceId,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task ActivateInvoicePaymentMethod(
-            string accountId,
-            string invoiceId,
-            string paymentMethod,
-            CancellationToken token = default);
-
-        #endregion
-
-        #region On-Chain
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<OnChainWalletOverviewData> ShowOnChainWalletOverview(
-            string accountId,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<IEnumerable<OnChainWalletTransactionData>> ShowOnChainWalletTransactions(
-            string accountId,
-            TransactionStatus[] statusFilter = null,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<OnChainWalletTransactionData> GetOnChainWalletTransaction(
-            string accountId,
-            string transactionId,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<IEnumerable<OnChainWalletUTXOData>> GetOnChainWalletUTXOs(
-            string accountId,
-            CancellationToken token = default);
-
-        #endregion
-
-        #region Payment Requests
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<IEnumerable<PaymentRequestData>> GetPaymentRequests(
-            string accountId,
-            bool includeArchived = false,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<PaymentRequestData> GetPaymentRequest(
-            string accountId,
-            string paymentRequestId,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task ArchivePaymentRequest(
-            string accountId,
-            string paymentRequestId,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<PaymentRequestData> CreatePaymentRequest(
-            string accountId,
-            CreatePaymentRequestRequest request,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<PaymentRequestData> UpdatePaymentRequest(
-            string accountId,
-            string paymentRequestId,
-            UpdatePaymentRequestRequest request,
-            CancellationToken token = default);
-
-        #endregion
-
-        #region Pull Payments
-
-        ///<summary>
-        ///
-        ///</summary>
-        Task<PullPaymentData> CreatePullPayment(
-            string accountId,
-            CreatePullPaymentRequest request,
-            CancellationToken cancellationToken = default);
-
-        ///<summary>
-        ///
-        ///</summary>
-        Task<PullPaymentData> GetPullPayment(
-            string pullPaymentId,
-            CancellationToken cancellationToken = default);
-
-        ///<summary>
-        ///
-        ///</summary>
-        Task<PullPaymentData[]> GetPullPayments(
-            string accountId,
-            bool includeArchived = false,
-            CancellationToken cancellationToken = default);
-
-        ///<summary>
-        ///
-        ///</summary>
-        Task ArchivePullPayment(
-            string accountId,
-            string pullPaymentId,
-            CancellationToken cancellationToken = default);
-
-        ///<summary>
-        ///
-        ///</summary>
-        Task<PayoutData[]> GetPayouts(
-            string pullPaymentId,
-            bool includeCancelled = false,
-            CancellationToken cancellationToken = default);
-
-        ///<summary>
-        ///
-        ///</summary>
-        Task<PayoutData> CreatePayout(
-            string pullPaymentId,
-            CreatePayoutRequest payoutRequest,
-            CancellationToken cancellationToken = default);
-
-        ///<summary>
-        ///
-        ///</summary>
-        Task CancelPayout(
-            string accountId,
-            string payoutId,
-            CancellationToken cancellationToken = default);
-
-        ///<summary>
-        ///
-        ///</summary>
-        Task<PayoutData> ApprovePayout(
-            string accountId,
-            string payoutId,
-            ApprovePayoutRequest request,
-            CancellationToken cancellationToken = default);
-
-        ///<summary>
-        ///
-        ///</summary>
-        Task MarkPayoutPaid(
-            string accountId,
-            string payoutId,
-            CancellationToken cancellationToken = default);
-
-        #endregion
-
         #region Lightning
 
         /// <summary>
         ///
         /// </summary>
-        Task<LightningInvoiceData> CreateLightningInvoice(
-            string accountId,
-            CreateLightningInvoiceRequest request,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<LightningInvoiceData> GetLightningInvoice(
-            string accountId,
-            string invoiceId,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task PayLightningInvoice(
-            string accountId,
-            PayLightningInvoiceRequest request,
-            CancellationToken token = default);
-
-        /// <summary>
-        ///
-        /// </summary>
-        Task<string> GetLightningDepositAddress(
-            string accountId,
-            CancellationToken token = default);
-        // TODO: Others?
+        Task<LightningInvoiceModel> CreateLightningInvoice(CreateLightningPaymentRequest request);
         #endregion
 
     }
@@ -403,232 +35,98 @@ namespace onlysats.domain.Services
     {
         private const string BTC = nameof(BTC);
         private BTCPayServerClient _Client { get; }
+        private readonly HttpClient _HttpClient;
+        private readonly OnlySatsConfiguration _Configuration;
+
         public BtcPayServerProxy(HttpClient httpClient, OnlySatsConfiguration configuration)
         {
+            // TODO: base64Encode(user:pass)
+            _HttpClient = httpClient;
+            _Configuration = configuration;
+
             _Client = new BTCPayServerClient(new Uri(configuration.BtcPayUri),
                                             configuration.BtcPayAdminUser,
-                                            configuration.BtcPayAdminPass,
-                                            httpClient);
+                                            configuration.BtcPayAdminPass);
         }
 
-        public async Task<OnChainPaymentMethodData> UpdateOnChainPaymentMethod(string accountId, UpdateOnChainPaymentMethodRequest request, CancellationToken token = default)
+        private JsonSerializerOptions SerializerOptions => new JsonSerializerOptions
         {
-            return await _Client.UpdateStoreOnChainPaymentMethod(accountId, BTC, request, token);
+            IgnoreReadOnlyFields = true,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault,
+            PropertyNameCaseInsensitive = true
+        };
+
+        // TODO: Cleanup
+        // Note: it's a weird workflow, I need to create a generic invoice and then call the get payment methods endpoint
+        // after creation to get the BOLT11 URL
+        public async Task<LightningInvoiceModel> CreateLightningInvoice(CreateLightningPaymentRequest request)
+        {
+            //var response = await _Client.CreateLightningInvoice(accountId, BTC, request, token);
+
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Post, $"{_Configuration.BtcPayUri}/api/v1/stores/{_Configuration.BtcPayStoreId}/invoices");
+            httpRequestMessage.Headers.Add("Accept", "application/json");
+
+            httpRequestMessage.Headers.Add("Authorization", $"Basic {"dGVzdG5ldEBidGMubG9jYWw6NWEyNWE4YmFlMTg5NDM3ZmIyNjUyZjRmNTljNThlNWY="}");
+
+            var data = new
+            {
+                metdata = new
+                {
+                    orderId = request.Id,
+                    itemDesc = request.Description
+                },
+                checkout = new
+                {
+                    paymentMethods = new string[] { "BTC-LightningNetwork" },
+                    expirationMinutes = request.ExpiryMinutes
+                },
+                amount = request.Satoshis.ToString(),
+                currency = "SATS"
+            };
+
+            var requestBody = JsonSerializer.Serialize(data, SerializerOptions);
+
+            httpRequestMessage.Content = new StringContent(requestBody, Encoding.UTF8, "application/json");
+
+            var httpResponse = await _HttpClient.SendAsync(httpRequestMessage).ConfigureAwait(continueOnCapturedContext: false);
+
+            var responseBody = await httpResponse.Content.ReadAsStringAsync();
+
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                // TODO: come back
+                return null;
+            }
+
+            var invoiceModel = JsonSerializer.Deserialize<LightningInvoiceModel>(responseBody);
+
+            var paymentMethod = await GetPaymentMethod(invoiceModel.Id);
+
+            invoiceModel.BOLT11 = paymentMethod.Destination;
+
+            return invoiceModel;
         }
 
-        public async Task<StoreData> CreateAccount(CreateStoreRequest request, CancellationToken token = default)
+        private async Task<InvoicePaymentMethodModel> GetPaymentMethod(string invoiceId)
         {
-            return await _Client.CreateStore(request, token);
-        }
+            var httpRequestMessage = new HttpRequestMessage(HttpMethod.Get, $"{_Configuration.BtcPayUri}/api/v1/stores/{_Configuration.BtcPayStoreId}/invoices/{invoiceId}/payment-methods");
+            httpRequestMessage.Headers.Add("Accept", "application/json");
 
-        public async Task<IEnumerable<StoreData>> GetAccounts(CancellationToken token = default)
-        {
-            return await _Client.GetStores(token);
-        }
+            httpRequestMessage.Headers.Add("Authorization", $"Basic {"dGVzdG5ldEBidGMubG9jYWw6NWEyNWE4YmFlMTg5NDM3ZmIyNjUyZjRmNTljNThlNWY="}");
 
-        public async Task<ApiKeyData> CreateAPIKey(CreateApiKeyRequest request, CancellationToken token = default)
-        {
-            return await _Client.CreateAPIKey(request, token);
-        }
+            var httpResponse = await _HttpClient.SendAsync(httpRequestMessage).ConfigureAwait(continueOnCapturedContext: false);
 
-        public async Task RevokeCurrentAPIKeyInfo(CancellationToken token = default)
-        {
-            await RevokeCurrentAPIKeyInfo(token);
-        }
+            var responseBody = await httpResponse.Content.ReadAsStringAsync();
 
-        public async Task RevokeAPIKey(string apiKey, CancellationToken token = default)
-        {
-            await RevokeAPIKey(apiKey, token);
-        }
+            if (!httpResponse.IsSuccessStatusCode)
+            {
+                // TODO: come back
+                return null;
+            }
 
-        public async Task<OnChainPaymentMethodPreviewResultData> PreviewProposedOnChainPaymentMethodAddresses(string accountId, UpdateOnChainPaymentMethodRequest paymentMethod, int offset = 0, int amount = 10, CancellationToken token = default)
-        {
-            return await _Client.PreviewProposedStoreOnChainPaymentMethodAddresses(accountId, BTC, paymentMethod, offset, amount, token);
-        }
+            var response = JsonSerializer.Deserialize<List<InvoicePaymentMethodModel>>(responseBody);
 
-        public async Task<OnChainPaymentMethodPreviewResultData> PreviewOnChainPaymentMethodAddresses(string accountId, int offset = 0, int amount = 10, CancellationToken token = default)
-        {
-            return await _Client.PreviewStoreOnChainPaymentMethodAddresses(accountId, BTC, offset, amount, token);
-        }
-
-        public async Task<OnChainPaymentMethodData> GetOnChainPaymentMethod(string accountId, CancellationToken token = default)
-        {
-            return await _Client.GetStoreOnChainPaymentMethod(accountId, BTC, token);
-        }
-
-        public async Task RemoveOnChainPaymentMethod(string accountId, CancellationToken token = default)
-        {
-            await _Client.RemoveStoreOnChainPaymentMethod(accountId, BTC, token);
-        }
-
-        public async Task<StoreData> GetAccount(string accountId, CancellationToken token = default)
-        {
-            return await _Client.GetStore(accountId, token);
-        }
-
-        public async Task<StoreData> UpdateAccount(string accountId, UpdateStoreRequest request, CancellationToken token = default)
-        {
-            return await _Client.UpdateStore(accountId, request, token);
-        }
-
-        public async Task RemoveAccount(string accountId, CancellationToken token = default)
-        {
-            await _Client.RemoveStore(accountId, token);
-        }
-
-        public async Task<IEnumerable<InvoiceData>> GetInvoices(string accountId, string[] orderId = null, InvoiceStatus[] status = null, DateTimeOffset? startDate = null, DateTimeOffset? endDate = null, string textSearch = null, bool includeArchived = false, int? skip = null, int? take = null, CancellationToken token = default)
-        {
-            return await _Client.GetInvoices(accountId, orderId, status, startDate, endDate, textSearch, includeArchived, token);
-        }
-
-        public async Task<InvoiceData> GetInvoice(string accountId, string invoiceId, CancellationToken token = default)
-        {
-            return await _Client.GetInvoice(accountId, invoiceId, token);
-        }
-
-        public async Task<InvoicePaymentMethodDataModel[]> GetInvoicePaymentMethods(string accountId, string invoiceId, CancellationToken token = default)
-        {
-            return await _Client.GetInvoicePaymentMethods(accountId, invoiceId, token);
-        }
-
-        public async Task ArchiveInvoice(string accountId, string invoiceId, CancellationToken token = default)
-        {
-            await _Client.ArchiveInvoice(accountId, invoiceId, token);
-        }
-
-        public async Task<InvoiceData> CreateInvoice(string accountId, CreateInvoiceRequest request, CancellationToken token = default)
-        {
-            return await _Client.CreateInvoice(accountId, request, token);
-        }
-
-        public async Task<InvoiceData> UpdateInvoice(string accountId, string invoiceId, UpdateInvoiceRequest request, CancellationToken token = default)
-        {
-            return await _Client.UpdateInvoice(accountId, invoiceId, request, token);
-        }
-
-        public async Task<InvoiceData> MarkInvoiceStatus(string accountId, string invoiceId, MarkInvoiceStatusRequest request, CancellationToken token = default)
-        {
-            return await _Client.MarkInvoiceStatus(accountId, invoiceId, request, token);
-        }
-
-        public async Task<InvoiceData> UnarchiveInvoice(string accountId, string invoiceId, CancellationToken token = default)
-        {
-            return await _Client.UnarchiveInvoice(accountId, invoiceId, token);
-        }
-
-        public async Task ActivateInvoicePaymentMethod(string accountId, string invoiceId, string paymentMethod, CancellationToken token = default)
-        {
-            await _Client.ActivateInvoicePaymentMethod(accountId, invoiceId, paymentMethod, token);
-        }
-
-        public async Task<OnChainWalletOverviewData> ShowOnChainWalletOverview(string accountId, CancellationToken token = default)
-        {
-            return await _Client.ShowOnChainWalletOverview(accountId, BTC, token);
-        }
-
-        public async Task<IEnumerable<OnChainWalletTransactionData>> ShowOnChainWalletTransactions(string accountId, TransactionStatus[] statusFilter = null, CancellationToken token = default)
-        {
-            return await _Client.ShowOnChainWalletTransactions(accountId, BTC, statusFilter, token);
-        }
-
-        public async Task<OnChainWalletTransactionData> GetOnChainWalletTransaction(string accountId, string transactionId, CancellationToken token = default)
-        {
-            return await _Client.GetOnChainWalletTransaction(accountId, BTC, transactionId, token);
-        }
-
-        public async Task<IEnumerable<OnChainWalletUTXOData>> GetOnChainWalletUTXOs(string accountId, CancellationToken token = default)
-        {
-            return await _Client.GetOnChainWalletUTXOs(accountId, BTC, token);
-        }
-
-        public async Task<IEnumerable<PaymentRequestData>> GetPaymentRequests(string accountId, bool includeArchived = false, CancellationToken token = default)
-        {
-            return await _Client.GetPaymentRequests(accountId, includeArchived, token);
-        }
-
-        public async Task<PaymentRequestData> GetPaymentRequest(string accountId, string paymentRequestId, CancellationToken token = default)
-        {
-            return await _Client.GetPaymentRequest(accountId, paymentRequestId, token);
-        }
-
-        public async Task ArchivePaymentRequest(string accountId, string paymentRequestId, CancellationToken token = default)
-        {
-            await _Client.ArchivePaymentRequest(accountId, paymentRequestId, token);
-        }
-
-        public async Task<PaymentRequestData> CreatePaymentRequest(string accountId, CreatePaymentRequestRequest request, CancellationToken token = default)
-        {
-            return await _Client.CreatePaymentRequest(accountId, request, token);
-        }
-
-        public async Task<PaymentRequestData> UpdatePaymentRequest(string accountId, string paymentRequestId, UpdatePaymentRequestRequest request, CancellationToken token = default)
-        {
-            return await _Client.UpdatePaymentRequest(accountId, paymentRequestId, request, token);
-        }
-
-        public async Task<PullPaymentData> CreatePullPayment(string accountId, CreatePullPaymentRequest request, CancellationToken cancellationToken = default)
-        {
-            return await _Client.CreatePullPayment(accountId, request, cancellationToken);
-        }
-
-        public async Task<PullPaymentData> GetPullPayment(string pullPaymentId, CancellationToken cancellationToken = default)
-        {
-            return await _Client.GetPullPayment(pullPaymentId, cancellationToken);
-        }
-
-        public async Task<PullPaymentData[]> GetPullPayments(string accountId, bool includeArchived = false, CancellationToken cancellationToken = default)
-        {
-            return await _Client.GetPullPayments(accountId, includeArchived, cancellationToken);
-        }
-
-        public async Task ArchivePullPayment(string accountId, string pullPaymentId, CancellationToken cancellationToken = default)
-        {
-            await _Client.ArchivePullPayment(accountId, pullPaymentId, cancellationToken);
-        }
-
-        public async Task<PayoutData[]> GetPayouts(string pullPaymentId, bool includeCancelled = false, CancellationToken cancellationToken = default)
-        {
-            return await _Client.GetPayouts(pullPaymentId, includeCancelled, cancellationToken);
-        }
-
-        public async Task<PayoutData> CreatePayout(string pullPaymentId, CreatePayoutRequest payoutRequest, CancellationToken cancellationToken = default)
-        {
-            return await _Client.CreatePayout(pullPaymentId, payoutRequest, cancellationToken);
-        }
-
-        public async Task CancelPayout(string accountId, string payoutId, CancellationToken cancellationToken = default)
-        {
-            await _Client.CancelPayout(accountId, payoutId, cancellationToken);
-        }
-
-        public async Task<PayoutData> ApprovePayout(string accountId, string payoutId, ApprovePayoutRequest request, CancellationToken cancellationToken = default)
-        {
-            return await _Client.ApprovePayout(accountId, payoutId, request, cancellationToken);
-        }
-
-        public async Task MarkPayoutPaid(string accountId, string payoutId, CancellationToken cancellationToken = default)
-        {
-            await _Client.MarkPayoutPaid(accountId, payoutId, cancellationToken);
-        }
-
-        public async Task<LightningInvoiceData> CreateLightningInvoice(string accountId, CreateLightningInvoiceRequest request, CancellationToken token = default)
-        {
-            return await _Client.CreateLightningInvoice(accountId, BTC, request, token);
-        }
-
-        public async Task<LightningInvoiceData> GetLightningInvoice(string accountId, string invoiceId, CancellationToken token = default)
-        {
-            return await _Client.GetLightningInvoice(accountId, BTC, invoiceId, token);
-        }
-
-        public async Task PayLightningInvoice(string accountId, PayLightningInvoiceRequest request, CancellationToken token = default)
-        {
-            await _Client.PayLightningInvoice(accountId, BTC, request, token);
-        }
-
-        public async Task<string> GetLightningDepositAddress(string accountId, CancellationToken token = default)
-        {
-            return await _Client.GetLightningDepositAddress(accountId, BTC, token);
+            return response.FirstOrDefault();
         }
     }
 }
