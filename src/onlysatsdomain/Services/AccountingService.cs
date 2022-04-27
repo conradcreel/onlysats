@@ -3,13 +3,16 @@ using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
 using BTCPayServer.Client.Models;
+using Microsoft.AspNetCore.SignalR;
 using onlysats.domain.Constants;
 using onlysats.domain.Entity;
 using onlysats.domain.Events;
 using onlysats.domain.Services.Repositories;
 using onlysats.domain.Services.Request.Accounting;
+using onlysats.domain.Services.Request.Chat;
 using onlysats.domain.Services.Response;
 using onlysats.domain.Services.Response.Accounting;
+using onlysats.domain.Hubs;
 
 namespace onlysats.domain.Services
 {
@@ -52,22 +55,69 @@ namespace onlysats.domain.Services
     {
         private readonly IBitcoinPaymentProcessor _BitcoinPaymentProcessor;
         private readonly IPaymentRepository _PaymentRepository;
+        private readonly IChatRepository _ChatRepository;
+        private readonly IChatService _ChatService;
         private readonly IMessagePublisher _MessagePublisher;
+        private readonly IHubContext<ChatHub> _ChatHubContext;
+
 
         public AccountingService(IPaymentRepository paymentRepository,
                                 IBitcoinPaymentProcessor bitcoinPaymentProcessor,
-                                IMessagePublisher messagePublisher)
+                                IChatRepository chatRepository,
+                                IChatService chatService,
+                                IMessagePublisher messagePublisher,
+                                IHubContext<ChatHub> chatHubContext)
         {
             _PaymentRepository = paymentRepository;
             _BitcoinPaymentProcessor = bitcoinPaymentProcessor;
+            _ChatRepository = chatRepository;
+            _ChatService = chatService;
             _MessagePublisher = messagePublisher;
+            _ChatHubContext = chatHubContext;
         }
 
         public async Task<InvoiceSettledResponse> HandleInvoiceSettled(InvoiceSettledRequest request)
         {
-            // TODO
-            await Task.Delay(10);
+            var queuedMessage = await _ChatRepository.GetQueuedMessageByInvoice(request.InvoiceId)
+                                        .ConfigureAwait(continueOnCapturedContext: false);
 
+            if (queuedMessage == null)
+            {
+                // TODO: come back to this
+                return new InvoiceSettledResponse().NotFound();
+            }
+
+            var message = $"Thank you for paying Invoice {request.InvoiceId}";
+            var sendMessageRequest = new SendMessageRequest
+            {
+                RoomId = queuedMessage.RoomId,
+                UserContext = new Request.AuthenticatedUserContext
+                {
+                    ChatAccessToken = queuedMessage.SynapseAccessToken
+                },
+                Body = message,
+                FormattedBody = message
+            };
+
+            var sendMessageResponse = await _ChatService.SendMessage(sendMessageRequest)
+                                            .ConfigureAwait(continueOnCapturedContext: false);
+
+            var getRoomEventRequest = new GetRoomEventRequest
+            {
+                RoomId = queuedMessage.RoomId,
+                EventId = sendMessageResponse.EventId,
+                UserContext = new Request.AuthenticatedUserContext
+                {
+                    ChatAccessToken = queuedMessage.SynapseAccessToken
+                }
+            };
+
+            var getRoomEventResponse = await _ChatService.GetRoomEvent(getRoomEventRequest)
+                                            .ConfigureAwait(continueOnCapturedContext: false);
+
+            // TODO: This would use groups
+            await _ChatHubContext.Clients.All.SendAsync("ReceiveMessage", getRoomEventResponse.Sender, message, getRoomEventResponse.OriginServerTimestamp, getRoomEventResponse.EventId);
+            
             return new InvoiceSettledResponse
             {
 

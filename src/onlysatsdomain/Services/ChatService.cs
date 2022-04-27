@@ -114,14 +114,17 @@ namespace onlysats.domain.Services
         private readonly HttpClient _HttpClient;
         private readonly OnlySatsConfiguration _Configuration;
         private readonly IChatRepository _ChatRepository;
+        private readonly IAssetRepository _AssetRepository;
         private readonly IBitcoinPaymentProcessor _BitcoinPaymentProcessor;
 
         public SynapseChatService(IChatRepository chatRepository,
+                                    IAssetRepository assetRepository,
                                   IBitcoinPaymentProcessor bitcoinPaymentProcessor,
                                   OnlySatsConfiguration configuration,
                                   HttpClient client)
         {
             _ChatRepository = chatRepository;
+            _AssetRepository = assetRepository;
             _BitcoinPaymentProcessor = bitcoinPaymentProcessor;
             _Configuration = configuration;
             _HttpClient = client;
@@ -414,7 +417,7 @@ namespace onlysats.domain.Services
                 Description = request.Description,
                 Expiry = new TimeSpan(0, 60, 0),
                 PrivateRouteHints = true
-            });
+            }).ConfigureAwait(continueOnCapturedContext: false);
 
             if (string.IsNullOrWhiteSpace(invoice?.Id))
             {
@@ -423,6 +426,33 @@ namespace onlysats.domain.Services
             }
 
             var messageContent = string.Empty; // TODO: Construct the message content from the Package selected for this paid message
+
+            if (request.AssetPackageId.HasValue)
+            {
+                int assetPackageId = request.AssetPackageId.Value;
+
+                var assets = await _AssetRepository.GetAssetsInPackage(assetPackageId).ConfigureAwait(continueOnCapturedContext: false);
+
+                var sb = new StringBuilder();
+
+                sb.Append("<ul class=\"assetList\">");
+
+                foreach (var asset in assets)
+                {
+                    switch (asset.Type)
+                    {
+                        case Enums.EAssetType.IMG:
+                            sb.Append($"<li><img src=\"{asset.RemoteLocation}\">{asset.DisplayName}</li>");
+                            break;
+
+                        default: break;
+                    }
+                }
+
+                sb.Append("</ul>");
+
+                messageContent = sb.ToString();
+            }
 
             // Since a payment is required, the Sender is always going to be the Creator
             // A Patron doesn't have the option to make a message require payment

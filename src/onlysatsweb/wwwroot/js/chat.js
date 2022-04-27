@@ -104,9 +104,19 @@ function sendMessage(roomId, message) {
 }
 
 function sendPaidMessage(roomId, assetPackageId, unlockedContent, costSatoshis) {
-    // TODO: Creator only. Creator can send a paid message where they select 
-    // a previously created AssetPackage of content (images, video, etc.) or some
-    // other service, a message to display to the Patron in chat while the 
-    // message is locked (usually a description of the content), and how much
-    // it costs to unlock the message
+    $.ajax({
+        url: '/api/chat/paid_messages',
+        dataType: 'json',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ "RoomId": roomId, "AssetPackageId": assetPackageId, "CostInSatoshis": costSatoshis, "Description": unlockedContent }),
+        processData: false,
+        success: function (data, textStatus, jQxhr) {
+            let msg = `Pay ${costSatoshis} sats to ${data.bolt11} to unlock: ${unlockedContent}`;
+            sendMessage(roomId, msg);
+        },
+        error: function (jqXhr, textStatus, errorThrown) {
+            alert(errorThrown);
+        }
+    });
 }

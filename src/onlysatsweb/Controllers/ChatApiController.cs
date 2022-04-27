@@ -83,7 +83,7 @@ namespace onlysatsweb.Controllers
         }
 
         [HttpPost("paid_messages")]
-        public async Task<IActionResult> SendPaidMessage()
+        public async Task<IActionResult> SendPaidMessage([FromBody] SendPaidMessageModel model)
         {
             var userType = GetUserType();
             if (userType != EUserRole.CREATOR)

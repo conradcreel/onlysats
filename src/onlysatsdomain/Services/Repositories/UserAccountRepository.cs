@@ -38,18 +38,29 @@ namespace onlysats.domain.Services.Repositories
         {
             await Task.Delay(10);
 
-            if (userName != "simp1")
+            if (userName != "simp1" && userName != "thot")
             {
                 return null;
             }
             const string defaultPassword = "490763548a9745b09a907dd8ad84d3ee";
 
+            if (userName == "simp1")
+            {
+                return new UserAccount
+                {
+                    Id = 1337,
+                    Username = userName,
+                    ChatPassword = defaultPassword,
+                    Role = EUserRole.PATRON
+                };
+            }
+
             return new UserAccount
             {
-                Id = 1337,
-                Username = "simp1",
+                Id = 666,
+                Username = userName,
                 ChatPassword = defaultPassword,
-                Role = EUserRole.PATRON
+                Role = EUserRole.CREATOR
             };
         }
 

@@ -44,7 +44,7 @@ namespace onlysats.domain.Services.Repositories
         /// <summary>
         /// Retrieves all Assets within an AssetPackage
         /// </summary>
-        Task<IEnumerable<Asset>> GetAssetsInPackage(int assetPackageId, int top = 10, int skip = 0);
+        Task<List<Asset>> GetAssetsInPackage(int assetPackageId, int top = 10, int skip = 0);
 
         /// <summary>
         /// Updates or Inserts an Asset
@@ -98,9 +98,17 @@ namespace onlysats.domain.Services.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Asset>> GetAssetsInPackage(int assetPackageId, int top = 10, int skip = 0)
+        public Task<List<Asset>> GetAssetsInPackage(int assetPackageId, int top = 10, int skip = 0)
         {
-            throw new NotImplementedException();
+            var assets = new List<Asset>
+            {
+                new Asset
+                {
+                    Type = Enums.EAssetType.IMG
+                }
+            };
+
+            return Task.FromResult(assets);
         }
 
         public Task<Asset> UpsertAsset(Asset asset)

@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.SignalR;
 using System.Threading.Tasks;
 
-namespace onlysatsweb.Hubs
+namespace onlysats.domain.Hubs
 {
     public class ChatHub : Hub
     {

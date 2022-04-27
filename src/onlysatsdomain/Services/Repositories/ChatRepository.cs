@@ -14,6 +14,7 @@ namespace onlysats.domain.Services.Repositories
         Task<QueuedMessage> QueueMessage(QueuedMessage msg);
         Task<List<QueuedMessage>> GetQueuedMessages(int receiverUserId);
         Task<QueuedMessage> GetQueuedMessage(int queuedMessageId);
+        Task<QueuedMessage> GetQueuedMessageByInvoice(string invoiceId);
     }
 
     #region Implementation
@@ -30,6 +31,22 @@ namespace onlysats.domain.Services.Repositories
         public Task<QueuedMessage> GetQueuedMessage(int queuedMessageId)
         {
             throw new NotImplementedException();
+        }
+
+        public Task<QueuedMessage> GetQueuedMessageByInvoice(string invoiceId)
+        {
+            var queuedMessage = new QueuedMessage
+            {
+                RoomId = "!KGRjPGFzoRrGDiVGSn:onlysats.matrix",
+                SynapseAccessToken = "syt_dGhvdA_KoJXtIaprxjdqHYqcezz_49nIUk",
+                InvoiceId = invoiceId,
+                BOLT11 = String.Empty,
+                CreatorId = 666,
+                Id = 222,
+                MessageContent = "TODO"
+            };
+
+            return Task.FromResult(queuedMessage);
         }
 
         public Task<List<QueuedMessage>> GetQueuedMessages(int receiverUserId)

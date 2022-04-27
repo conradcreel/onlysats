@@ -36,7 +36,10 @@ namespace onlysats.tests
             _AccountingService = new AccountingService(
                 paymentRepository: _MockPaymentRepository.Object,
                 bitcoinPaymentProcessor: _MockBitcoinPaymentProcessor.Object,
-                messagePublisher: _MockMessagePublisher.Object
+                messagePublisher: _MockMessagePublisher.Object,
+                chatRepository: null,
+                chatService: null,
+                chatHubContext: null
             );
         }
 
